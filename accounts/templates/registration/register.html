@@ -57,12 +57,12 @@
           <div class="help">{{ form.password2.help_text|safe }}</div>
         {% endif %}
       </div>
-      <div class="submit-row">
+      <div class="submit-row" style="margin-bottom: 10px;">
         <input type="submit" value="{% trans 'Registrar' %}">
       </div>
     </form>
 
-    <div class="password-reset-link">
+    <div class="password-reset-link" style="margin-top: 10px;">
       <a href="{% url 'admin:login' %}">{% trans 'Já possui uma conta? Acesse aqui.' %}</a>
     </div>
   </div>

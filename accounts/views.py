@@ -13,10 +13,14 @@ class RegisterView(FormView):
     success_url = reverse_lazy("admin:login")
 
     def form_valid(self, form: UserCreationForm):
-        user = form.save()
-        group = Group.objects.filter(pk=1, name="assinante").first()
+        # 1) cria usuário já como staff (membro da equipe)
+        user = form.save(commit=False)
+        user.is_staff = True
+        user.save()
+
+        group = Group.objects.filter(pk=1, name="Assinante").first()
         if not group:
-            group, _ = Group.objects.get_or_create(name="assinante")
+            group, _ = Group.objects.get_or_create(name="Assinante")
         user.groups.add(group)
         messages.success(
             self.request,

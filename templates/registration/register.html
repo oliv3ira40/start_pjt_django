@@ -1,0 +1,19 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Registrar nova conta" %}{% endblock title %}
+
+{% block content %}
+<h1>{% trans "Registrar nova conta" %}</h1>
+<p>{% trans "Preencha o formul\u00e1rio abaixo para criar sua conta." %}</p>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="submit-row">
+        <button type="submit" class="default">{% trans "Registrar" %}</button>
+    </div>
+</form>
+<p class="mt-3">
+    <a href="{% url 'admin:login' %}">{% trans "J\u00e1 possui uma conta? Fa\u00e7a login" %}</a>
+</p>
+{% endblock content %}

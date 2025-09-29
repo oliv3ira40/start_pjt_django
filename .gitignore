@@ -9,6 +9,8 @@ __pycache__/
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
+start_project.sqlite3
+start_project.sqlite3-journal
 media
 .DS_Store
 

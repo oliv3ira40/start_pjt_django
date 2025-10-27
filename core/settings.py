@@ -58,8 +58,9 @@ INSTALLED_APPS = [
     "admin_interface",
     "colorfield",
     "accounts",
+    "admin_menu.apps.AdminMenuConfig",
 
-    'django.contrib.admin',
+    'core.admin_site.CustomAdminConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',

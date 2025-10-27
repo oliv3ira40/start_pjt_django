@@ -68,7 +68,13 @@ class PersonAdmin(admin.ModelAdmin):
     def get_readonly_fields(self, request, obj=None):
         if request.user.is_superuser:
             return ("created_at", "updated_at")
-        return ("user", "created_at", "updated_at")
+        return ("created_at", "updated_at")
+
+    def get_fields(self, request, obj=None):
+        fields = list(super().get_fields(request, obj))
+        if request.user.is_superuser:
+            return fields
+        return [field for field in fields if field != "user"]
 
 
 class RestrictedUserAdmin(DjangoUserAdmin):

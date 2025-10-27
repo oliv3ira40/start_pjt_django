@@ -1,7 +1,16 @@
 from pathlib import Path
 import os
 from dotenv import load_dotenv
-from distutils.util import strtobool
+try:
+    from distutils.util import strtobool
+except ModuleNotFoundError:
+    def strtobool(val: str) -> bool:
+        val = val.strip().lower()
+        if val in ("y", "yes", "t", "true", "on", "1"):
+            return True
+        if val in ("n", "no", "f", "false", "off", "0"):
+            return False
+        raise ValueError(f"Invalid truth value: {val}")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

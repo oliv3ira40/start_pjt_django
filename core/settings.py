@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     "colorfield",
     "accounts",
     "admin_menu.apps.AdminMenuConfig",
+    "testerecursos.apps.TesteRecursosConfig",
 
     'core.admin_site.CustomAdminConfig',
     'django.contrib.auth',

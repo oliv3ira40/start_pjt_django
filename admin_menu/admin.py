@@ -2,10 +2,12 @@ from __future__ import annotations
 
 from django.contrib import admin
 
+from core.admin import BaseAdmin, BaseInline
+
 from .models import MenuConfig, MenuItem, MenuScope
 
 
-class MenuItemInline(admin.TabularInline):
+class MenuItemInline(BaseInline):
     model = MenuItem
     extra = 0
     fields = (
@@ -33,7 +35,7 @@ class MenuItemInline(admin.TabularInline):
 
 
 @admin.register(MenuScope)
-class MenuScopeAdmin(admin.ModelAdmin):
+class MenuScopeAdmin(BaseAdmin):
     list_display = ("name", "group", "priority")
     list_filter = ("group",)
     search_fields = ("name", "group__name")
@@ -56,7 +58,7 @@ class MenuScopeAdmin(admin.ModelAdmin):
 
 
 @admin.register(MenuConfig)
-class MenuConfigAdmin(admin.ModelAdmin):
+class MenuConfigAdmin(BaseAdmin):
     list_display = ("scope", "is_active", "updated_at")
     list_filter = ("scope__name", "is_active")
     search_fields = ("scope__name",)

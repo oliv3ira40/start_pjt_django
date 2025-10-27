@@ -1,15 +1,14 @@
 # Integração Select2 no Django Admin
 
-O arquivo `static/admin/select2-init.js` adiciona suporte opcional ao [Select2](https://select2.org/) no Django Admin sem exigir customização de templates. O script só executa quando `$.fn.select2` estiver disponível, garantindo degradação elegante quando o plugin não for carregado.
+O arquivo `apiary/js/hive_species_filter.js` adiciona suporte opcional ao [Select2](https://select2.org/) no Django Admin sem exigir customização de templates. O script só executa quando `$.fn.select2` estiver disponível, garantindo degradação elegante quando o plugin não for carregado.
 
 ## Como habilitar
 
-1. Assegure-se de copiar o modelo `exemplo-novos-recursos/select2-init.js` para `static/admin/select2-init.js` (veja instruções no [README](../README.md)).
-2. Carregue o JavaScript do Select2 e suas dependências (jQuery + CSS) conforme a necessidade do projeto.
-3. Inclua `static/admin/select2-init.js` via `ModelAdmin.Media` ou hook global do AdminSite, após importar o Select2.
-4. Aplique o atributo `data-select2="1"` nos `select` que devem ser aprimorados.
+1. Utilize `BaseAdmin`/`BaseInline` para carregar automaticamente o Select2 (via CDN) e o script `apiary/js/hive_species_filter.js`.
+2. Opcionalmente, defina `window.SELECT2_START` com uma lista de seletores customizados **antes** do `DOMContentLoaded`. Quando a variável não estiver presente, o fallback cobre `.list-filter-dropdown select`, `#id_species[name="species"]`, `#id_hive`, `#id_city`, `#id_origin_hive` e `#id_box_model`.
+3. Aplique o atributo `data-select2="1"` nos `select` que devem ser aprimorados. Esse seletor tem prioridade mesmo quando `window.SELECT2_START` é fornecido.
 
-Além dos campos opt-in, o script inicializa automaticamente selects presentes em filtros do changelist (`.list-filter-dropdown select`).
+Além dos campos opt-in, o fallback inicializa automaticamente os filtros do changelist (`.list-filter-dropdown select`).
 
 ## Comportamento
 

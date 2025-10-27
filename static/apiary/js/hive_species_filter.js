@@ -7,9 +7,51 @@
   }
 
   const $ = window.jQuery;
-  const FILTER_SELECTOR = ".list-filter-dropdown select";
   const OPT_IN_SELECTOR = 'select[data-select2="1"]';
-  const SELECTOR = `${FILTER_SELECTOR}, ${OPT_IN_SELECTOR}`;
+  const FALLBACK_SELECTORS = [
+    ".list-filter-dropdown select",
+    '#id_species[name="species"]',
+    "#id_hive",
+    "#id_city",
+    "#id_origin_hive",
+    "#id_box_model",
+  ];
+
+  function resolveSelectors() {
+    const selectors = [];
+    const seen = new Set();
+
+    function pushSelector(value) {
+      if (typeof value !== "string") {
+        return;
+      }
+      const trimmed = value.trim();
+      if (!trimmed || seen.has(trimmed)) {
+        return;
+      }
+      seen.add(trimmed);
+      selectors.push(trimmed);
+    }
+
+    pushSelector(OPT_IN_SELECTOR);
+
+    const configured = Array.isArray(window.SELECT2_START)
+      ? window.SELECT2_START
+      : null;
+    if (configured && configured.length) {
+      configured.forEach(pushSelector);
+    } else {
+      FALLBACK_SELECTORS.forEach(pushSelector);
+    }
+
+    return selectors;
+  }
+
+  const SELECTORS = resolveSelectors();
+  const SELECTOR = SELECTORS.join(", ");
+  if (!SELECTOR) {
+    return;
+  }
 
   const initialised = new WeakSet();
 
@@ -111,17 +153,23 @@
     selects.forEach(refreshSelect);
   }
 
+  function initialiseWithDelay(root) {
+    window.setTimeout(function () {
+      initialise(root || document);
+    }, 200);
+  }
+
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", function () {
-      initialise(document);
+      initialiseWithDelay(document);
     });
   } else {
-    initialise(document);
+    initialiseWithDelay(document);
   }
 
   document.addEventListener("formset:added", function (event) {
     if (event && event.target) {
-      initialise(event.target);
+      initialiseWithDelay(event.target);
     }
   });
 
@@ -129,7 +177,9 @@
     if (!event || !event.detail || !event.detail.container) {
       return;
     }
-    refreshWithin(event.detail.container);
+    window.setTimeout(function () {
+      refreshWithin(event.detail.container);
+    }, 50);
   });
 
   document.addEventListener("formset:removed", function () {

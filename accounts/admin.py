@@ -7,13 +7,15 @@ from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 
+from core.admin import BaseAdmin, Select2AdminMixin
+
 from .models import Person
 
 User = get_user_model()
 
 
 @admin.register(Person)
-class PersonAdmin(admin.ModelAdmin):
+class PersonAdmin(BaseAdmin):
     list_display = ("user", "email", "first_name", "last_name")
     search_fields = ("user__username", "first_name", "last_name", "email")
 
@@ -77,7 +79,7 @@ class PersonAdmin(admin.ModelAdmin):
         return [field for field in fields if field != "user"]
 
 
-class RestrictedUserAdmin(DjangoUserAdmin):
+class RestrictedUserAdmin(Select2AdminMixin, DjangoUserAdmin):
     def has_module_permission(self, request):
         return request.user.is_superuser
 
@@ -94,7 +96,7 @@ class RestrictedUserAdmin(DjangoUserAdmin):
         return request.user.is_superuser
 
 
-class RestrictedGroupAdmin(GroupAdmin):
+class RestrictedGroupAdmin(Select2AdminMixin, GroupAdmin):
     def has_module_permission(self, request):
         return request.user.is_superuser
 

@@ -1,11 +1,11 @@
 # Campos condicionais no Django Admin
 
-O módulo `static/admin/conditional-fields.js` permite declarar regras em JavaScript puro para mostrar, ocultar ou ajustar o estado de campos do Django Admin sem alterar templates. As regras funcionam em qualquer `ModelAdmin`, inclusive com formulários inline, e respeitam o tema `django-admin-interface`.
+O módulo `apiary/js/conditional-fields.js` permite declarar regras em JavaScript puro para mostrar, ocultar ou ajustar o estado de campos do Django Admin sem alterar templates. As regras funcionam em qualquer `ModelAdmin`, inclusive com formulários inline, e respeitam o tema `django-admin-interface`.
 
 ## Como registrar regras
 
-1. Copie o arquivo `exemplo-novos-recursos/conditional-fields.js` para `static/admin/conditional-fields.js` (veja detalhes no [README](../README.md)).
-2. Em cada tela que precisa de lógica condicional, defina `window.ADMIN_FIELD_RULES` **antes** de carregar o script (por exemplo em `ModelAdmin.Media`):
+1. Garanta que o `BaseAdmin`/`BaseInline` esteja em uso. O mixin `Select2AdminMixin` carrega `apiary/js/conditional-fields.js` automaticamente.
+2. Em cada tela que precisa de lógica condicional, defina `window.ADMIN_FIELD_RULES` **até** o carregamento do `DOMContentLoaded` (um bloco `<script>` na página já é suficiente):
 
 ```html
 <script>

@@ -4,7 +4,7 @@ A prévia de imagem permite conferir imediatamente o arquivo selecionado em camp
 
 ## Como habilitar
 
-1. Garanta que o arquivo `static/admin/preview-image.js` esteja disponível (veja o método de configuração na [documentação principal](../README.md)).
+1. Garanta que o mixin `Select2AdminMixin` esteja sendo aplicado através de `BaseAdmin`/`BaseInline` (veja a [seção Recursos do Admin](../README.md)). Ele é responsável por carregar `apiary/js/image-preview.js` e `apiary/css/image-preview.css` automaticamente.
 2. Nos campos de upload que devem exibir a miniatura, adicione o atributo `data-admin-preview="image"` ao `input[type="file"]`.
 3. Opcionalmente informe atributos adicionais no campo:
    - `data-admin-preview-label`: texto exibido na legenda abaixo da miniatura.
@@ -15,16 +15,20 @@ O script procura automaticamente o link padrão gerado pelo admin (`Currently: <
 
 ## Comportamento e limites visuais
 
-- A miniatura mantém a proporção original do arquivo e recebe limites de largura/altura máximos (`12rem` por padrão) para evitar que imagens grandes quebrem o layout.
+- A miniatura mantém a proporção original do arquivo e recebe limites de largura/altura máximos (`200px` por padrão) para evitar que imagens grandes quebrem o layout.
 - Ao selecionar um novo arquivo, o script usa `URL.createObjectURL` (ou `FileReader` como fallback) para exibir imediatamente a imagem escolhida.
 - Se o usuário limpar o campo ou marcar o checkbox “Limpar”, a miniatura volta para o estado inicial ou é ocultada.
 
 Caso precise de tamanhos diferentes, personalize via CSS utilizando as classes utilitárias adicionadas pelo script:
 
 ```css
+.admin-image-preview {
+  max-width: 14rem;
+}
+
 .admin-image-preview__image {
-  max-width: 16rem;
-  max-height: 16rem;
+  max-width: 100%;
+  max-height: 14rem;
 }
 ```
 

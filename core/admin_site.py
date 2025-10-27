@@ -7,7 +7,6 @@ from copy import copy
 from django.apps import apps
 from django.contrib.admin import AdminSite
 from django.contrib.admin.apps import AdminConfig
-from django.forms import Media
 from django.urls import NoReverseMatch, reverse
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
@@ -19,25 +18,6 @@ class CustomAdminSite(AdminSite):
     site_title = "Django admin"
     site_header = "Django admin"
     index_title = "Django admin"
-
-    global_admin_js = (
-        "admin/preview-image.js",
-        "admin/conditional-fields.js",
-        "admin/select2-init.js",
-    )
-
-    def get_global_admin_media(self):
-        """Return the Media instance containing the global admin scripts."""
-
-        return Media(js=self.global_admin_js)
-
-    def each_context(self, request):
-        context = super().each_context(request)
-        media = context.get("media")
-        if not isinstance(media, Media):
-            media = Media()
-        context["media"] = media + self.get_global_admin_media()
-        return context
 
     def get_app_list(self, request, app_label=None):
         default_list = super().get_app_list(request, app_label=app_label)

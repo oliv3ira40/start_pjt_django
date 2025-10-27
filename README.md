@@ -52,15 +52,19 @@ python manage.py collectstatic --noinput
 ### Padrões de desenvolvimento
 Clique [aqui](docs/padroes.md) para ver os padrões de desenvolvimento utilizados neste projeto.
 
-### Recursos do Admin
-Os recursos JavaScript reutilizáveis do admin são distribuídos por cópia: copie os arquivos modelo de `exemplo-novos-recursos/` para `static/admin/` mantendo os nomes `preview-image.js`, `conditional-fields.js` e `select2-init.js`. Ajuste apenas os seletores/opt-ins (`data-*` e RULES) conforme a necessidade de cada tela e carregue os scripts via `ModelAdmin.Media` ou pelo hook global do `AdminSite`.
+### Recursos do Admin (JS-only)
+Herde de `BaseAdmin` (para `ModelAdmin`) e `BaseInline` (para inlines) definidos em `core/admin.py`. O mixin `Select2AdminMixin` carrega automaticamente:
 
-- [Prévia de imagem](/docs/preview-image.md)
-- [Campos condicionais](/docs/campos-condicionais.md)
-- [Select2](/docs/select2.md)
+- o Select2 via CDN;
+- `apiary/js/hive_species_filter.js` (ponto de configuração dos selects);
+- `apiary/js/conditional-fields.js` (engine de campos condicionais);
+- `apiary/js/image-preview.js` e `apiary/css/image-preview.css` (prévia de imagens).
 
-Após aplicar os arquivos no projeto, a pasta temporária `exemplo-novos-recursos/` pode ser removida com segurança para evitar
-duplicação dos recursos.
+Resumo rápido:
+
+- [Prévia de imagem](/docs/preview-image.md) — adicione `data-admin-preview="image"` nos `input[type=file]` que devem exibir miniatura.
+- [Campos condicionais](/docs/campos-condicionais.md) — declare `window.ADMIN_FIELD_RULES` com regras `when/then` por sufixo do campo.
+- [Select2](/docs/select2.md) — use `data-select2="1"` ou configure `window.SELECT2_START` para definir os seletores desejados.
 
 ### Tema Django utilizado - Django admin interface:
 Clique [aqui](https://github.com/fabiocaccamo/django-admin-interface?tab=readme-ov-file) para ver o tema utilizado neste projeto.

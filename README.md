@@ -52,6 +52,13 @@ python manage.py collectstatic --noinput
 ### Padrões de desenvolvimento
 Clique [aqui](docs/padroes.md) para ver os padrões de desenvolvimento utilizados neste projeto.
 
+### Recursos do Admin
+Os recursos JavaScript reutilizáveis do admin são distribuídos por cópia: copie os arquivos modelo de `exemplo-novos-recursos/` para `static/admin/` mantendo os nomes `preview-image.js`, `conditional-fields.js` e `select2-init.js`. Ajuste apenas os seletores/opt-ins (`data-*` e RULES) conforme a necessidade de cada tela e carregue os scripts via `ModelAdmin.Media` ou pelo hook global do `AdminSite`.
+
+- [Prévia de imagem](/docs/preview-image.md)
+- [Campos condicionais](/docs/campos-condicionais.md)
+- [Select2](/docs/select2.md)
+
 ### Tema Django utilizado - Django admin interface:
 Clique [aqui](https://github.com/fabiocaccamo/django-admin-interface?tab=readme-ov-file) para ver o tema utilizado neste projeto.
 

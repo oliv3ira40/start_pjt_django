@@ -1,8 +1,10 @@
-from django.contrib import admin, messages
+from django.contrib import admin
 from django.contrib.admin.sites import NotRegistered
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import GroupAdmin, UserAdmin as DjangoUserAdmin
 from django.contrib.auth.models import Group
+from django.http import HttpResponseForbidden
+from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 
 from .models import Person
@@ -14,6 +16,24 @@ User = get_user_model()
 class PersonAdmin(admin.ModelAdmin):
     list_display = ("user", "email", "first_name", "last_name")
     search_fields = ("user__username", "first_name", "last_name", "email")
+
+    def changelist_view(self, request, extra_context=None):
+        if request.user.is_superuser:
+            return super().changelist_view(request, extra_context=extra_context)
+
+        try:
+            person, _ = Person.objects.get_or_create(
+                user=request.user,
+                defaults={
+                    "first_name": request.user.first_name,
+                    "last_name": request.user.last_name,
+                    "email": request.user.email,
+                },
+            )
+        except Exception:  # pragma: no cover - defensive fallback
+            return HttpResponseForbidden(_("Não foi possível localizar o seu perfil."))
+
+        return redirect("admin:accounts_person_change", person.pk)
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request).select_related("user")
@@ -45,25 +65,16 @@ class PersonAdmin(admin.ModelAdmin):
             return True
         return obj.user == request.user
 
-    def get_fields(self, request, obj=None):
-        if request.user.is_superuser:
-            return ("user", "email", "first_name", "last_name", "created_at", "updated_at")
-        return ("email", "first_name", "last_name")
-
     def get_readonly_fields(self, request, obj=None):
         if request.user.is_superuser:
             return ("created_at", "updated_at")
-        return ()
+        return ("created_at", "updated_at")
 
-    def message_user(self, request, message, level=messages.INFO, extra_tags="", fail_silently=False):
-        if (
-            level == messages.SUCCESS
-            and request.method == "POST"
-            and getattr(request, "resolver_match", None)
-            and "object_id" in request.resolver_match.kwargs
-        ):
-            message = _("Dados do perfil atualizados.")
-        super().message_user(request, message, level=level, extra_tags=extra_tags, fail_silently=fail_silently)
+    def get_fields(self, request, obj=None):
+        fields = list(super().get_fields(request, obj))
+        if request.user.is_superuser:
+            return fields
+        return [field for field in fields if field != "user"]
 
 
 class RestrictedUserAdmin(DjangoUserAdmin):

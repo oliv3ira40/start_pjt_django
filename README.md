@@ -5,23 +5,26 @@
 ```bash
 
 # Criar a env
-$ python -m venv venv
+$ python3 -m venv venv
+
+# Ativar a env
+$ source venv/bin/activate
+
+# Instalar as dependências
+$ pip install -r requirements.txt
 
 # Gerar nova secret key
 $ python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
 # Colar no arquivo .env
 
-# Ativar a env
-$ source {nome da env}/bin/activate
-
 # Desativar a env
 $ deactivate
 
-# Iniciar o projeto
-$ python manage.py runserver
-
 # Criar o banco de dados
 $ python manage.py migrate
+
+# Iniciar o projeto
+$ python manage.py runserver
 
 # Criar um super usuário
 $ python manage.py createsuperuser
@@ -34,12 +37,6 @@ $ pip freeze > requirements.txt
 
 # Mandar dependências para o arquivo requirements.txt
 $ pip freeze > requirements.txt
-
-# Instalar as dependências
-$ pip install -r requirements.txt
-
-# Link para a documentação do unfold:
-[Git Django Unfold](https://github.com/unfoldadmin/django-unfold)
 
 # Reiniciar o gunicorn e o nginx
 sudo systemctl restart gunicorn

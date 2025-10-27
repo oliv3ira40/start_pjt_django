@@ -24,8 +24,7 @@ class CustomAdminSite(AdminSite):
         if app_label or request.user.is_superuser:
             return default_list
 
-        menu_config_model = apps.get_model("admin_menu", "MenuConfig")
-        config = menu_config_model.get_active_for_scope(menu_config_model.Scope.NON_SUPERUSER)
+        config = self._resolve_active_config(request.user)
         if not config:
             return default_list
 
@@ -36,6 +35,31 @@ class CustomAdminSite(AdminSite):
             return default_list
 
         return custom_list or default_list
+
+    def _resolve_active_config(self, user):
+        menu_config_model = apps.get_model("admin_menu", "MenuConfig")
+        menu_scope_model = apps.get_model("admin_menu", "MenuScope")
+
+        if not user.is_authenticated:
+            return menu_config_model.get_active_for_scope(
+                menu_scope_model.objects.default_scope().ordered().first()
+            )
+
+        group_ids = list(user.groups.values_list("id", flat=True))
+        if group_ids:
+            scope = (
+                menu_scope_model.objects.for_groups(group_ids)
+                .ordered()
+                .first()
+            )
+            config = menu_config_model.get_active_for_scope(scope)
+            if config:
+                return config
+
+        default_scope = menu_scope_model.objects.default_scope().ordered().first()
+        if default_scope:
+            return menu_config_model.get_active_for_scope(default_scope)
+        return None
 
     def _build_custom_app_list(self, request, config):
         app_dict = self._build_app_dict(request)

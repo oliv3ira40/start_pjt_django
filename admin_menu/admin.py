@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from django.contrib import admin
 
-from .models import MenuConfig, MenuItem
+from .models import MenuConfig, MenuItem, MenuScope
 
 
 class MenuItemInline(admin.TabularInline):
@@ -20,7 +20,7 @@ class MenuItemInline(admin.TabularInline):
         "permission_codename",
     )
     ordering = ("order", "pk")
-    show_change_link = True
+    show_change_link = False
 
     def has_add_permission(self, request, obj=None):
         return request.user.is_superuser
@@ -32,13 +32,12 @@ class MenuItemInline(admin.TabularInline):
         return request.user.is_superuser
 
 
-@admin.register(MenuConfig)
-class MenuConfigAdmin(admin.ModelAdmin):
-    list_display = ("scope", "active", "updated_at")
-    list_filter = ("scope", "active")
-    search_fields = ("scope",)
-    ordering = ("scope", "-updated_at")
-    inlines = (MenuItemInline,)
+@admin.register(MenuScope)
+class MenuScopeAdmin(admin.ModelAdmin):
+    list_display = ("name", "group", "priority")
+    list_filter = ("group",)
+    search_fields = ("name", "group__name")
+    ordering = ("-priority", "name")
 
     def has_module_permission(self, request):
         return request.user.is_superuser
@@ -56,20 +55,13 @@ class MenuConfigAdmin(admin.ModelAdmin):
         return request.user.is_superuser
 
 
-@admin.register(MenuItem)
-class MenuItemAdmin(admin.ModelAdmin):
-    list_display = (
-        "config",
-        "order",
-        "item_type",
-        "label",
-        "app_label",
-        "model_name",
-        "url_name",
-    )
-    list_filter = ("item_type", "config__scope")
-    search_fields = ("label", "app_label", "model_name", "url_name")
-    ordering = ("config", "order", "pk")
+@admin.register(MenuConfig)
+class MenuConfigAdmin(admin.ModelAdmin):
+    list_display = ("scope", "is_active", "updated_at")
+    list_filter = ("scope__name", "is_active")
+    search_fields = ("scope__name",)
+    ordering = ("scope__priority", "scope__name", "-updated_at")
+    inlines = (MenuItemInline,)
 
     def has_module_permission(self, request):
         return request.user.is_superuser

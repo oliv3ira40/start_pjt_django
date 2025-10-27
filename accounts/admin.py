@@ -1,4 +1,4 @@
-from django.contrib import admin, messages
+from django.contrib import admin
 from django.contrib.admin.sites import NotRegistered
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import GroupAdmin, UserAdmin as DjangoUserAdmin
@@ -65,25 +65,10 @@ class PersonAdmin(admin.ModelAdmin):
             return True
         return obj.user == request.user
 
-    def get_fields(self, request, obj=None):
-        if request.user.is_superuser:
-            return ("user", "email", "first_name", "last_name", "created_at", "updated_at")
-        return ("email", "first_name", "last_name")
-
     def get_readonly_fields(self, request, obj=None):
         if request.user.is_superuser:
             return ("created_at", "updated_at")
-        return ()
-
-    def message_user(self, request, message, level=messages.INFO, extra_tags="", fail_silently=False):
-        if (
-            level == messages.SUCCESS
-            and request.method == "POST"
-            and getattr(request, "resolver_match", None)
-            and "object_id" in request.resolver_match.kwargs
-        ):
-            message = _("Dados do perfil atualizados.")
-        super().message_user(request, message, level=level, extra_tags=extra_tags, fail_silently=fail_silently)
+        return ("user", "created_at", "updated_at")
 
 
 class RestrictedUserAdmin(DjangoUserAdmin):

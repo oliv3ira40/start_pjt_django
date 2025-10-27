@@ -59,6 +59,9 @@ Os recursos JavaScript reutilizáveis do admin são distribuídos por cópia: co
 - [Campos condicionais](/docs/campos-condicionais.md)
 - [Select2](/docs/select2.md)
 
+Após aplicar os arquivos no projeto, a pasta temporária `exemplo-novos-recursos/` pode ser removida com segurança para evitar
+duplicação dos recursos.
+
 ### Tema Django utilizado - Django admin interface:
 Clique [aqui](https://github.com/fabiocaccamo/django-admin-interface?tab=readme-ov-file) para ver o tema utilizado neste projeto.
 

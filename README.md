@@ -72,3 +72,21 @@ Superusuários continuam visualizando o menu padrão do Django. Para usuários n
    - Ajuste **Ordem** para controlar a sequência de exibição dentro do menu.
 
 Quando o usuário não possuir escopo configurado (ou quando nenhuma configuração ativa estiver disponível), o menu volta automaticamente para o comportamento padrão do Django Admin.
+
+## Tratamento de imagens
+
+Todos os campos de upload de imagens passam por conversão e compressão automática para o formato WebP antes de serem salvos. Isso vale para fotos de colmeias, meliponários, anexos de revisões e observações rápidas, garantindo arquivos menores e padronizados sem necessidade de intervenção manual.
+
+## Recursos do Admin (JS-only)
+
+- [Boot global do Admin](docs/admin_boot.md)
+- [Prévia de imagem](docs/preview-image.md)
+- [Campos condicionais](docs/campos-condicionais.md)
+- [Select2](docs/select2.md)
+
+**Checklist de integração rápida**
+- [ ] Herdar `BaseAdmin`/`OwnerRestrictedAdmin` e `BaseInline` ao registrar novos modelos.
+- [ ] Garantir que inputs de imagem usem `data-image-preview="true"` ou sigam os sufixos `photo`/`file`.
+- [ ] Definir/atualizar `RULES` para campos condicionais antes de carregar o Admin.
+- [ ] Confirmar que os selects relevantes estão cobertos pelo script Select2 ou adicionados manualmente.
+- [ ] Testar eventos `formset:added` para inlines (prévia, condicionais e Select2).

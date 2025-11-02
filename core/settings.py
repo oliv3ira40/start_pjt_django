@@ -23,7 +23,7 @@ dotenv_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env')
 load_dotenv(dotenv_path)
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY', 'test-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = strtobool(os.getenv('DEBUG', 'False'))
@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     "colorfield",
     "accounts",
     "admin_menu.apps.AdminMenuConfig",
+    "syshealth.apps.SysHealthConfig",
 
     'core.admin_site.CustomAdminConfig',
     'django.contrib.auth',

@@ -7,7 +7,7 @@ from copy import copy
 from django.apps import apps
 from django.contrib.admin import AdminSite
 from django.contrib.admin.apps import AdminConfig
-from django.urls import NoReverseMatch, reverse
+from django.urls import NoReverseMatch, reverse, path
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
@@ -18,6 +18,19 @@ class CustomAdminSite(AdminSite):
     site_title = "Django admin"
     site_header = "Django admin"
     index_title = "Django admin"
+
+    def get_urls(self):
+        urls = super().get_urls()
+        from syshealth import views as syshealth_views
+
+        custom_urls = [
+            path(
+                "syshealth/dashboard/",
+                self.admin_view(syshealth_views.dashboard),
+                name="syshealth_dashboard",
+            ),
+        ]
+        return custom_urls + urls
 
     def get_app_list(self, request, app_label=None):
         default_list = super().get_app_list(request, app_label=app_label)

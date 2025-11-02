@@ -1,0 +1,207 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">{% trans "Início" %}</a>
+  &rsaquo; Saúde do servidor
+</div>
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+  .syshealth-meta {
+    margin-bottom: 1.5rem;
+    background: var(--body-bg);
+    border: 1px solid var(--hairline-color);
+    border-radius: 6px;
+    padding: 1.5rem;
+  }
+  .syshealth-meta dl {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.75rem 1.5rem;
+    margin: 0;
+  }
+  .syshealth-meta dt {
+    font-weight: 600;
+    color: var(--body-quiet-color);
+  }
+  .syshealth-meta dd {
+    margin: 0;
+    font-size: 1rem;
+  }
+  .syshealth-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .syshealth-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+  .syshealth-card {
+    border: 1px solid var(--hairline-color);
+    border-radius: 6px;
+    padding: 1.25rem;
+    background: var(--body-bg);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+  .syshealth-card h2 {
+    margin-top: 0;
+    font-size: 1.1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .syshealth-card dl {
+    margin: 0;
+  }
+  .syshealth-card dt {
+    font-weight: 600;
+    color: var(--body-quiet-color);
+  }
+  .syshealth-card dd {
+    margin: 0 0 0.5rem;
+    font-size: 1.05rem;
+  }
+  .syshealth-status {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.95rem;
+  }
+  .status-ok {
+    color: #2e7d32;
+  }
+  .status-warn {
+    color: #ed6c02;
+  }
+  .status-crit {
+    color: #d32f2f;
+  }
+  .status-unknown {
+    color: var(--body-quiet-color);
+  }
+  .syshealth-footnote {
+    margin-top: 1rem;
+    color: var(--body-quiet-color);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="syshealth-dashboard">
+  <h1 class="page-title">Saúde do servidor</h1>
+  <div class="syshealth-actions">
+    <a href="{{ refresh_url }}" class="button">Atualizar agora</a>
+    <button type="button" class="button" id="syshealth-copy" data-summary="{{ summary_text|escapejs }}">Copiar resumo</button>
+    {% if config_url %}
+      <a href="{{ config_url }}" class="button">Configurações</a>
+    {% endif %}
+  </div>
+
+  <div class="syshealth-meta">
+    <dl>
+      <div>
+        <dt>Host</dt>
+        <dd>{{ hostname }}</dd>
+      </div>
+      <div>
+        <dt>Sistema operacional</dt>
+        <dd>{{ system_platform }}</dd>
+      </div>
+      <div>
+        <dt>Kernel</dt>
+        <dd>{{ kernel }}</dd>
+      </div>
+      <div>
+        <dt>Python</dt>
+        <dd>{{ python_version }}</dd>
+      </div>
+      <div>
+        <dt>Hora local</dt>
+        <dd>{{ local_time|date:"d/m/Y H:i:s" }} (America/Sao_Paulo)</dd>
+      </div>
+    </dl>
+  </div>
+
+  <div class="syshealth-grid">
+    <div class="syshealth-card">
+      <h2>CPU <span class="syshealth-status status-{{ cpu.status }}">{{ cpu.status_label }}</span></h2>
+      <dl>
+        <dt>Núcleos (lógicos)</dt>
+        <dd>{{ cpu.cores_display }}</dd>
+        <dt>Load avg (1/5/15)</dt>
+        <dd>{{ cpu.load_display }}</dd>
+        <dt>Carga por núcleo</dt>
+        <dd>{{ cpu.load_per_core_display }}</dd>
+      </dl>
+    </div>
+    <div class="syshealth-card">
+      <h2>Memória <span class="syshealth-status status-{{ memory.status }}">{{ memory.status_label }}</span></h2>
+      <dl>
+        <dt>Total</dt>
+        <dd>{{ memory.total_display }}</dd>
+        <dt>Usada</dt>
+        <dd>{{ memory.used_display }}</dd>
+        <dt>% usado</dt>
+        <dd>{{ memory.percent_display }}</dd>
+      </dl>
+    </div>
+    <div class="syshealth-card">
+      <h2>Disco "/" <span class="syshealth-status status-{{ disk.status }}">{{ disk.status_label }}</span></h2>
+      <dl>
+        <dt>Total</dt>
+        <dd>{{ disk.total_display }}</dd>
+        <dt>Usado</dt>
+        <dd>{{ disk.used_display }}</dd>
+        <dt>Livre</dt>
+        <dd>{{ disk.free_display }}</dd>
+        <dt>% usado</dt>
+        <dd>{{ disk.percent_display }}</dd>
+      </dl>
+    </div>
+    <div class="syshealth-card">
+      <h2>Uptime</h2>
+      <dl>
+        <dt>Tempo desde o boot</dt>
+        <dd>{{ uptime.display }}</dd>
+      </dl>
+    </div>
+  </div>
+
+  <p class="syshealth-footnote">Cache: {{ cache_seconds }} segundos.</p>
+</div>
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<script>
+  (function() {
+    const button = document.getElementById('syshealth-copy');
+    if (!button) {
+      return;
+    }
+    button.addEventListener('click', function() {
+      const summary = button.getAttribute('data-summary');
+      if (!navigator.clipboard) {
+        alert('Clipboard API indisponível.');
+        return;
+      }
+      navigator.clipboard.writeText(summary).then(function() {
+        button.classList.add('success');
+        button.textContent = 'Resumo copiado!';
+        setTimeout(function() {
+          button.classList.remove('success');
+          button.textContent = 'Copiar resumo';
+        }, 2000);
+      }).catch(function() {
+        alert('Não foi possível copiar o resumo.');
+      });
+    });
+  })();
+</script>
+{% endblock %}

@@ -29,6 +29,16 @@ class CustomAdminSite(AdminSite):
                 self.admin_view(syshealth_views.dashboard),
                 name="syshealth_dashboard",
             ),
+            path(
+                "ops/access-dashboard/",
+                self.admin_view(syshealth_views.access_dashboard),
+                name="ops_access_dashboard",
+            ),
+            path(
+                "ops/access-dashboard.json",
+                self.admin_view(syshealth_views.access_dashboard_data),
+                name="ops_access_dashboard_data",
+            ),
         ]
         return custom_urls + urls
 

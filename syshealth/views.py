@@ -5,6 +5,7 @@ from datetime import datetime, time as time_cls, timedelta
 from io import StringIO
 from typing import Dict, Iterable, Tuple
 
+from django.contrib import admin
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
@@ -215,7 +216,11 @@ def access_dashboard(request):
 
     events_payload = [_serialize_event(event, admin_namespace) for event in page_obj.object_list]
 
+    admin_context = admin.site.each_context(request)
+    available_apps = admin_context.get("available_apps") or admin.site.get_app_list(request)
+
     context = {
+        **admin_context,
         "title": "Monitoramento de acessos",
         "online_count": online_total,
         "access_count": access_count,
@@ -233,6 +238,7 @@ def access_dashboard(request):
         "settings": settings_obj,
         "query_string": query_string,
         "full_query_string": full_query_string,
+        "available_apps": available_apps,
     }
     return render(request, "admin/ops/access_dashboard.html", context)
 

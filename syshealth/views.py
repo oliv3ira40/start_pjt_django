@@ -221,7 +221,7 @@ def access_dashboard(request):
 
     context = {
         **admin_context,
-        "title": "Monitoramento de acessos",
+        # "title": "Monitoramento de acessos",
         "online_count": online_total,
         "access_count": access_count,
         "online_authenticated": online_authenticated,

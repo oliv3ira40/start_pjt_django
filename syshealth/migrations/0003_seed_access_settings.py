@@ -7,7 +7,15 @@ def create_settings_and_permissions(apps, schema_editor):
     AccessSettings = apps.get_model("syshealth", "AccessSettings")
     AccessSettings.objects.get_or_create(
         defaults={
-            "ignore_paths": ["/static/", "/media/", "/health/"],
+            "ignore_paths": [
+                "/static/",
+                "/media/",
+                "/admin/jsi18n/",
+                "/admin/ops/access-dashboard",
+                "/admin/ops/",
+                "/.well-known/appspecific/com.chrome.devtools.json",
+                "/admin/syshealth/",
+            ],
             "log_anonymous": True,
             "log_non_get_requests": False,
             "sampling_ratio": 1,

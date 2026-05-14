@@ -83,6 +83,7 @@ Todos os campos de upload de imagens passam por conversão e compressão automá
 - [Prévia de imagem](docs/preview-image.md)
 - [Campos condicionais](docs/campos-condicionais.md)
 - [Select2](docs/select2.md)
+- [Remoção do monitoramento interno de acessos](docs/remocao-monitoramento-acessos.md)
 
 **Checklist de integração rápida**
 - [ ] Herdar `BaseAdmin`/`OwnerRestrictedAdmin` e `BaseInline` ao registrar novos modelos.
@@ -90,3 +91,9 @@ Todos os campos de upload de imagens passam por conversão e compressão automá
 - [ ] Definir/atualizar `RULES` para campos condicionais antes de carregar o Admin.
 - [ ] Confirmar que os selects relevantes estão cobertos pelo script Select2 ou adicionados manualmente.
 - [ ] Testar eventos `formset:added` para inlines (prévia, condicionais e Select2).
+
+### Tema utilizado no admin
+As páginas criadas devem seguir o tema bootstrap do django-admin-interface, que oferece uma interface mais amigável e moderna para o administrador do Django.
+- [Documentação do django-admin-interface](https://github.com/fabiocaccamo/django-admin-interface?tab=readme-ov-file)
+- Intalação do tema bootstrap do django-admin-interface: python manage.py loaddata admin_interface_theme_bootstrap.json
+- Para customizar templates do admin, é necessário consultar a documentação/arquivos do template, por exemplo: https://github.com/fabiocaccamo/django-admin-interface/blob/main/admin_interface/templates/admin/base_site.html

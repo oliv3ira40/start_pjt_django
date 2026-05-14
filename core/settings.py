@@ -59,7 +59,6 @@ INSTALLED_APPS = [
     "colorfield",
     "accounts",
     "admin_menu.apps.AdminMenuConfig",
-    "syshealth.apps.SysHealthConfig",
 
     'core.admin_site.CustomAdminConfig',
     'django.contrib.auth',
@@ -80,7 +79,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'syshealth.middleware.AccessLogMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'

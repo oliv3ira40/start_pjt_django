@@ -38,27 +38,46 @@ Este é o guia definitivo de trabalho do projeto. Ele registra invariantes, padr
 ## Django, dados e migrations
 
 - Respeite os padrões nativos do Django para autenticação, formulários, permissões, Admin, mensagens, CSRF e transações; não altere internals do framework sem necessidade comprovada.
-- Não edite nem apague migrations já aplicadas. Mudanças de schema exigem uma nova migration.
+- Antes de adotar uma API do Django, confirme compatibilidade com a versão suportada pelo projeto. A base atual usa Django 4.2 e Python 3.9; não assuma recursos de versões posteriores sem upgrade aprovado.
+- Models devem ter `__str__()` útil. Use `TextChoices` ou `IntegerChoices` para opções estáveis e `related_name` explícito quando melhorar a clareza do acesso reverso.
+- Use constraints e índices em `Meta` somente para uma regra real de integridade ou padrão de consulta comprovado; evite índices e abstrações por antecipação.
+- Não crie, edite nem apague migrations manualmente. Mudanças de schema exigem migration gerada por `python manage.py makemigrations` e revisada antes de ser aplicada.
 - Para mudanças de schema, execute `makemigrations --check`, revise `migrate --plan` quando aplicável e rode `check` e os testes afetados. Em produção, migrations exigem procedimento aprovado e backup quando pertinente.
 - Use constraints de banco para invariantes de concorrência e unicidade importantes; validações de aplicação continuam necessárias para mensagens e contexto adequados.
-- Operações que modificam vários registros ou dependem de consistência devem usar transações. Efeitos externos devem ocorrer somente após a confirmação da transação local.
+- Views e ações do Admin devem orquestrar a requisição e permanecer enxutas. Extraia regras complexas ou reutilizadas para funções ou serviços específicos, mas não introduza camadas, managers ou querysets customizados sem reutilização real ou ganho claro de legibilidade.
+- Preserve os limites e responsabilidades de cada app e evite imports circulares entre eles.
 - Seeds e comandos de carga devem ser idempotentes: criar ausentes, atualizar o que é gerenciado, manter ordem determinística, não duplicar dados e não apagar personalizações não relacionadas.
 - Não execute seeds de demonstração ou alterações operacionais em produção sem autorização explícita e proteção adequada ao ambiente.
 
 ## Segurança, privacidade e ownership
 
 - Segurança é requisito transversal. Toda regra crítica de permissão, escopo, integridade e isolamento deve ser validada no servidor.
+- Valide e sanitize no backend todas as entradas de forms, query strings, parâmetros de rota, uploads e integrações. Validações de frontend são apenas apoio e nunca substituem essa proteção.
+- Forms e serializers expostos devem declarar campos explicitamente; não use `fields = "__all__"` quando isso puder expor campos não autorizados.
 - Endpoints que alteram estado devem validar método HTTP, autenticação, autorização, CSRF, parâmetros e escopo do usuário. Nunca confie em campos ocultos, filtros visuais, IDs, query strings, relações indiretas, anexos ou JavaScript.
 - Em sistemas multi-tenant, usuário comum acessa somente os próprios dados e superusuário mantém a visão global apenas quando isto for intencional.
 - Models com `owner` (ou vínculo equivalente) devem aplicar isolamento completo: queryset, criação, edição, exclusão, relações FK/M2M, ações em massa, Admin, views, endpoints e páginas customizadas.
 - A criação deve atribuir o proprietário no backend. Usuários comuns não devem escolher nem visualizar campos de ownership sem necessidade explícita.
-- O acesso direto por URL a objeto de outro proprietário deve ser bloqueado sem vazar dados. Relações devem oferecer apenas opções do escopo autorizado.
+- Cheque permissão e ownership por objeto antes de visualizar, editar ou excluir. O acesso direto por URL a objeto de outro proprietário deve ser bloqueado sem vazar dados. Relações devem oferecer apenas opções do escopo autorizado.
 - Menus, botões, redirecionamentos e ocultação visual não substituem autorização no backend. Permissões alteradas devem produzir efeito na próxima requisição.
 - Não enfraqueça nem remova testes de segurança, privacidade, permissão, ownership ou visibilidade sem autorização explícita.
 - Colete e retenha apenas os dados necessários. Não exponha dados sensíveis em logs, templates, respostas JSON, mensagens de erro, analytics ou ferramentas de terceiros.
 - Cookies essenciais de sessão e CSRF devem permanecer funcionais. Qualquer armazenamento opcional, analytics, pixel ou terceiro exige avaliação de privacidade, consentimento quando aplicável e atualização da documentação.
+- Não use `csrf_exempt` sem necessidade excepcional e justificativa documentada. Não use `mark_safe`, `|safe` ou desative autoescape para conteúdo do usuário sem sanitização apropriada.
+- Nunca monte SQL com interpolação de strings. Prefira ORM e, quando SQL parametrizado for indispensável, mantenha os valores separados da consulta.
 - Tokens, chaves e credenciais de integrações devem vir de variáveis de ambiente, ficar restritos ao backend e nunca aparecer em logs, páginas ou respostas.
 - Fluxos destrutivos ou irreversíveis exigem confirmação explícita, validação no servidor, escopo estrito e cobertura de testes.
+- Antes de produção, execute `python manage.py check --deploy` com as configurações do ambiente e revise HTTPS, cookies seguros, hosts permitidos e demais alertas aplicáveis.
+
+## Transações, concorrência e queries
+
+- Use `transaction.atomic()` em operações compostas que não possam ficar parcialmente concluídas. E-mails, tarefas e chamadas externas só devem ocorrer em `transaction.on_commit()` após sucesso da gravação local.
+- Para alterações concorrentes críticas — como contadores, saldo, disponibilidade ou transições de estado — escolha a proteção adequada: constraint de banco, `F()`/expressão de banco e, quando necessário, `select_for_update()` dentro de uma transação curta.
+- Audite riscos de N+1 em páginas, Admin e serviços que percorrem relações. Use `select_related()` para `ForeignKey`/`OneToOneField` e `prefetch_related()` para relações reversas ou `ManyToManyField` somente quando elas forem efetivamente usadas.
+- Não consulte repetidamente relacionamentos dentro de loops. Para checagem simples, use `exists()`; quando instâncias completas não forem necessárias, prefira `values()` ou `values_list()`.
+- Em grandes volumes, considere operações em lote, `update()` e expressões de banco. Preserve signals, validações e regras de negócio quando elas forem necessárias; otimização não pode alterar o contrato funcional.
+- Use `list_select_related`, anotações ou prefetch nas listagens do Admin quando aplicáveis e evite consultas extras em métodos repetidos de `list_display`.
+- Otimizações de query, `only()`/`defer()`, iteração em lote e índices devem responder a uma necessidade medida ou risco real. Não otimize telas ou models simples prematuramente.
 
 ## Admin, páginas customizadas e UX
 
@@ -73,8 +92,9 @@ Este é o guia definitivo de trabalho do projeto. Ele registra invariantes, padr
 
 ## Uploads, integrações e conteúdo público
 
-- Centralize políticas de upload: tipos aceitos, tamanho, dimensões, conversão, nomes internos seguros e remoção após substituição/exclusão confirmada.
+- Centralize políticas de upload: tipo, extensão, tamanho, conteúdo, dimensões, conversão, nomes internos seguros e remoção após substituição/exclusão confirmada. O atributo HTML `accept` é apenas uma ajuda visual.
 - Reutilize validadores e presets de upload; não replique regras em model, form e view. Não aceite arquivos ou formatos não previstos sem decisão explícita.
+- Arquivos privados não podem ser expostos diretamente sem autenticação e validação de ownership; trate caminhos e nomes enviados pelo usuário como não confiáveis.
 - Integrações externas devem ficar em serviços de backend centralizados, com timeout, tratamento de falhas, logs seguros e comportamento local consistente quando o serviço externo falhar.
 - Chamadas externas devem ser idempotentes e não podem duplicar efeitos em novas tentativas. Não as dispare diretamente de models, templates ou JavaScript.
 - Dados e páginas públicas devem ser isolados da área autenticada. Tokens públicos são restritos ao recurso autorizado, longos, aleatórios, revogáveis quando aplicável e nunca substituem ownership.
@@ -89,6 +109,8 @@ Este é o guia definitivo de trabalho do projeto. Ele registra invariantes, padr
 - Sempre que possível, o teste deve falhar antes da correção e passar depois dela.
 - Mudanças de ownership, visibilidade, permissões ou rotas exigem testes específicos de isolamento, formulários/relações e bloqueio de acesso direto por URL.
 - Mudanças de Admin, model, form ou schema exigem as suítes afetadas e as verificações de migration pertinentes.
+- Teste validação no servidor mesmo quando há comportamento JavaScript no Admin. Operações compostas críticas devem cobrir sucesso, falha e ausência de persistência parcial.
+- Quando uma mudança afetar uma listagem ou fluxo com risco relevante de N+1, inclua teste de quantidade de queries ou outra proteção proporcional contra regressão; não exija esse tipo de teste para alterações triviais.
 - Não marque uma tarefa como concluída sem executar as validações proporcionais ao risco. Declare claramente o que foi executado e o que não pôde ser validado.
 
 ## Atualização deste guia

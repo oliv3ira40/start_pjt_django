@@ -1,0 +1,415 @@
+# Finances Hub — Aplicar nova identidade visual e atualizar o seed do tema
+
+## Objetivo
+
+Aplicar ao Finances Hub a nova identidade visual desenvolvida pelo DevFront e atualizar o seed responsável pela configuração do tema do Django Admin.
+
+A nova referência está disponível em:
+
+`core/static/identidade-visual/`
+
+A pasta contém os ativos exportados, guia de identidade e documentação produzida pelo DevFront.
+
+Nesta etapa, implementar somente:
+
+* adoção das novas cores oficiais;
+* atualização do tema do Django Admin;
+* configuração das logos no tema;
+* integração dos ativos visuais necessários;
+* atualização idempotente do seed;
+* revisão das referências antigas da marca.
+
+O SEO técnico e as metatags serão tratados em um prompt posterior.
+
+Antes de iniciar, ler integralmente:
+
+* `AGENTS.md`;
+* arquivos de documentação da pasta `core/static/identidade-visual/`;
+* guia visual criado pelo DevFront;
+* arquivos de referência e ativos disponíveis na pasta.
+
+## 1. Referência visual obrigatória
+
+A pasta:
+
+`core/static/identidade-visual/`
+
+é a referência oficial da identidade visual do Finances Hub.
+
+Identificar nela:
+
+* logo principal;
+* logo horizontal;
+* logo quadrada;
+* símbolo isolado;
+* versões para fundo claro;
+* versões para fundo escuro;
+* versões monocromáticas;
+* paleta oficial;
+* tipografia;
+* favicon;
+* ícones;
+* imagens sociais;
+* orientações de uso.
+
+Não redesenhar, recolorir ou reinterpretar os ativos.
+
+Não gerar novas cores por aproximação quando os valores oficiais estiverem documentados.
+
+## 2. Auditoria da configuração atual
+
+Revisar o tema atual acessível por rotas como:
+
+`/admin/admin_interface/theme/<id>/change/`
+
+Identificar:
+
+* model e campos do tema;
+* seed ou comando responsável pela criação e atualização;
+* cores atualmente cadastradas;
+* logos atualmente usadas;
+* favicon ou ícone atual;
+* configurações de cabeçalho;
+* títulos;
+* estilos adicionais;
+* comportamento para tema claro e escuro;
+* referências a arquivos estáticos antigos.
+
+Revisar também:
+
+* templates globais;
+* arquivos CSS;
+* configurações de marca;
+* login;
+* cabeçalho do Admin;
+* menu;
+* páginas públicas que já utilizem logo;
+* manifest ou PWA, sem implementar ainda o pacote completo de SEO.
+
+Não alterar campos do tema sem antes entender como o `django-admin-interface` ou estrutura equivalente espera receber os valores.
+
+## 3. Atualizar o seed do tema
+
+Atualizar o seed existente responsável por configurar o tema do Finances Hub.
+
+O seed deve passar a usar os valores oficiais da nova identidade.
+
+Atualizar, conforme os campos reais disponíveis:
+
+* cor primária;
+* cor secundária;
+* cor de destaque;
+* cor de links;
+* cor de links ativos;
+* cor de hover;
+* fundo do cabeçalho;
+* texto do cabeçalho;
+* fundo do menu;
+* texto do menu;
+* item ativo do menu;
+* bordas;
+* botões principais;
+* botões secundários;
+* estados de sucesso;
+* alerta;
+* erro;
+* demais tokens atualmente configurados pelo tema.
+
+Usar somente cores documentadas no guia de identidade.
+
+Não criar uma paleta paralela no seed.
+
+## 4. Não sobrescrever indiscriminadamente todos os estados
+
+A nova paleta deve respeitar a função de cada cor.
+
+Não usar a cor principal da marca indistintamente para:
+
+* sucesso;
+* alerta;
+* erro;
+* ações destrutivas;
+* status financeiros negativos.
+
+Manter cores semânticas apropriadas, usando os tokens documentados pelo DevFront.
+
+Garantir contraste suficiente entre:
+
+* texto e fundo;
+* botões e rótulos;
+* menu ativo e menu inativo;
+* cabeçalho e logo;
+* estados de foco;
+* tema claro e escuro, quando aplicável.
+
+## 5. Configurar a logo no tema
+
+Localizar os campos reais de logo disponíveis no tema administrativo.
+
+Configurar a versão correta para cada uso, conforme a documentação da identidade:
+
+* logo do cabeçalho;
+* logo da tela de login;
+* símbolo reduzido, quando necessário;
+* logo para fundo claro;
+* logo para fundo escuro, caso o tema possua contextos distintos.
+
+Não utilizar a logo horizontal em espaços onde ela fique ilegível ou comprimida.
+
+Não utilizar caminho local absoluto.
+
+Usar corretamente o sistema de arquivos estáticos ou o mecanismo de upload esperado pelo campo.
+
+## 6. Campos de imagem do `admin_interface`
+
+Verificar como o pacote atual armazena as imagens do tema.
+
+Se os campos de logo forem `ImageField` ou arquivos persistidos em mídia:
+
+* não preencher apenas com uma string de caminho estático incompatível;
+* usar o mecanismo correto para criar ou atualizar o arquivo associado ao campo;
+* reutilizar o ativo da pasta de identidade;
+* evitar cópias duplicadas em cada execução do seed;
+* garantir funcionamento em desenvolvimento e produção.
+
+Se a configuração atual já possuir uma estratégia consolidada para copiar assets estáticos para o campo do tema, reutilizá-la.
+
+Não criar uma solução exclusiva e frágil apenas para este seed.
+
+## 7. Seed idempotente
+
+O seed deve funcionar tanto para:
+
+* banco novo;
+* ambiente de desenvolvimento existente;
+* homologação;
+* produção com tema já criado.
+
+Ao executar novamente:
+
+* atualizar o tema oficial existente;
+* não criar temas duplicados;
+* não duplicar arquivos de logo;
+* não criar vários temas ativos;
+* preservar o vínculo correto com o tema padrão;
+* atualizar apenas os campos gerenciados pelo seed.
+
+Identificar o tema por uma chave estável já usada no projeto, e não apenas pelo ID numérico visto na URL.
+
+Não assumir que o tema oficial sempre terá ID `2`.
+
+## 8. Tema ativo
+
+Garantir que o tema atualizado continue sendo o tema padrão e ativo do sistema.
+
+Não deixar:
+
+* dois temas marcados como padrão;
+* o novo tema criado, mas não utilizado;
+* usuários presos a uma configuração antiga incompatível;
+* referências ao antigo tema no menu ou no login.
+
+Respeitar o funcionamento atual de preferências individuais, caso o pacote permita seleção de tema por usuário.
+
+## 9. Tipografia
+
+Revisar a tipografia definida no guia.
+
+Aplicar apenas fontes que:
+
+* já estejam disponíveis no projeto;
+* possam ser carregadas legalmente;
+* funcionem em produção;
+* possuam fallback seguro.
+
+Não compartilhar nem incorporar arquivos de fonte de origem desconhecida.
+
+Se o guia utilizar uma fonte externa ainda não integrada, verificar primeiro a estratégia já adotada no sistema.
+
+Não prejudicar desempenho ou carregamento inicial apenas para forçar uma fonte específica.
+
+## 10. Assets oficiais
+
+Organizar os ativos usados pelo sistema de maneira clara.
+
+Preservar a pasta original do DevFront como referência.
+
+Quando necessário, criar uma estrutura de consumo do projeto, por exemplo:
+
+* logos;
+* ícones;
+* favicon;
+* imagens sociais;
+* versões claras e escuras.
+
+Não:
+
+* manter imagens em base64;
+* duplicar o mesmo arquivo sem necessidade;
+* utilizar nomes genéricos como `logo-final-2.png`;
+* editar os arquivos originais do guia.
+
+Utilizar nomes estáveis e descritivos.
+
+## 11. Cabeçalho e menu do Admin
+
+Validar como a nova logo e as novas cores aparecem em:
+
+* cabeçalho;
+* menu lateral;
+* item ativo;
+* item em hover;
+* modo recolhido, se existir;
+* versão desktop;
+* versão mobile;
+* tela de login.
+
+A logo não deve:
+
+* ficar cortada;
+* ficar esticada;
+* perder proporção;
+* encostar nas bordas;
+* ficar ilegível sobre o fundo;
+* aumentar excessivamente a altura do cabeçalho.
+
+Fazer somente os ajustes técnicos necessários para aplicar corretamente os ativos.
+
+Não redesenhar o cabeçalho ou o menu.
+
+## 12. Páginas customizadas recentes
+
+Validar a nova identidade junto às páginas customizadas já implementadas, especialmente:
+
+* Dashboard;
+* Perfil;
+* Metas e Provisões;
+* Classificações financeiras;
+* Catálogo de compras;
+* Abastecimentos.
+
+As páginas possuem estilos isolados e não devem ser recoloridas automaticamente de forma que deixem de corresponder aos layouts aprovados.
+
+A atualização do tema global não pode:
+
+* sobrescrever componentes internos;
+* alterar modais;
+* quebrar contrastes;
+* modificar espaçamentos;
+* afetar responsividade.
+
+Caso exista conflito, corrigir o isolamento do tema ou dos componentes sem redesenhar as páginas.
+
+## 13. Identidade no login e cadastro
+
+Atualizar a aplicação da marca nas telas públicas de autenticação que já utilizam o tema:
+
+* login;
+* criação de conta;
+* recuperação de senha;
+* redefinição de senha.
+
+Aplicar:
+
+* logo adequada;
+* cores oficiais;
+* favicon, se já fizer parte da estrutura global.
+
+Não realizar nesta etapa redesign dessas páginas.
+
+Não modificar textos ou fluxos de autenticação.
+
+## 14. Referências antigas
+
+Pesquisar no projeto por referências à identidade anterior, incluindo:
+
+* caminhos antigos de logo;
+* cores hexadecimais antigas;
+* arquivos de favicon anteriores;
+* nomes de assets;
+* CSS global;
+* templates;
+* manifest;
+* e-mails;
+* documentação técnica.
+
+Substituir somente referências que devam utilizar a nova identidade oficial.
+
+Não alterar cores semânticas de componentes financeiros apenas porque coincidem com valores antigos.
+
+Não remover arquivos antes de confirmar que não possuem outros consumidores.
+
+## 15. Não implementar SEO nesta etapa
+
+Não implementar ainda:
+
+* Open Graph;
+* Twitter Cards;
+* metatags públicas;
+* dados estruturados;
+* sitemap;
+* `robots.txt`;
+* canonical;
+* Search Console;
+* novos conteúdos para a Home;
+* páginas de artigos;
+* imagem social nos templates.
+
+Os ativos correspondentes podem permanecer disponíveis para o próximo prompt, mas não devem ser conectados agora.
+
+## 16. Documentação no `AGENTS.md`
+
+Registrar objetivamente no `AGENTS.md`:
+
+* a pasta oficial da identidade visual;
+* que cores e logos devem vir do guia oficial;
+* que o seed do tema é a fonte de configuração do Admin;
+* que o seed deve permanecer idempotente;
+* que não se deve criar outra paleta por aproximação;
+* que páginas customizadas mantêm seus estilos isolados;
+* que novos ativos públicos devem reutilizar o pacote oficial.
+
+Não copiar todo o guia visual para o `AGENTS.md`.
+
+Referenciar a documentação existente na pasta.
+
+## 17. Testes e validação
+
+Criar ou ajustar testes quando aplicável para validar:
+
+* seed cria o tema em banco novo;
+* seed atualiza o tema existente;
+* múltiplas execuções não criam duplicidade;
+* existe apenas um tema padrão esperado;
+* logo é associada corretamente;
+* arquivo não é duplicado a cada execução;
+* cores oficiais são persistidas;
+* tema continua ativo;
+* login carrega a logo;
+* Admin carrega a logo;
+* menu continua legível;
+* páginas customizadas não sofrem alteração indevida.
+
+Realizar também validação manual em:
+
+* desktop;
+* mobile;
+* produção simulada com `DEBUG=False`;
+* arquivos estáticos coletados;
+* arquivos de mídia, quando forem usados pelos campos de logo.
+
+## 18. Critérios de aceite
+
+* O tema do Finances Hub utiliza a nova paleta oficial.
+* A logo oficial aparece corretamente no Admin.
+* A versão adequada da logo aparece no login.
+* O seed atualiza instalações existentes.
+* O seed é idempotente.
+* Não são criados temas ou arquivos duplicados.
+* O tema oficial permanece ativo.
+* As páginas customizadas continuam visualmente preservadas.
+* Os ativos vêm da pasta oficial de identidade.
+* Referências antigas são removidas somente quando não utilizadas.
+* O `AGENTS.md` documenta a fonte oficial da identidade.
+* Nenhuma funcionalidade de SEO é implementada nesta etapa.
+* Melhorias fora deste escopo devem ser apenas relatadas, sem implementação.

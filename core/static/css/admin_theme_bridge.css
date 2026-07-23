@@ -1,0 +1,1405 @@
+/*
+ * Bridge between Django's native theme selector (light/dark/auto)
+ * and the current admin_interface-based theme customization.
+ */
+
+html[data-theme="dark"] {
+    color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] {
+        color-scheme: dark;
+    }
+}
+
+html[data-theme="dark"] .admin-interface {
+    --admin-interface-module-background-color: #111827;
+    --admin-interface-module-background-selected-color: #1f2937;
+    --admin-interface-module-text-color: #e2e8f0;
+    --admin-interface-module-link-color: #d1d5db;
+    --admin-interface-module-link-selected-color: #ffffff;
+    --admin-interface-module-link-hover-color: #bfdbfe;
+    --admin-interface-generic-link-color: #93c5fd;
+    --admin-interface-generic-link-hover-color: #bfdbfe;
+    --admin-interface-generic-link-active-color: #60a5fa;
+    --admin-interface-save-button-background-color: #2563eb;
+    --admin-interface-save-button-background-hover-color: #1d4ed8;
+    --admin-interface-save-button-text-color: #eff6ff;
+    --admin-interface-delete-button-background-color: #dc2626;
+    --admin-interface-delete-button-background-hover-color: #b91c1c;
+    --admin-interface-delete-button-text-color: #fee2e2;
+    --admin-interface-related-modal-background-color: #0b1220;
+}
+
+html[data-theme="dark"] .admin-interface body,
+html[data-theme="dark"] .admin-interface #container,
+html[data-theme="dark"] .admin-interface #content,
+html[data-theme="dark"] .admin-interface .main > .content {
+    background: var(--body-bg);
+    color: var(--body-fg);
+}
+
+html[data-theme="dark"] .admin-interface #nav-sidebar,
+html[data-theme="dark"] .admin-interface .module,
+html[data-theme="dark"] .admin-interface .dashboard .module,
+html[data-theme="dark"] .admin-interface .inline-group,
+html[data-theme="dark"] .admin-interface .grp-group,
+html[data-theme="dark"] .admin-interface .object-tools,
+html[data-theme="dark"] .admin-interface .results,
+html[data-theme="dark"] .admin-interface table,
+html[data-theme="dark"] .admin-interface .changelist-form-container,
+html[data-theme="dark"] .admin-interface .submit-row,
+html[data-theme="dark"] .admin-interface .pwa-helper-modal__dialog {
+    background: #111827;
+    color: #e2e8f0;
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .admin-interface table thead th,
+html[data-theme="dark"] .admin-interface .results thead th,
+html[data-theme="dark"] .admin-interface .results thead th a,
+html[data-theme="dark"] .admin-interface .results thead th span {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .admin-interface table tbody tr:nth-child(odd),
+html[data-theme="dark"] .admin-interface .results tbody tr:nth-child(odd) {
+    background: #0f172a;
+}
+
+html[data-theme="dark"] .admin-interface table tbody tr:nth-child(even),
+html[data-theme="dark"] .admin-interface .results tbody tr:nth-child(even) {
+    background: #111827;
+}
+
+html[data-theme="dark"] .admin-interface table td,
+html[data-theme="dark"] .admin-interface table th,
+html[data-theme="dark"] .admin-interface .results td,
+html[data-theme="dark"] .admin-interface .results th {
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .admin-interface input:not([type="submit"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]),
+html[data-theme="dark"] .admin-interface textarea,
+html[data-theme="dark"] .admin-interface select {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-color: #475569;
+}
+
+html[data-theme="dark"] .admin-interface input:focus,
+html[data-theme="dark"] .admin-interface textarea:focus,
+html[data-theme="dark"] .admin-interface select:focus,
+html[data-theme="dark"] .admin-interface button:focus-visible,
+html[data-theme="dark"] .admin-interface a:focus-visible {
+    outline: 2px solid #60a5fa;
+    outline-offset: 1px;
+}
+
+html[data-theme="dark"] .admin-interface .button,
+html[data-theme="dark"] .admin-interface button,
+html[data-theme="dark"] .admin-interface input[type="submit"],
+html[data-theme="dark"] .admin-interface input[type="button"] {
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .admin-interface .account-nav-shortcuts,
+html[data-theme="dark"] .admin-interface .data-protection-nav-shortcut {
+    border-top-color: #334155;
+}
+
+html[data-theme="dark"] .admin-interface #nav-sidebar .account-nav-shortcuts__link {
+    border-color: #1d4ed8;
+    background: #172554;
+    color: #bfdbfe !important;
+}
+
+html[data-theme="dark"] .admin-interface #nav-sidebar .account-nav-shortcuts__link:hover,
+html[data-theme="dark"] .admin-interface #nav-sidebar .account-nav-shortcuts__link:focus-visible,
+html[data-theme="dark"] .admin-interface #nav-sidebar .account-nav-shortcuts__link.is-active {
+    border-color: #60a5fa;
+    background: #1e3a8a !important;
+    color: #eff6ff !important;
+}
+
+html[data-theme="dark"] .admin-interface #nav-sidebar .data-protection-nav-shortcut__link {
+    border-color: #9a3412;
+    background: #431407;
+    color: #fdba74 !important;
+}
+
+html[data-theme="dark"] .admin-interface #nav-sidebar .data-protection-nav-shortcut__link:hover,
+html[data-theme="dark"] .admin-interface #nav-sidebar .data-protection-nav-shortcut__link:focus-visible,
+html[data-theme="dark"] .admin-interface #nav-sidebar .data-protection-nav-shortcut__link.is-active {
+    border-color: #ea580c;
+    background: #7c2d12 !important;
+    color: #ffedd5 !important;
+}
+
+html[data-theme="dark"] .admin-interface .pwa-footer {
+    border-top-color: #334155;
+    color: #cbd5e1;
+}
+
+html[data-theme="dark"] .admin-interface .pwa-footer__label,
+html[data-theme="dark"] .admin-interface .pwa-helper-modal__description,
+html[data-theme="dark"] .admin-interface .pwa-helper-modal__steps {
+    color: #cbd5e1;
+}
+
+html[data-theme="dark"] .admin-interface .pwa-footer__paused {
+    border-color: #475569;
+    background: #0f172a;
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] .admin-interface .fin-home-card {
+    background: #111827;
+    border-color: #334155;
+    box-shadow: 0 10px 24px rgba(2, 6, 23, 0.35);
+}
+
+html[data-theme="dark"] .admin-interface .fin-home-card--accent {
+    background: linear-gradient(180deg, rgba(37, 99, 235, 0.2), #111827 48%);
+}
+
+html[data-theme="dark"] .admin-interface .fin-home__news-button,
+html[data-theme="dark"] .admin-interface .fin-home__link-action {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-color: #475569;
+}
+
+html[data-theme="dark"] .admin-interface .fin-home__news-button:hover,
+html[data-theme="dark"] .admin-interface .fin-home__news-button:focus-visible,
+html[data-theme="dark"] .admin-interface .fin-home__link-action:hover,
+html[data-theme="dark"] .admin-interface .fin-home__link-action:focus-visible {
+    background: #1e293b;
+    border-color: #64748b;
+}
+
+html[data-theme="dark"] .admin-interface .fin-home__metric,
+html[data-theme="dark"] .admin-interface .fin-home__trip-item,
+html[data-theme="dark"] .admin-interface .fin-home__goal-item {
+    background: #0f172a;
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .admin-interface .fin-dashboard-wrap {
+    --table-head-bg-top: #111827;
+    --table-head-bg-bottom: #0f172a;
+    --table-scrollbar-track: rgba(51, 65, 85, 0.7);
+    --table-scrollbar-thumb: rgba(148, 163, 184, 0.7);
+    --table-scrollbar-thumb-hover: rgba(203, 213, 225, 0.8);
+}
+
+html[data-theme="dark"] .admin-interface .fin-dashboard-wrap .card-shell,
+html[data-theme="dark"] .admin-interface .table-frame,
+html[data-theme="dark"] .admin-interface .table-actions-frame,
+html[data-theme="dark"] .admin-interface .dashboard-month-menu,
+html[data-theme="dark"] .admin-interface .btn-more-actions,
+html[data-theme="dark"] .admin-interface .card-header-row {
+    background: #111827;
+    color: #e2e8f0;
+    border-color: #334155;
+    box-shadow: none;
+}
+
+html[data-theme="dark"] .admin-interface .dashboard-month-menu__item {
+    color: #e2e8f0;
+}
+
+html[data-theme="dark"] .admin-interface .dashboard-month-menu__item:hover {
+    background: rgba(59, 130, 246, 0.18);
+}
+
+html[data-theme="dark"] .admin-interface .pwa-install-banner {
+    background: linear-gradient(180deg, rgba(37, 99, 235, 0.2), rgba(15, 23, 42, 0.95));
+    border-color: rgba(59, 130, 246, 0.4) !important;
+}
+
+html[data-theme="dark"] .admin-interface .pwa-install-banner__title,
+html[data-theme="dark"] .admin-interface .pwa-install-banner__description {
+    color: #e2e8f0;
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] .admin-interface {
+        --admin-interface-module-background-color: #111827;
+        --admin-interface-module-background-selected-color: #1f2937;
+        --admin-interface-module-text-color: #e2e8f0;
+        --admin-interface-module-link-color: #d1d5db;
+        --admin-interface-module-link-selected-color: #ffffff;
+        --admin-interface-module-link-hover-color: #bfdbfe;
+        --admin-interface-generic-link-color: #93c5fd;
+        --admin-interface-generic-link-hover-color: #bfdbfe;
+        --admin-interface-generic-link-active-color: #60a5fa;
+        --admin-interface-save-button-background-color: #2563eb;
+        --admin-interface-save-button-background-hover-color: #1d4ed8;
+        --admin-interface-save-button-text-color: #eff6ff;
+        --admin-interface-delete-button-background-color: #dc2626;
+        --admin-interface-delete-button-background-hover-color: #b91c1c;
+        --admin-interface-delete-button-text-color: #fee2e2;
+        --admin-interface-related-modal-background-color: #0b1220;
+    }
+
+    html[data-theme="auto"] .admin-interface body,
+    html[data-theme="auto"] .admin-interface #container,
+    html[data-theme="auto"] .admin-interface #content,
+    html[data-theme="auto"] .admin-interface .main > .content {
+        background: var(--body-bg);
+        color: var(--body-fg);
+    }
+
+    html[data-theme="auto"] .admin-interface #nav-sidebar,
+    html[data-theme="auto"] .admin-interface .module,
+    html[data-theme="auto"] .admin-interface .dashboard .module,
+    html[data-theme="auto"] .admin-interface .inline-group,
+    html[data-theme="auto"] .admin-interface .grp-group,
+    html[data-theme="auto"] .admin-interface .object-tools,
+    html[data-theme="auto"] .admin-interface .results,
+    html[data-theme="auto"] .admin-interface table,
+    html[data-theme="auto"] .admin-interface .changelist-form-container,
+    html[data-theme="auto"] .admin-interface .submit-row,
+    html[data-theme="auto"] .admin-interface .pwa-helper-modal__dialog {
+        background: #111827;
+        color: #e2e8f0;
+        border-color: #334155;
+    }
+
+    html[data-theme="auto"] .admin-interface table thead th,
+    html[data-theme="auto"] .admin-interface .results thead th,
+    html[data-theme="auto"] .admin-interface .results thead th a,
+    html[data-theme="auto"] .admin-interface .results thead th span {
+        background: #0f172a;
+        color: #e2e8f0;
+        border-color: #334155;
+    }
+
+    html[data-theme="auto"] .admin-interface table tbody tr:nth-child(odd),
+    html[data-theme="auto"] .admin-interface .results tbody tr:nth-child(odd) {
+        background: #0f172a;
+    }
+
+    html[data-theme="auto"] .admin-interface table tbody tr:nth-child(even),
+    html[data-theme="auto"] .admin-interface .results tbody tr:nth-child(even) {
+        background: #111827;
+    }
+
+    html[data-theme="auto"] .admin-interface table td,
+    html[data-theme="auto"] .admin-interface table th,
+    html[data-theme="auto"] .admin-interface .results td,
+    html[data-theme="auto"] .admin-interface .results th {
+        border-color: #334155;
+    }
+
+    html[data-theme="auto"] .admin-interface input:not([type="submit"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]),
+    html[data-theme="auto"] .admin-interface textarea,
+    html[data-theme="auto"] .admin-interface select {
+        background: #0f172a;
+        color: #e2e8f0;
+        border-color: #475569;
+    }
+
+    html[data-theme="auto"] .admin-interface input:focus,
+    html[data-theme="auto"] .admin-interface textarea:focus,
+    html[data-theme="auto"] .admin-interface select:focus,
+    html[data-theme="auto"] .admin-interface button:focus-visible,
+    html[data-theme="auto"] .admin-interface a:focus-visible {
+        outline: 2px solid #60a5fa;
+        outline-offset: 1px;
+    }
+
+    html[data-theme="auto"] .admin-interface .button,
+    html[data-theme="auto"] .admin-interface button,
+    html[data-theme="auto"] .admin-interface input[type="submit"],
+    html[data-theme="auto"] .admin-interface input[type="button"] {
+        border-color: #334155;
+    }
+
+    html[data-theme="auto"] .admin-interface .account-nav-shortcuts,
+    html[data-theme="auto"] .admin-interface .data-protection-nav-shortcut {
+        border-top-color: #334155;
+    }
+
+    html[data-theme="auto"] .admin-interface #nav-sidebar .account-nav-shortcuts__link {
+        border-color: #1d4ed8;
+        background: #172554;
+        color: #bfdbfe !important;
+    }
+
+    html[data-theme="auto"] .admin-interface #nav-sidebar .account-nav-shortcuts__link:hover,
+    html[data-theme="auto"] .admin-interface #nav-sidebar .account-nav-shortcuts__link:focus-visible,
+    html[data-theme="auto"] .admin-interface #nav-sidebar .account-nav-shortcuts__link.is-active {
+        border-color: #60a5fa;
+        background: #1e3a8a !important;
+        color: #eff6ff !important;
+    }
+
+    html[data-theme="auto"] .admin-interface #nav-sidebar .data-protection-nav-shortcut__link {
+        border-color: #9a3412;
+        background: #431407;
+        color: #fdba74 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface #nav-sidebar .data-protection-nav-shortcut__link:hover,
+    html[data-theme="auto"] .admin-interface #nav-sidebar .data-protection-nav-shortcut__link:focus-visible,
+    html[data-theme="auto"] .admin-interface #nav-sidebar .data-protection-nav-shortcut__link.is-active {
+        border-color: #ea580c;
+        background: #7c2d12 !important;
+        color: #ffedd5 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .pwa-footer {
+        border-top-color: #334155;
+        color: #cbd5e1;
+    }
+
+    html[data-theme="auto"] .admin-interface .pwa-footer__label,
+    html[data-theme="auto"] .admin-interface .pwa-helper-modal__description,
+    html[data-theme="auto"] .admin-interface .pwa-helper-modal__steps {
+        color: #cbd5e1;
+    }
+
+    html[data-theme="auto"] .admin-interface .pwa-footer__paused {
+        border-color: #475569;
+        background: #0f172a;
+        color: #94a3b8;
+    }
+
+    html[data-theme="auto"] .admin-interface .fin-home-card {
+        background: #111827;
+        border-color: #334155;
+        box-shadow: 0 10px 24px rgba(2, 6, 23, 0.35);
+    }
+
+    html[data-theme="auto"] .admin-interface .fin-home-card--accent {
+        background: linear-gradient(180deg, rgba(37, 99, 235, 0.2), #111827 48%);
+    }
+
+    html[data-theme="auto"] .admin-interface .fin-home__news-button,
+    html[data-theme="auto"] .admin-interface .fin-home__link-action {
+        background: #0f172a;
+        color: #e2e8f0;
+        border-color: #475569;
+    }
+
+    html[data-theme="auto"] .admin-interface .fin-home__news-button:hover,
+    html[data-theme="auto"] .admin-interface .fin-home__news-button:focus-visible,
+    html[data-theme="auto"] .admin-interface .fin-home__link-action:hover,
+    html[data-theme="auto"] .admin-interface .fin-home__link-action:focus-visible {
+        background: #1e293b;
+        border-color: #64748b;
+    }
+
+    html[data-theme="auto"] .admin-interface .fin-home__metric,
+    html[data-theme="auto"] .admin-interface .fin-home__trip-item,
+    html[data-theme="auto"] .admin-interface .fin-home__goal-item {
+        background: #0f172a;
+        border-color: #334155;
+    }
+
+    html[data-theme="auto"] .admin-interface .fin-dashboard-wrap {
+        --table-head-bg-top: #111827;
+        --table-head-bg-bottom: #0f172a;
+        --table-scrollbar-track: rgba(51, 65, 85, 0.7);
+        --table-scrollbar-thumb: rgba(148, 163, 184, 0.7);
+        --table-scrollbar-thumb-hover: rgba(203, 213, 225, 0.8);
+    }
+
+    html[data-theme="auto"] .admin-interface .fin-dashboard-wrap .card-shell,
+    html[data-theme="auto"] .admin-interface .table-frame,
+    html[data-theme="auto"] .admin-interface .table-actions-frame,
+    html[data-theme="auto"] .admin-interface .dashboard-month-menu,
+    html[data-theme="auto"] .admin-interface .btn-more-actions,
+    html[data-theme="auto"] .admin-interface .card-header-row {
+        background: #111827;
+        color: #e2e8f0;
+        border-color: #334155;
+        box-shadow: none;
+    }
+
+    html[data-theme="auto"] .admin-interface .dashboard-month-menu__item {
+        color: #e2e8f0;
+    }
+
+    html[data-theme="auto"] .admin-interface .dashboard-month-menu__item:hover {
+        background: rgba(59, 130, 246, 0.18);
+    }
+
+    html[data-theme="auto"] .admin-interface .pwa-install-banner {
+        background: linear-gradient(180deg, rgba(37, 99, 235, 0.2), rgba(15, 23, 42, 0.95));
+        border-color: rgba(59, 130, 246, 0.4) !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .pwa-install-banner__title,
+    html[data-theme="auto"] .admin-interface .pwa-install-banner__description {
+        color: #e2e8f0;
+    }
+}
+
+/* Extra hardening for remaining light patches and low-contrast text in dark mode. */
+html[data-theme="dark"] .admin-interface #main,
+html[data-theme="dark"] .admin-interface #content-start,
+html[data-theme="dark"] .admin-interface #content-main,
+html[data-theme="dark"] .admin-interface #content,
+html[data-theme="dark"] .admin-interface .main > #nav-sidebar + .content,
+html[data-theme="dark"] .admin-interface #content-related {
+    background: #0b1220 !important;
+    color: #e2e8f0;
+}
+
+html[data-theme="dark"] .admin-interface #content h1 {
+    color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .admin-interface #toggle-nav-sidebar {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+    box-shadow: 0 8px 18px rgba(2, 6, 23, 0.45) !important;
+}
+
+html[data-theme="dark"] .admin-interface #nav-filter {
+    background: #0f172a !important;
+    color: #e2e8f0 !important;
+    border-color: #64748b !important;
+}
+
+html[data-theme="dark"] .admin-interface #nav-filter::placeholder {
+    color: #cbd5e1 !important;
+    opacity: 1 !important;
+}
+
+html[data-theme="dark"] .admin-interface .btn-icon {
+    background: #0b1220 !important;
+    border-top-color: #334155 !important;
+    border-left-color: #334155 !important;
+    border-bottom-color: #334155 !important;
+    border-right-color: #334155 !important;
+    color: #93c5fd !important;
+}
+
+html[data-theme="dark"] .admin-interface .btn-icon--warning {
+    border-color: #f59e0b !important;
+    color: #fbbf24 !important;
+    background: #1f2937 !important;
+}
+
+html[data-theme="dark"] .admin-interface .btn-icon--danger {
+    border-color: #ef4444 !important;
+    color: #f87171 !important;
+}
+
+html[data-theme="dark"] .admin-interface .editable-table td[data-field="payment_status"] .expense-status-switch {
+    border-color: rgba(245, 158, 11, 0.62) !important;
+    background: linear-gradient(180deg, rgba(120, 53, 15, 0.65), rgba(69, 26, 3, 0.72)) !important;
+}
+
+html[data-theme="dark"] .admin-interface .editable-table td[data-field="payment_status"] .expense-status-switch[data-status="paid"] {
+    border-color: rgba(34, 197, 94, 0.58) !important;
+    background: linear-gradient(180deg, rgba(22, 101, 52, 0.62), rgba(20, 83, 45, 0.72)) !important;
+}
+
+html[data-theme="dark"] .admin-interface .editable-table td[data-field="payment_status"] .expense-status-switch__thumb {
+    background: #0f172a !important;
+    border-color: rgba(251, 191, 36, 0.45) !important;
+    color: #fcd34d !important;
+}
+
+html[data-theme="dark"] .admin-interface .editable-table td[data-field="payment_status"] .expense-status-switch[data-status="paid"] .expense-status-switch__thumb {
+    border-color: rgba(74, 222, 128, 0.45) !important;
+    color: #86efac !important;
+}
+
+html[data-theme="dark"] .admin-interface .btn-icon:hover {
+    background: #1e293b !important;
+}
+
+html[data-theme="dark"] .admin-interface .btn-icon--danger:hover {
+    background: #3f1d23 !important;
+}
+
+html[data-theme="dark"] .admin-interface .month-import-btn--ghost,
+html[data-theme="dark"] .admin-interface .dashboard-analytics-panel__toggle,
+html[data-theme="dark"] .admin-interface .table-group-toggle__action--inline {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .admin-interface .dashboard-breakdown-toggle {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .admin-interface .dashboard-breakdown-toggle__btn {
+    background: #0f172a !important;
+    color: #cbd5e1 !important;
+}
+
+html[data-theme="dark"] .admin-interface .dashboard-breakdown-toggle__btn + .dashboard-breakdown-toggle__btn {
+    border-left-color: #334155 !important;
+}
+
+html[data-theme="dark"] .admin-interface .dashboard-breakdown-toggle__btn.is-active {
+    background: #1e293b !important;
+    color: #93c5fd !important;
+}
+
+html[data-theme="dark"] .admin-interface .salary-config-modal__card,
+html[data-theme="dark"] .admin-interface .month-import-modal__card {
+    background: #111827 !important;
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .admin-interface .dashboard-modal-close {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
+
+html[data-theme="dark"] .admin-interface .dashboard-customize-section,
+html[data-theme="dark"] .admin-interface .dashboard-layout-card,
+html[data-theme="dark"] .admin-interface .dashboard-column-order__item {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .admin-interface .dashboard-customize-section h4,
+html[data-theme="dark"] .admin-interface .dashboard-column-check,
+html[data-theme="dark"] .admin-interface .dashboard-customize-note,
+html[data-theme="dark"] .admin-interface .dashboard-column-order__label,
+html[data-theme="dark"] .admin-interface .delete-confirm-modal__message {
+    color: #cbd5e1 !important;
+}
+
+html[data-theme="dark"] .admin-interface .dashboard-analytics-metric,
+html[data-theme="dark"] .admin-interface .dashboard-analytics-chart-card,
+html[data-theme="dark"] .admin-interface .dashboard-goal-card {
+    background: #0f172a;
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .admin-interface .dashboard-analytics-panel__head p,
+html[data-theme="dark"] .admin-interface .dashboard-analytics-metric span,
+html[data-theme="dark"] .admin-interface .dashboard-analytics-chart-card__empty,
+html[data-theme="dark"] .admin-interface .dashboard-aggregate-month-card__metrics dt,
+html[data-theme="dark"] .admin-interface .dashboard-aggregate-year-card__metrics dt,
+html[data-theme="dark"] .admin-interface .dashboard-goal-card__metrics dt,
+html[data-theme="dark"] .admin-interface .dashboard-goal-card__progress-label,
+html[data-theme="dark"] .admin-interface .goal-contribution-list li,
+html[data-theme="dark"] .admin-interface .goal-contribution-empty {
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] .admin-interface .dashboard-analytics-metric strong,
+html[data-theme="dark"] .admin-interface .dashboard-aggregate-month-card__head h3,
+html[data-theme="dark"] .admin-interface .dashboard-aggregate-month-card__metrics dd,
+html[data-theme="dark"] .admin-interface .dashboard-aggregate-year-card__head h3,
+html[data-theme="dark"] .admin-interface .dashboard-aggregate-year-card__metrics dd,
+html[data-theme="dark"] .admin-interface .dashboard-goal-card__head h3,
+html[data-theme="dark"] .admin-interface .dashboard-goal-card__metrics dd {
+    color: #e2e8f0;
+}
+
+html[data-theme="dark"] .admin-interface .dashboard-analytics-chart-card__head h3,
+html[data-theme="dark"] .admin-interface [data-analytics-breakdown-title],
+html[data-theme="dark"] .admin-interface [data-analytics-income-breakdown-title] {
+    color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .admin-interface .dashboard-balance-value--neutral {
+    color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .admin-interface .fin-home__title,
+html[data-theme="dark"] .admin-interface .fin-home__subtitle,
+html[data-theme="dark"] .admin-interface .fin-home-card__head h2,
+html[data-theme="dark"] .admin-interface .fin-home-card__head p,
+html[data-theme="dark"] .admin-interface .fin-home__metric span,
+html[data-theme="dark"] .admin-interface .fin-home__metric strong,
+html[data-theme="dark"] .admin-interface .fin-home__trip-main a,
+html[data-theme="dark"] .admin-interface .fin-home__trip-main small,
+html[data-theme="dark"] .admin-interface .fin-home__trip-meta dt,
+html[data-theme="dark"] .admin-interface .fin-home__trip-meta dd,
+html[data-theme="dark"] .admin-interface .fin-home__goal-head strong,
+html[data-theme="dark"] .admin-interface .fin-home__goal-head span,
+html[data-theme="dark"] .admin-interface .fin-home__goal-meta dt,
+html[data-theme="dark"] .admin-interface .fin-home__goal-meta dd,
+html[data-theme="dark"] .admin-interface .fin-home__extra-hint,
+html[data-theme="dark"] .admin-interface .fin-home__empty {
+    color: #e2e8f0;
+}
+
+html[data-theme="dark"] .admin-interface .fin-home__highlight {
+    background: #cbd5e1;
+    border-color: #93c5fd;
+}
+
+html[data-theme="dark"] .admin-interface .fin-home__highlight p {
+    color: #1e3a8a;
+}
+
+html[data-theme="dark"] .admin-interface .fin-home__highlight strong {
+    color: #1f2937;
+}
+
+html[data-theme="dark"] .admin-interface .fin-home__highlight span {
+    color: #1d4ed8;
+}
+
+html[data-theme="dark"] .admin-interface .fin-home-modal__card {
+    background: #111827;
+    border-color: #334155;
+}
+
+html[data-theme="dark"] .admin-interface .fin-home-modal__close {
+    color: #cbd5e1;
+}
+
+html[data-theme="dark"] .admin-interface .fin-home-modal__close:hover,
+html[data-theme="dark"] .admin-interface .fin-home-modal__close:focus-visible {
+    background: #1e293b;
+}
+
+html[data-theme="dark"] .admin-interface .fin-home-modal__intro,
+html[data-theme="dark"] .admin-interface .fin-home-modal__sections ul {
+    color: #cbd5e1;
+}
+
+html[data-theme="dark"] .admin-interface .fin-home-modal__sections article {
+    border-color: #334155;
+    background: #0f172a;
+}
+
+html[data-theme="dark"] .admin-interface .pwa-footer {
+    background: #0f172a;
+}
+
+/* Home highlight card (shopping trip quick continue) */
+html[data-theme="dark"] .admin-interface .fin-home__highlight {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .admin-interface .fin-home__highlight p {
+    color: #bfdbfe !important;
+}
+
+html[data-theme="dark"] .admin-interface .fin-home__highlight strong,
+html[data-theme="dark"] .admin-interface .fin-home__highlight span {
+    color: #e2e8f0 !important;
+}
+
+/* Django changelist controls/filters still using light backgrounds in custom pages */
+html[data-theme="dark"] .admin-interface #changelist-search,
+html[data-theme="dark"] .admin-interface #changelist-form .actions,
+html[data-theme="dark"] .admin-interface #changelist .paginator,
+html[data-theme="dark"] .admin-interface #changelist-filter {
+    background: #111827 !important;
+    color: #e2e8f0 !important;
+    border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .admin-interface #changelist-filter h2,
+html[data-theme="dark"] .admin-interface #changelist-filter h3,
+html[data-theme="dark"] .admin-interface #changelist-filter a,
+html[data-theme="dark"] .admin-interface #changelist-filter li,
+html[data-theme="dark"] .admin-interface #changelist-form .actions label,
+html[data-theme="dark"] .admin-interface #changelist-form .actions span {
+    color: #cbd5e1 !important;
+}
+
+html[data-theme="dark"] .admin-interface #changelist-form .actions select {
+    background: #0b1220 !important;
+    color: #e2e8f0 !important;
+    border-color: #64748b !important;
+}
+
+html[data-theme="dark"] .admin-interface #changelist-form .actions select option {
+    background: #0b1220 !important;
+    color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .admin-interface #changelist #toolbar,
+html[data-theme="dark"] .admin-interface #changelist #changelist-search > div {
+    background: #111827 !important;
+    border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .admin-interface #changelist #changelist-search label,
+html[data-theme="dark"] .admin-interface #changelist #changelist-search .help,
+html[data-theme="dark"] .admin-interface #changelist #changelist-search .quiet {
+    color: #cbd5e1 !important;
+}
+
+html[data-theme="dark"] .admin-interface #changelist #changelist-search #searchbar {
+    background: #0b1220 !important;
+    color: #e2e8f0 !important;
+    border-color: #64748b !important;
+}
+
+html[data-theme="dark"] .admin-interface #changelist #changelist-search input[type="submit"] {
+    background: #1e293b !important;
+    color: #e2e8f0 !important;
+    border-color: #64748b !important;
+    box-shadow: none !important;
+}
+
+html[data-theme="dark"] .admin-interface #changelist #changelist-search label img {
+    filter: brightness(0) invert(0.82);
+}
+
+/* Django date/time widget popup (calendar/clock) */
+html[data-theme="dark"] .admin-interface .calendarbox,
+html[data-theme="dark"] .admin-interface .clockbox {
+    background: #111827 !important;
+    color: #e2e8f0 !important;
+    border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .admin-interface .calendar table {
+    background: #0f172a !important;
+}
+
+html[data-theme="dark"] .admin-interface .calendar caption,
+html[data-theme="dark"] .admin-interface .calendarbox h2 {
+    background: #0f172a !important;
+    color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .admin-interface .calendar th {
+    background: #1e293b !important;
+    color: #cbd5e1 !important;
+    border-bottom-color: #334155 !important;
+}
+
+html[data-theme="dark"] .admin-interface .calendar td {
+    border-top-color: #334155 !important;
+}
+
+html[data-theme="dark"] .admin-interface .calendar td.nonday {
+    background: #111827 !important;
+}
+
+html[data-theme="dark"] .admin-interface .calendar td a,
+html[data-theme="dark"] .admin-interface .timelist a,
+html[data-theme="dark"] .admin-interface .calendar-cancel a,
+html[data-theme="dark"] .admin-interface .calendar-shortcuts a,
+html[data-theme="dark"] .admin-interface .calendarnav a {
+    color: #93c5fd !important;
+}
+
+html[data-theme="dark"] .admin-interface .calendar td.selected a,
+html[data-theme="dark"] .admin-interface .calendar td a:hover,
+html[data-theme="dark"] .admin-interface .calendar td a:focus,
+html[data-theme="dark"] .admin-interface .timelist a:hover,
+html[data-theme="dark"] .admin-interface .timelist a:focus {
+    background: #1d4ed8 !important;
+    color: #eff6ff !important;
+}
+
+html[data-theme="dark"] .admin-interface .calendar-shortcuts,
+html[data-theme="dark"] .admin-interface .calendar-cancel {
+    background: #111827 !important;
+    color: #cbd5e1 !important;
+    border-top-color: #334155 !important;
+}
+
+html[data-theme="dark"] .admin-interface .calendar-cancel:hover,
+html[data-theme="dark"] .admin-interface .calendar-cancel:focus {
+    background: #1e293b !important;
+}
+
+/* Django CRUD/change-form readability */
+html[data-theme="dark"] .admin-interface .change-form .aligned label,
+html[data-theme="dark"] .admin-interface .change-form .form-row label,
+html[data-theme="dark"] .admin-interface .change-form .form-row .help,
+html[data-theme="dark"] .admin-interface .change-form .help,
+html[data-theme="dark"] .admin-interface .change-form .quiet,
+html[data-theme="dark"] .admin-interface .change-form .readonly,
+html[data-theme="dark"] .admin-interface .change-form .readonly a,
+html[data-theme="dark"] .admin-interface .change-form p.help,
+html[data-theme="dark"] .admin-interface .change-form div.help,
+html[data-theme="dark"] .admin-interface .change-form .description,
+html[data-theme="dark"] .admin-interface .change-form .form-row .description,
+html[data-theme="dark"] .admin-interface .change-form .fieldBox .help,
+html[data-theme="dark"] .admin-interface .change-form .fieldBox .helptext {
+    color: #cbd5e1 !important;
+}
+
+html[data-theme="dark"] .admin-interface .change-form .aligned label.required,
+html[data-theme="dark"] .admin-interface .change-form .form-row label.required,
+html[data-theme="dark"] .admin-interface .change-form .aligned label,
+html[data-theme="dark"] .admin-interface .change-form .form-row label {
+    color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .admin-interface .change-form .form-row,
+html[data-theme="dark"] .admin-interface .change-form .module.aligned,
+html[data-theme="dark"] .admin-interface .change-form .module,
+html[data-theme="dark"] .admin-interface .change-form .submit-row,
+html[data-theme="dark"] .admin-interface .change-form fieldset {
+    border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .admin-interface .change-form .module h2,
+html[data-theme="dark"] .admin-interface .change-form .module caption,
+html[data-theme="dark"] .admin-interface .change-form .inline-group h2 {
+    background: #0f172a !important;
+    color: #e2e8f0 !important;
+    border-color: #334155 !important;
+}
+
+/* Extra fallback for Django aligned CRUD forms (add/edit pages) */
+html[data-theme="dark"] .admin-interface form .aligned label,
+html[data-theme="dark"] .admin-interface .aligned .form-row > label,
+html[data-theme="dark"] .admin-interface .aligned .form-row > div > label,
+html[data-theme="dark"] .admin-interface .aligned .form-row .vCheckboxLabel {
+    color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .admin-interface form .aligned p.help,
+html[data-theme="dark"] .admin-interface form .aligned div.help,
+html[data-theme="dark"] .admin-interface .aligned .form-row .help,
+html[data-theme="dark"] .admin-interface .aligned .description,
+html[data-theme="dark"] .admin-interface .aligned .readonly,
+html[data-theme="dark"] .admin-interface .aligned .readonly a,
+html[data-theme="dark"] .admin-interface .help,
+html[data-theme="dark"] .admin-interface .helptext {
+    color: #cbd5e1 !important;
+}
+
+html[data-theme="dark"] .admin-interface form .aligned .form-row,
+html[data-theme="dark"] .admin-interface form .aligned .form-row > div,
+html[data-theme="dark"] .admin-interface form .aligned .form-row > label,
+html[data-theme="dark"] .admin-interface form .aligned .form-row > div p {
+    border-color: #334155 !important;
+}
+
+/* Shopping trip custom page base dark adaptation */
+html[data-theme="dark"] .admin-interface .shopping-trip-owner-layout .shopping-trip-app {
+    --trip-pastel-warm-bg: #111827;
+    --trip-pastel-warm-border: #334155;
+    --trip-soft-green-bg: #0f172a;
+    --trip-soft-green-border: #334155;
+    --trip-border: #334155;
+    --trip-soft-bg: #0f172a;
+    background: #111827 !important;
+    border-color: #334155 !important;
+    color: #e2e8f0;
+}
+
+html[data-theme="dark"] .admin-interface .shopping-trip-owner-layout .shopping-trip-app-header,
+html[data-theme="dark"] .admin-interface .shopping-trip-owner-layout .shopping-trip-app-summary-strip,
+html[data-theme="dark"] .admin-interface .shopping-trip-owner-layout .shopping-trip-tabs,
+html[data-theme="dark"] .admin-interface .shopping-trip-owner-layout .shopping-trip-quick-add,
+html[data-theme="dark"] .admin-interface .shopping-trip-owner-layout .shopping-trip-items-section,
+html[data-theme="dark"] .admin-interface .shopping-trip-owner-layout .shopping-trip-calc-summary-card {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .admin-interface .shopping-trip-owner-layout .shopping-trip-app-subtitle,
+html[data-theme="dark"] .admin-interface .shopping-trip-owner-layout .shopping-trip-field,
+html[data-theme="dark"] .admin-interface .shopping-trip-owner-layout .shopping-trip-items-section__header h2 {
+    color: #cbd5e1 !important;
+}
+
+html[data-theme="dark"] .admin-interface .shopping-trip-owner-layout .shopping-trip-tab {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
+
+html[data-theme="dark"] .admin-interface .shopping-trip-owner-layout .shopping-trip-tab.is-active {
+    background: #1e293b !important;
+    border-color: #60a5fa !important;
+    color: #e2e8f0 !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] .admin-interface #main,
+    html[data-theme="auto"] .admin-interface #content-start,
+    html[data-theme="auto"] .admin-interface #content-main,
+    html[data-theme="auto"] .admin-interface #content,
+    html[data-theme="auto"] .admin-interface .main > #nav-sidebar + .content,
+    html[data-theme="auto"] .admin-interface #content-related {
+        background: #0b1220 !important;
+        color: #e2e8f0;
+    }
+
+    html[data-theme="auto"] .admin-interface #content h1 {
+        color: #e2e8f0 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface #toggle-nav-sidebar {
+        background: #1e293b !important;
+        border-color: #334155 !important;
+        color: #cbd5e1 !important;
+        box-shadow: 0 8px 18px rgba(2, 6, 23, 0.45) !important;
+    }
+
+    html[data-theme="auto"] .admin-interface #nav-filter {
+        background: #0f172a !important;
+        color: #e2e8f0 !important;
+        border-color: #64748b !important;
+    }
+
+    html[data-theme="auto"] .admin-interface #nav-filter::placeholder {
+        color: #cbd5e1 !important;
+        opacity: 1 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .btn-icon {
+        background: #0b1220 !important;
+        border-top-color: #334155 !important;
+        border-left-color: #334155 !important;
+        border-bottom-color: #334155 !important;
+        border-right-color: #334155 !important;
+        color: #93c5fd !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .btn-icon--warning {
+        border-color: #f59e0b !important;
+        color: #fbbf24 !important;
+        background: #1f2937 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .btn-icon--danger {
+        border-color: #ef4444 !important;
+        color: #f87171 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .editable-table td[data-field="payment_status"] .expense-status-switch {
+        border-color: rgba(245, 158, 11, 0.62) !important;
+        background: linear-gradient(180deg, rgba(120, 53, 15, 0.65), rgba(69, 26, 3, 0.72)) !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .editable-table td[data-field="payment_status"] .expense-status-switch[data-status="paid"] {
+        border-color: rgba(34, 197, 94, 0.58) !important;
+        background: linear-gradient(180deg, rgba(22, 101, 52, 0.62), rgba(20, 83, 45, 0.72)) !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .editable-table td[data-field="payment_status"] .expense-status-switch__thumb {
+        background: #0f172a !important;
+        border-color: rgba(251, 191, 36, 0.45) !important;
+        color: #fcd34d !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .editable-table td[data-field="payment_status"] .expense-status-switch[data-status="paid"] .expense-status-switch__thumb {
+        border-color: rgba(74, 222, 128, 0.45) !important;
+        color: #86efac !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .btn-icon:hover {
+        background: #1e293b !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .btn-icon--danger:hover {
+        background: #3f1d23 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .month-import-btn--ghost,
+    html[data-theme="auto"] .admin-interface .dashboard-analytics-panel__toggle,
+    html[data-theme="auto"] .admin-interface .table-group-toggle__action--inline {
+        background: #1e293b !important;
+        border-color: #334155 !important;
+        color: #e2e8f0 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .dashboard-breakdown-toggle {
+        background: #0f172a !important;
+        border-color: #334155 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .dashboard-breakdown-toggle__btn {
+        background: #0f172a !important;
+        color: #cbd5e1 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .dashboard-breakdown-toggle__btn + .dashboard-breakdown-toggle__btn {
+        border-left-color: #334155 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .dashboard-breakdown-toggle__btn.is-active {
+        background: #1e293b !important;
+        color: #93c5fd !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .salary-config-modal__card,
+    html[data-theme="auto"] .admin-interface .month-import-modal__card {
+        background: #111827 !important;
+        border-color: #334155 !important;
+        color: #e2e8f0 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .dashboard-modal-close {
+        background: #0f172a !important;
+        border-color: #334155 !important;
+        color: #cbd5e1 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .dashboard-customize-section,
+    html[data-theme="auto"] .admin-interface .dashboard-layout-card,
+    html[data-theme="auto"] .admin-interface .dashboard-column-order__item {
+        background: #0f172a !important;
+        border-color: #334155 !important;
+        color: #e2e8f0 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .dashboard-customize-section h4,
+    html[data-theme="auto"] .admin-interface .dashboard-column-check,
+    html[data-theme="auto"] .admin-interface .dashboard-customize-note,
+    html[data-theme="auto"] .admin-interface .dashboard-column-order__label,
+    html[data-theme="auto"] .admin-interface .delete-confirm-modal__message {
+        color: #cbd5e1 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .dashboard-analytics-metric,
+    html[data-theme="auto"] .admin-interface .dashboard-analytics-chart-card,
+    html[data-theme="auto"] .admin-interface .dashboard-goal-card {
+        background: #0f172a;
+        border-color: #334155;
+    }
+
+    html[data-theme="auto"] .admin-interface .dashboard-analytics-panel__head p,
+    html[data-theme="auto"] .admin-interface .dashboard-analytics-metric span,
+    html[data-theme="auto"] .admin-interface .dashboard-analytics-chart-card__empty,
+    html[data-theme="auto"] .admin-interface .dashboard-aggregate-month-card__metrics dt,
+    html[data-theme="auto"] .admin-interface .dashboard-aggregate-year-card__metrics dt,
+    html[data-theme="auto"] .admin-interface .dashboard-goal-card__metrics dt,
+    html[data-theme="auto"] .admin-interface .dashboard-goal-card__progress-label,
+    html[data-theme="auto"] .admin-interface .goal-contribution-list li,
+    html[data-theme="auto"] .admin-interface .goal-contribution-empty {
+        color: #94a3b8;
+    }
+
+    html[data-theme="auto"] .admin-interface .dashboard-analytics-metric strong,
+    html[data-theme="auto"] .admin-interface .dashboard-aggregate-month-card__head h3,
+    html[data-theme="auto"] .admin-interface .dashboard-aggregate-month-card__metrics dd,
+    html[data-theme="auto"] .admin-interface .dashboard-aggregate-year-card__head h3,
+    html[data-theme="auto"] .admin-interface .dashboard-aggregate-year-card__metrics dd,
+    html[data-theme="auto"] .admin-interface .dashboard-goal-card__head h3,
+    html[data-theme="auto"] .admin-interface .dashboard-goal-card__metrics dd {
+        color: #e2e8f0;
+    }
+
+    html[data-theme="auto"] .admin-interface .dashboard-analytics-chart-card__head h3,
+    html[data-theme="auto"] .admin-interface [data-analytics-breakdown-title],
+    html[data-theme="auto"] .admin-interface [data-analytics-income-breakdown-title] {
+        color: #e2e8f0 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .dashboard-balance-value--neutral {
+        color: #e2e8f0 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .fin-home__title,
+    html[data-theme="auto"] .admin-interface .fin-home__subtitle,
+    html[data-theme="auto"] .admin-interface .fin-home-card__head h2,
+    html[data-theme="auto"] .admin-interface .fin-home-card__head p,
+    html[data-theme="auto"] .admin-interface .fin-home__metric span,
+    html[data-theme="auto"] .admin-interface .fin-home__metric strong,
+    html[data-theme="auto"] .admin-interface .fin-home__trip-main a,
+    html[data-theme="auto"] .admin-interface .fin-home__trip-main small,
+    html[data-theme="auto"] .admin-interface .fin-home__trip-meta dt,
+    html[data-theme="auto"] .admin-interface .fin-home__trip-meta dd,
+    html[data-theme="auto"] .admin-interface .fin-home__goal-head strong,
+    html[data-theme="auto"] .admin-interface .fin-home__goal-head span,
+    html[data-theme="auto"] .admin-interface .fin-home__goal-meta dt,
+    html[data-theme="auto"] .admin-interface .fin-home__goal-meta dd,
+    html[data-theme="auto"] .admin-interface .fin-home__extra-hint,
+    html[data-theme="auto"] .admin-interface .fin-home__empty {
+        color: #e2e8f0;
+    }
+
+    html[data-theme="auto"] .admin-interface .fin-home__highlight {
+        background: #cbd5e1;
+        border-color: #93c5fd;
+    }
+
+    html[data-theme="auto"] .admin-interface .fin-home__highlight p {
+        color: #1e3a8a;
+    }
+
+    html[data-theme="auto"] .admin-interface .fin-home__highlight strong {
+        color: #1f2937;
+    }
+
+    html[data-theme="auto"] .admin-interface .fin-home__highlight span {
+        color: #1d4ed8;
+    }
+
+    html[data-theme="auto"] .admin-interface .fin-home-modal__card {
+        background: #111827;
+        border-color: #334155;
+    }
+
+    html[data-theme="auto"] .admin-interface .fin-home-modal__close {
+        color: #cbd5e1;
+    }
+
+    html[data-theme="auto"] .admin-interface .fin-home-modal__close:hover,
+    html[data-theme="auto"] .admin-interface .fin-home-modal__close:focus-visible {
+        background: #1e293b;
+    }
+
+    html[data-theme="auto"] .admin-interface .fin-home-modal__intro,
+    html[data-theme="auto"] .admin-interface .fin-home-modal__sections ul {
+        color: #cbd5e1;
+    }
+
+    html[data-theme="auto"] .admin-interface .fin-home-modal__sections article {
+        border-color: #334155;
+        background: #0f172a;
+    }
+
+    html[data-theme="auto"] .admin-interface .pwa-footer {
+        background: #0f172a;
+    }
+
+    html[data-theme="auto"] .admin-interface .fin-home__highlight {
+        background: #1e293b !important;
+        border-color: #334155 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .fin-home__highlight p {
+        color: #bfdbfe !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .fin-home__highlight strong,
+    html[data-theme="auto"] .admin-interface .fin-home__highlight span {
+        color: #e2e8f0 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface #changelist-search,
+    html[data-theme="auto"] .admin-interface #changelist-form .actions,
+    html[data-theme="auto"] .admin-interface #changelist .paginator,
+    html[data-theme="auto"] .admin-interface #changelist-filter {
+        background: #111827 !important;
+        color: #e2e8f0 !important;
+        border-color: #334155 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface #changelist-filter h2,
+    html[data-theme="auto"] .admin-interface #changelist-filter h3,
+    html[data-theme="auto"] .admin-interface #changelist-filter a,
+    html[data-theme="auto"] .admin-interface #changelist-filter li,
+    html[data-theme="auto"] .admin-interface #changelist-form .actions label,
+    html[data-theme="auto"] .admin-interface #changelist-form .actions span {
+        color: #cbd5e1 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface #changelist-form .actions select {
+        background: #0b1220 !important;
+        color: #e2e8f0 !important;
+        border-color: #64748b !important;
+    }
+
+    html[data-theme="auto"] .admin-interface #changelist-form .actions select option {
+        background: #0b1220 !important;
+        color: #e2e8f0 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface #changelist #toolbar,
+    html[data-theme="auto"] .admin-interface #changelist #changelist-search > div {
+        background: #111827 !important;
+        border-color: #334155 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface #changelist #changelist-search label,
+    html[data-theme="auto"] .admin-interface #changelist #changelist-search .help,
+    html[data-theme="auto"] .admin-interface #changelist #changelist-search .quiet {
+        color: #cbd5e1 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface #changelist #changelist-search #searchbar {
+        background: #0b1220 !important;
+        color: #e2e8f0 !important;
+        border-color: #64748b !important;
+    }
+
+    html[data-theme="auto"] .admin-interface #changelist #changelist-search input[type="submit"] {
+        background: #1e293b !important;
+        color: #e2e8f0 !important;
+        border-color: #64748b !important;
+        box-shadow: none !important;
+    }
+
+    html[data-theme="auto"] .admin-interface #changelist #changelist-search label img {
+        filter: brightness(0) invert(0.82);
+    }
+
+    html[data-theme="auto"] .admin-interface .calendarbox,
+    html[data-theme="auto"] .admin-interface .clockbox {
+        background: #111827 !important;
+        color: #e2e8f0 !important;
+        border-color: #334155 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .calendar table {
+        background: #0f172a !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .calendar caption,
+    html[data-theme="auto"] .admin-interface .calendarbox h2 {
+        background: #0f172a !important;
+        color: #e2e8f0 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .calendar th {
+        background: #1e293b !important;
+        color: #cbd5e1 !important;
+        border-bottom-color: #334155 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .calendar td {
+        border-top-color: #334155 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .calendar td.nonday {
+        background: #111827 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .calendar td a,
+    html[data-theme="auto"] .admin-interface .timelist a,
+    html[data-theme="auto"] .admin-interface .calendar-cancel a,
+    html[data-theme="auto"] .admin-interface .calendar-shortcuts a,
+    html[data-theme="auto"] .admin-interface .calendarnav a {
+        color: #93c5fd !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .calendar td.selected a,
+    html[data-theme="auto"] .admin-interface .calendar td a:hover,
+    html[data-theme="auto"] .admin-interface .calendar td a:focus,
+    html[data-theme="auto"] .admin-interface .timelist a:hover,
+    html[data-theme="auto"] .admin-interface .timelist a:focus {
+        background: #1d4ed8 !important;
+        color: #eff6ff !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .calendar-shortcuts,
+    html[data-theme="auto"] .admin-interface .calendar-cancel {
+        background: #111827 !important;
+        color: #cbd5e1 !important;
+        border-top-color: #334155 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .calendar-cancel:hover,
+    html[data-theme="auto"] .admin-interface .calendar-cancel:focus {
+        background: #1e293b !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .change-form .aligned label,
+    html[data-theme="auto"] .admin-interface .change-form .form-row label,
+    html[data-theme="auto"] .admin-interface .change-form .form-row .help,
+    html[data-theme="auto"] .admin-interface .change-form .help,
+    html[data-theme="auto"] .admin-interface .change-form .quiet,
+    html[data-theme="auto"] .admin-interface .change-form .readonly,
+    html[data-theme="auto"] .admin-interface .change-form .readonly a,
+    html[data-theme="auto"] .admin-interface .change-form p.help,
+    html[data-theme="auto"] .admin-interface .change-form div.help,
+    html[data-theme="auto"] .admin-interface .change-form .description,
+    html[data-theme="auto"] .admin-interface .change-form .form-row .description,
+    html[data-theme="auto"] .admin-interface .change-form .fieldBox .help,
+    html[data-theme="auto"] .admin-interface .change-form .fieldBox .helptext {
+        color: #cbd5e1 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .change-form .aligned label.required,
+    html[data-theme="auto"] .admin-interface .change-form .form-row label.required,
+    html[data-theme="auto"] .admin-interface .change-form .aligned label,
+    html[data-theme="auto"] .admin-interface .change-form .form-row label {
+        color: #e2e8f0 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .change-form .form-row,
+    html[data-theme="auto"] .admin-interface .change-form .module.aligned,
+    html[data-theme="auto"] .admin-interface .change-form .module,
+    html[data-theme="auto"] .admin-interface .change-form .submit-row,
+    html[data-theme="auto"] .admin-interface .change-form fieldset {
+        border-color: #334155 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .change-form .module h2,
+    html[data-theme="auto"] .admin-interface .change-form .module caption,
+    html[data-theme="auto"] .admin-interface .change-form .inline-group h2 {
+        background: #0f172a !important;
+        color: #e2e8f0 !important;
+        border-color: #334155 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface form .aligned label,
+    html[data-theme="auto"] .admin-interface .aligned .form-row > label,
+    html[data-theme="auto"] .admin-interface .aligned .form-row > div > label,
+    html[data-theme="auto"] .admin-interface .aligned .form-row .vCheckboxLabel {
+        color: #e2e8f0 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface form .aligned p.help,
+    html[data-theme="auto"] .admin-interface form .aligned div.help,
+    html[data-theme="auto"] .admin-interface .aligned .form-row .help,
+    html[data-theme="auto"] .admin-interface .aligned .description,
+    html[data-theme="auto"] .admin-interface .aligned .readonly,
+    html[data-theme="auto"] .admin-interface .aligned .readonly a,
+    html[data-theme="auto"] .admin-interface .help,
+    html[data-theme="auto"] .admin-interface .helptext {
+        color: #cbd5e1 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface form .aligned .form-row,
+    html[data-theme="auto"] .admin-interface form .aligned .form-row > div,
+    html[data-theme="auto"] .admin-interface form .aligned .form-row > label,
+    html[data-theme="auto"] .admin-interface form .aligned .form-row > div p {
+        border-color: #334155 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .shopping-trip-owner-layout .shopping-trip-app {
+        --trip-pastel-warm-bg: #111827;
+        --trip-pastel-warm-border: #334155;
+        --trip-soft-green-bg: #0f172a;
+        --trip-soft-green-border: #334155;
+        --trip-border: #334155;
+        --trip-soft-bg: #0f172a;
+        background: #111827 !important;
+        border-color: #334155 !important;
+        color: #e2e8f0;
+    }
+
+    html[data-theme="auto"] .admin-interface .shopping-trip-owner-layout .shopping-trip-app-header,
+    html[data-theme="auto"] .admin-interface .shopping-trip-owner-layout .shopping-trip-app-summary-strip,
+    html[data-theme="auto"] .admin-interface .shopping-trip-owner-layout .shopping-trip-tabs,
+    html[data-theme="auto"] .admin-interface .shopping-trip-owner-layout .shopping-trip-quick-add,
+    html[data-theme="auto"] .admin-interface .shopping-trip-owner-layout .shopping-trip-items-section,
+    html[data-theme="auto"] .admin-interface .shopping-trip-owner-layout .shopping-trip-calc-summary-card {
+        background: #0f172a !important;
+        border-color: #334155 !important;
+        color: #e2e8f0 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .shopping-trip-owner-layout .shopping-trip-app-subtitle,
+    html[data-theme="auto"] .admin-interface .shopping-trip-owner-layout .shopping-trip-field,
+    html[data-theme="auto"] .admin-interface .shopping-trip-owner-layout .shopping-trip-items-section__header h2 {
+        color: #cbd5e1 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .shopping-trip-owner-layout .shopping-trip-tab {
+        background: #0f172a !important;
+        border-color: #334155 !important;
+        color: #cbd5e1 !important;
+    }
+
+    html[data-theme="auto"] .admin-interface .shopping-trip-owner-layout .shopping-trip-tab.is-active {
+        background: #1e293b !important;
+        border-color: #60a5fa !important;
+        color: #e2e8f0 !important;
+    }
+}

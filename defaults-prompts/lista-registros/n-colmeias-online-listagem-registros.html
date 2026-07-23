@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Colmeias Online — Listagem de registros</title>
+  <style>
+
+    .co-listing-demo {
+      --demo-bg: #f5f6f1;
+      --demo-line: #dce5d9;
+      position: fixed;
+      inset: 0;
+      display: grid;
+      grid-template-columns: minmax(220px, 25%) minmax(0, 1fr);
+      gap: 20px;
+      padding: 20px;
+      overflow: hidden;
+      background: var(--demo-bg);
+      color: #24372c;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.45;
+    }
+    .co-listing-demo,
+    .co-listing-demo * { box-sizing: border-box; }
+    .co-listing-demo__menu {
+      min-width: 0;
+      min-height: calc(100vh - 40px);
+      padding-top: 28px;
+      border: 1px solid var(--demo-line);
+      border-radius: 18px;
+      background: #eef1e9;
+      color: #7a887f;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .co-listing-demo__content {
+      min-width: 0;
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 0 2px 38px 0;
+      overscroll-behavior: contain;
+    }
+    @media (max-width: 720px) {
+      .co-listing-demo {
+        display: block;
+        padding: 12px;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+      .co-listing-demo__menu { display: none; }
+      .co-listing-demo__content { overflow: visible; padding: 0 0 24px; }
+    }
+
+/* INÍCIO — COMPONENTE REUTILIZÁVEL: listagem de registros */
+    .co-record-listing {
+      --rl-surface: #fff;
+      --rl-soft: #f8faf5;
+      --rl-line: #dce5d9;
+      --rl-line-strong: #c7d4c8;
+      --rl-green: #244a32;
+      --rl-green-dark: #17331f;
+      --rl-muted: #68776d;
+      --rl-gold: #d6a53a;
+      --rl-danger: #a44242;
+      --rl-danger-soft: #fff1f1;
+      --rl-focus: rgba(53,99,68,.18);
+      width: 100%;
+      min-width: 0;
+      color: #24372c;
+    }
+    .co-record-listing * { box-sizing: border-box; }
+    .co-record-listing button,
+    .co-record-listing input,
+    .co-record-listing select { font: inherit; }
+    .co-record-listing [hidden] { display: none !important; }
+    .co-record-listing__top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 18px;
+      border: 1px solid var(--rl-line);
+      border-radius: 18px;
+      background: var(--rl-surface);
+      box-shadow: 0 8px 24px rgba(28,51,35,.06);
+      margin-bottom: 14px;
+    }
+    .co-record-listing__title-wrap { min-width: 0; }
+    .co-record-listing__title { margin: 0; font-size: clamp(23px, 3vw, 31px); line-height: 1.1; letter-spacing: -.035em; color: var(--rl-green-dark); }
+    .co-record-listing__count { margin: 5px 0 0; color: var(--rl-muted); font-size: 13px; font-weight: 700; }
+    .co-record-listing__primary,
+    .co-record-listing__button,
+    .co-record-listing__icon-button,
+    .co-record-listing__page-button,
+    .co-record-listing__text-button {
+      border: 1px solid var(--rl-line-strong);
+      border-radius: 12px;
+      background: #fff;
+      color: var(--rl-green);
+      font-weight: 850;
+      cursor: pointer;
+      transition: background .18s ease, border-color .18s ease, box-shadow .18s ease, transform .1s ease;
+    }
+    .co-record-listing__primary { min-height: 42px; padding: 0 15px; border-color: var(--rl-green); background: var(--rl-green); color: #fff; white-space: nowrap; }
+    .co-record-listing__button { min-height: 42px; padding: 0 13px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap; }
+    .co-record-listing__button:hover,
+    .co-record-listing__icon-button:hover,
+    .co-record-listing__page-button:hover { background: #f1f5ee; border-color: #b8c9b9; }
+    .co-record-listing__primary:hover { background: #1c402a; }
+    .co-record-listing__button:active,
+    .co-record-listing__primary:active,
+    .co-record-listing__icon-button:active { transform: translateY(1px); }
+    .co-record-listing button:focus-visible,
+    .co-record-listing input:focus-visible,
+    .co-record-listing select:focus-visible,
+    .co-record-listing a:focus-visible {
+      outline: 0;
+      box-shadow: 0 0 0 3px var(--rl-focus);
+    }
+    .co-record-listing__toolbar-card,
+    .co-record-listing__list-card {
+      border: 1px solid var(--rl-line);
+      border-radius: 18px;
+      background: var(--rl-surface);
+      box-shadow: 0 8px 24px rgba(28,51,35,.055);
+    }
+    .co-record-listing__toolbar-card { padding: 14px; margin-bottom: 14px; }
+    .co-record-listing__toolbar {
+      display: grid;
+      grid-template-columns: minmax(240px, 1fr) auto auto;
+      gap: 10px;
+      align-items: center;
+    }
+    .co-record-listing__search { position: relative; min-width: 0; }
+    .co-record-listing__search-icon { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); width: 19px; height: 19px; display: block; color: #6f8074; pointer-events: none; }
+    .co-record-listing__search-icon circle,
+    .co-record-listing__search-icon path { vector-effect: non-scaling-stroke; }
+    .co-record-listing__search-input {
+      width: 100%; height: 44px; padding: 0 42px 0 40px; border: 1px solid var(--rl-line-strong); border-radius: 12px; background: #fff; color: #24372c; outline: 0;
+    }
+    .co-record-listing__search-input:focus { border-color: #75927c; box-shadow: 0 0 0 3px var(--rl-focus); }
+    .co-record-listing__search-clear { position: absolute; right: 7px; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border: 0; border-radius: 9px; background: transparent; color: var(--rl-muted); cursor: pointer; }
+    .co-record-listing__search-clear:hover { background: var(--rl-soft); }
+    .co-record-listing__filter-count { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; display: inline-grid; place-items: center; background: var(--rl-green); color: #fff; font-size: 11px; }
+    .co-record-listing__page-size { display: flex; align-items: center; gap: 8px; color: var(--rl-muted); font-size: 12px; font-weight: 800; }
+    .co-record-listing__select { height: 42px; border: 1px solid var(--rl-line-strong); border-radius: 12px; background: #fff; color: #294233; padding: 0 34px 0 11px; outline: 0; }
+    .co-record-listing__mobile-sort { display: none; }
+    .co-record-listing__chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 11px; }
+    .co-record-listing__chip { min-height: 32px; display: inline-flex; align-items: center; gap: 7px; padding: 4px 7px 4px 10px; border: 1px solid #d5dfce; border-radius: 999px; background: #f5f8f1; color: #38503e; font-size: 12px; font-weight: 800; }
+    .co-record-listing__chip button { width: 24px; height: 24px; border: 0; border-radius: 50%; background: #e6ede2; color: #53665a; cursor: pointer; }
+    .co-record-listing__bulk {
+      min-height: 50px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 12px; margin-bottom: 10px; border: 1px solid #ead2d2; border-radius: 14px; background: var(--rl-danger-soft);
+    }
+    .co-record-listing__bulk strong { font-size: 13px; color: #6e3333; }
+    .co-record-listing__danger { min-height: 38px; padding: 0 12px; border: 1px solid #d18d8d; border-radius: 10px; background: #fff; color: var(--rl-danger); font-weight: 850; cursor: pointer; }
+    .co-record-listing__list-card { overflow: hidden; }
+    .co-record-listing__table-wrap { width: 100%; overflow-x: auto; }
+    .co-record-listing__table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 860px; }
+    .co-record-listing__table th { padding: 12px 13px; background: #f7f9f4; border-bottom: 1px solid var(--rl-line); color: #53655a; font-size: 11px; letter-spacing: .025em; text-transform: uppercase; text-align: left; white-space: nowrap; }
+    .co-record-listing__table td { padding: 13px; border-bottom: 1px solid #edf1ea; vertical-align: middle; font-size: 13px; }
+    .co-record-listing__table tbody tr { transition: background .15s ease; }
+    .co-record-listing__table tbody tr:hover { background: #fbfcf9; }
+    .co-record-listing__table tbody tr.is-selected { background: #f5f8ee; }
+    .co-record-listing__table tbody tr:last-child td { border-bottom: 0; }
+    .co-record-listing__sort { display: inline-flex; align-items: center; gap: 6px; padding: 2px 0; border: 0; background: transparent; color: inherit; font: inherit; font-weight: 900; text-transform: inherit; cursor: pointer; }
+    .co-record-listing__sort svg { width: 14px; height: 14px; opacity: .42; }
+    .co-record-listing__sort.is-sorted { color: var(--rl-green); }
+    .co-record-listing__sort.is-sorted svg { opacity: 1; }
+    .co-record-listing__sort[data-dir="desc"] svg { transform: rotate(180deg); }
+    .co-record-listing__checkbox { width: 18px; height: 18px; accent-color: var(--rl-green); cursor: pointer; }
+    .co-record-listing__record-link { display: inline-block; color: var(--rl-green-dark); font-size: 13px; font-weight: 900; text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 3px; transition: color .16s ease, text-decoration-color .16s ease; }
+    .co-record-listing__record-link:hover { color: var(--rl-green); text-decoration-color: currentColor; }
+    .co-record-listing__hive strong { display: block; color: inherit; font-size: inherit; }
+    .co-record-listing__hive span { display: block; margin-top: 2px; color: var(--rl-muted); font-size: 12px; }
+    .co-record-listing__tag { display: inline-flex; align-items: center; min-height: 27px; padding: 3px 8px; border: 1px solid #d9e3d4; border-radius: 999px; background: #f4f8f1; color: #466049; font-size: 11px; font-weight: 850; white-space: nowrap; }
+    
+    .co-record-listing__mobile-list { display: none; }
+    .co-record-listing__mobile-item { border-bottom: 1px solid var(--rl-line); }
+    .co-record-listing__mobile-item:last-child { border-bottom: 0; }
+    .co-record-listing__mobile-head { display: grid; grid-template-columns: 34px minmax(0,1fr) 36px; gap: 8px; align-items: center; padding: 12px; }
+    .co-record-listing__mobile-main strong { display: block; color: var(--rl-green-dark); font-size: 14px; }
+    .co-record-listing__mobile-main span { display: block; margin-top: 3px; color: var(--rl-muted); font-size: 12px; }
+    .co-record-listing__expand { width: 36px; height: 36px; border: 1px solid var(--rl-line); border-radius: 10px; background: var(--rl-soft); color: var(--rl-green); cursor: pointer; }
+    .co-record-listing__expand svg { width: 17px; height: 17px; transition: transform .2s ease; }
+    .co-record-listing__mobile-item.is-open .co-record-listing__expand svg { transform: rotate(180deg); }
+    .co-record-listing__mobile-details { padding: 0 12px 13px 54px; }
+    .co-record-listing__mobile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px 12px; padding: 11px; border-radius: 12px; background: var(--rl-soft); }
+    .co-record-listing__mobile-detail span { display: block; color: var(--rl-muted); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
+    .co-record-listing__mobile-detail strong { display: block; margin-top: 2px; color: #344b3c; font-size: 12px; }
+    .co-record-listing__footer { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 13px 15px; border-top: 1px solid var(--rl-line); }
+    .co-record-listing__summary { color: var(--rl-muted); font-size: 12px; font-weight: 750; }
+    .co-record-listing__pagination { display: flex; gap: 6px; align-items: center; }
+    .co-record-listing__page-button { min-width: 38px; height: 38px; padding: 0 9px; }
+    .co-record-listing__page-button.is-current { border-color: var(--rl-green); background: var(--rl-green); color: #fff; }
+    .co-record-listing__page-button:disabled { opacity: .45; cursor: not-allowed; }
+    .co-record-listing__feedback { margin-bottom: 12px; padding: 11px 13px; border: 1px solid #cfe0cb; border-radius: 13px; background: #f1f8ee; color: #34543a; font-size: 13px; font-weight: 800; }
+    .co-record-listing__state { min-height: 330px; display: grid; place-items: center; padding: 28px 18px; text-align: center; }
+    .co-record-listing__state-inner { max-width: 460px; }
+    .co-record-listing__state h2 { margin: 0 0 7px; color: var(--rl-green-dark); font-size: 20px; }
+    .co-record-listing__state p { margin: 0 0 15px; color: var(--rl-muted); font-size: 13px; }
+    .co-record-listing__state-actions { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+    .co-record-listing__skeleton { padding: 14px; }
+    .co-record-listing__skeleton-row { height: 54px; margin-bottom: 9px; border-radius: 11px; background: linear-gradient(90deg,#eef2eb 25%,#f8faf6 50%,#eef2eb 75%); background-size: 200% 100%; animation: coRlSkeleton 1.25s infinite linear; }
+    @keyframes coRlSkeleton { to { background-position: -200% 0; } }
+    .co-record-listing__overlay { position: fixed; inset: 0; z-index: 220; display: grid; place-items: center; padding: 16px; background: rgba(24,42,31,.42); opacity: 0; visibility: hidden; transition: opacity .2s ease, visibility .2s ease; }
+    .co-record-listing__overlay.is-open { opacity: 1; visibility: visible; }
+    .co-record-listing__panel { width: min(760px,100%); max-height: min(780px,calc(100dvh - 32px)); overflow: auto; border: 1px solid var(--rl-line); border-radius: 18px; background: #fff; box-shadow: 0 24px 70px rgba(22,40,28,.22); transform: translateY(8px); transition: transform .22s ease; }
+    .co-record-listing__overlay.is-open .co-record-listing__panel { transform: none; }
+    .co-record-listing__panel-head { position: sticky; top: 0; z-index: 2; display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid var(--rl-line); background: #fff; }
+    .co-record-listing__panel-head h2 { margin: 0; color: var(--rl-green-dark); font-size: 18px; }
+    .co-record-listing__icon-button { width: 38px; height: 38px; display: grid; place-items: center; padding: 0; }
+    .co-record-listing__panel-body { padding: 18px; background: #fbfcf9; }
+    .co-record-listing__filter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .co-record-listing__field { min-width: 0; }
+    .co-record-listing__field label,
+    .co-record-listing__column-list legend { display: block; margin: 0 0 6px; color: #344b3c; font-size: 12px; font-weight: 850; }
+    .co-record-listing__field input,
+    .co-record-listing__field select { width: 100%; height: 44px; border: 1px solid var(--rl-line-strong); border-radius: 12px; background: #fff; color: #294233; padding: 0 11px; outline: 0; transition: border-color .16s ease, box-shadow .16s ease; }
+    .co-record-listing__field input:focus,
+    .co-record-listing__field select:focus { border-color: #75927c; box-shadow: 0 0 0 3px var(--rl-focus); }
+    .co-record-listing__filter-preview { display: flex; align-items: center; gap: 9px; min-height: 42px; color: var(--rl-muted); font-size: 12px; font-weight: 750; }
+    .co-record-listing__filter-preview strong { color: var(--rl-green-dark); font-size: 14px; }
+    .co-record-listing__panel-action-group { display: flex; gap: 8px; margin-left: auto; }
+
+    .co-record-listing__panel-actions { position: sticky; bottom: 0; display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 13px 18px; border-top: 1px solid var(--rl-line); background: #fff; }
+    .co-record-listing__column-list { border: 0; padding: 0; margin: 0; }
+    .co-record-listing__column-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .co-record-listing__check-option { min-height: 42px; display: flex; align-items: center; gap: 9px; padding: 8px 10px; border: 1px solid var(--rl-line); border-radius: 11px; background: var(--rl-soft); font-size: 13px; font-weight: 750; }
+    .co-record-listing__confirm { width: min(430px,100%); }
+    .co-record-listing__confirm p { margin: 0; color: var(--rl-muted); font-size: 13px; }
+    .co-record-listing__demo-states { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--rl-line); }
+    .co-record-listing__demo-states span { align-self: center; margin-right: 3px; color: var(--rl-muted); font-size: 11px; font-weight: 800; }
+    .co-record-listing__text-button { min-height: 30px; padding: 0 8px; font-size: 11px; }
+
+    @media (max-width: 980px) {
+      .co-record-listing__toolbar { grid-template-columns: minmax(220px,1fr) auto auto; }
+      .co-record-listing__page-size { grid-column: 1 / -1; justify-content: flex-end; }
+    }
+    @media (max-width: 720px) {
+      .co-record-listing__top { align-items: stretch; flex-direction: column; padding: 14px; }
+      .co-record-listing__primary { width: 100%; min-height: 44px; }
+      .co-record-listing__toolbar-card { padding: 11px; }
+      .co-record-listing__toolbar { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .co-record-listing__search { grid-column: 1 / -1; }
+      .co-record-listing__button { width: 100%; min-width: 0; padding-inline: 8px; }
+      .co-record-listing__page-size { grid-column: 1 / 2; justify-content: flex-start; flex-wrap: wrap; gap: 5px; }
+      .co-record-listing__mobile-sort { display: flex; align-items: center; justify-content: flex-end; gap: 5px; min-width: 0; }
+      .co-record-listing__mobile-sort .co-record-listing__select { min-width: 0; max-width: 130px; }
+      .co-record-listing__table-wrap { display: none; }
+      .co-record-listing__mobile-list { display: block; }
+      .co-record-listing__footer { align-items: stretch; flex-direction: column; }
+      .co-record-listing__pagination { justify-content: space-between; }
+      .co-record-listing__pagination .co-record-listing__page-number { display: none; }
+      .co-record-listing__page-button { flex: 1 1 auto; }
+      .co-record-listing__bulk { position: sticky; bottom: calc(8px + env(safe-area-inset-bottom)); z-index: 20; box-shadow: 0 10px 28px rgba(91,42,42,.12); }
+      .co-record-listing__filter-grid,
+      .co-record-listing__column-options { grid-template-columns: 1fr; }
+      .co-record-listing__overlay { align-items: end; padding: 0; }
+      .co-record-listing__panel { width: 100%; max-height: min(86dvh,760px); border-radius: 20px 20px 0 0; padding-bottom: env(safe-area-inset-bottom); transform: translateY(100%); }
+      .co-record-listing__overlay.is-open .co-record-listing__panel { transform: translateY(0); }
+      .co-record-listing__panel-actions { align-items: stretch; flex-direction: column; }
+      .co-record-listing__filter-preview { justify-content: center; }
+      .co-record-listing__panel-action-group { width: 100%; margin-left: 0; }
+      .co-record-listing__panel-action-group .co-record-listing__button,
+      .co-record-listing__panel-action-group .co-record-listing__primary { flex: 1 1 0; min-width: 0; }
+      .co-record-listing__panel-actions > .co-record-listing__button,
+      .co-record-listing__panel-actions > .co-record-listing__primary { width: 100%; }
+    }
+    @media (max-width: 370px) {
+      .co-record-listing__toolbar { gap: 7px; }
+      .co-record-listing__button { font-size: 12px; }
+      .co-record-listing__page-size label { display: none; }
+      .co-record-listing__mobile-grid { grid-template-columns: 1fr; }
+    }
+    /* FIM — COMPONENTE REUTILIZÁVEL: listagem de registros */
+
+    /* INÍCIO — CORREÇÕES: busca, alinhamento e painel de filtros */
+    .co-record-listing .co-sr-only {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+    .co-record-listing {
+      --rl-control-h: 44px;
+      font-family: inherit;
+    }
+    .co-record-listing__toolbar {
+      grid-template-columns: minmax(260px, 1fr) auto auto;
+      gap: 12px;
+      align-items: center;
+    }
+    .co-record-listing__search {
+      height: var(--rl-control-h);
+      display: block;
+    }
+    .co-record-listing__search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      width: 20px;
+      height: 20px;
+      display: grid;
+      place-items: center;
+      transform: translateY(-50%);
+      color: #738278;
+      pointer-events: none;
+      line-height: 0;
+    }
+    .co-record-listing__search-icon svg {
+      width: 20px;
+      height: 20px;
+      display: block;
+      overflow: visible;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .co-record-listing__search-input {
+      height: var(--rl-control-h);
+      line-height: normal;
+      padding: 0 42px 0 44px;
+    }
+    .co-record-listing__search-input::-webkit-search-cancel-button { display: none; }
+    .co-record-listing__button,
+    .co-record-listing__select {
+      min-height: var(--rl-control-h);
+      height: var(--rl-control-h);
+    }
+    .co-record-listing__page-size {
+      min-height: var(--rl-control-h);
+      align-items: center;
+      white-space: nowrap;
+    }
+    .co-record-listing__page-size label { line-height: 1; }
+
+    .co-record-listing__overlay {
+      font-family: inherit;
+      color: #24372c;
+      backdrop-filter: blur(2px);
+    }
+    .co-record-listing__panel {
+      width: min(820px, 100%);
+      max-height: min(820px, calc(100dvh - 32px));
+      overflow: auto;
+      border-color: #d5dfd3;
+      border-radius: 20px;
+      background: #fff;
+      font-family: inherit;
+    }
+    .co-record-listing__panel-head {
+      padding: 18px 20px 16px;
+      align-items: flex-start;
+      background: #fff;
+    }
+    .co-record-listing__panel-title-wrap { min-width: 0; }
+    .co-record-listing__panel-eyebrow {
+      display: block;
+      margin-bottom: 3px;
+      color: #74864b;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .065em;
+      text-transform: uppercase;
+    }
+    .co-record-listing__panel-head h2 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.2;
+      letter-spacing: -.02em;
+    }
+    .co-record-listing__panel-head p {
+      margin: 5px 0 0;
+      color: var(--rl-muted);
+      font-size: 12.5px;
+      line-height: 1.45;
+    }
+    .co-record-listing__panel-head .co-record-listing__icon-button {
+      flex: 0 0 auto;
+      border-color: transparent;
+      background: #f2f5ef;
+      font-size: 22px;
+      line-height: 1;
+    }
+    .co-record-listing__panel-body {
+      padding: 20px;
+      background: #f8faf6;
+    }
+    .co-record-listing__filter-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .co-record-listing__field--wide { grid-column: 1 / -1; }
+    .co-record-listing__field label,
+    .co-record-listing__date-group legend {
+      display: block;
+      margin: 0 0 7px;
+      color: #304638;
+      font-size: 12.5px;
+      line-height: 1.3;
+      font-weight: 850;
+    }
+    .co-record-listing__field input,
+    .co-record-listing__field select {
+      height: 46px;
+      padding-inline: 13px;
+      border-color: #c7d4c8;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 13px;
+    }
+    .co-record-listing__field-help {
+      margin: 6px 0 0;
+      color: #758278;
+      font-size: 11.5px;
+    }
+    .co-record-listing__date-group {
+      grid-column: 1 / -1;
+      min-width: 0;
+      margin: 0;
+      padding: 14px;
+      border: 1px solid #dce5d9;
+      border-radius: 14px;
+      background: #fff;
+    }
+    .co-record-listing__date-group legend { padding: 0 5px; }
+    .co-record-listing__date-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .co-record-listing__panel-actions {
+      padding: 15px 20px;
+      background: #fff;
+    }
+    .co-record-listing__filter-preview {
+      min-width: 0;
+      gap: 10px;
+      color: var(--rl-muted);
+    }
+    .co-record-listing__filter-preview-icon {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border-radius: 11px;
+      background: #edf4e9;
+      color: var(--rl-green);
+    }
+    .co-record-listing__filter-preview-icon svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .co-record-listing__filter-preview-copy { display: block; min-width: 0; }
+    .co-record-listing__filter-preview-copy > span {
+      display: block;
+      margin-bottom: 1px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .co-record-listing__filter-preview-copy strong {
+      display: block;
+      color: var(--rl-green-dark);
+      font-size: 14px;
+      line-height: 1.3;
+    }
+    .co-record-listing__panel-action-group {
+      flex: 0 0 auto;
+      margin-left: auto;
+    }
+    .co-record-listing__panel-action-group .co-record-listing__button,
+    .co-record-listing__panel-action-group .co-record-listing__primary {
+      min-height: 42px;
+      height: 42px;
+      padding-inline: 15px;
+    }
+    .co-record-listing__panel .co-record-listing__primary,
+    .co-record-listing__panel .co-record-listing__primary:hover,
+    #applyFilters,
+    #applyFilters:hover {
+      border-color: var(--rl-green);
+      background: var(--rl-green);
+      color: #fff;
+    }
+    #applyFilters:hover { background: #1c402a; }
+
+    @media (max-width: 980px) {
+      .co-record-listing__toolbar { grid-template-columns: minmax(220px, 1fr) auto auto; }
+      .co-record-listing__page-size { grid-column: auto; justify-content: flex-start; }
+    }
+    @media (max-width: 720px) {
+      .co-record-listing__toolbar { grid-template-columns: 1fr 1fr; }
+      .co-record-listing__search { grid-column: 1 / -1; }
+      .co-record-listing__page-size { grid-column: 1 / 2; }
+      .co-record-listing__filter-grid,
+      .co-record-listing__date-grid { grid-template-columns: 1fr; }
+      .co-record-listing__panel-head { padding: 16px 15px 14px; }
+      .co-record-listing__panel-body { padding: 15px; }
+      .co-record-listing__panel-actions {
+        padding: 13px 15px calc(13px + env(safe-area-inset-bottom));
+        align-items: stretch;
+      }
+      .co-record-listing__filter-preview { justify-content: flex-start; width: 100%; }
+      .co-record-listing__panel-action-group { display: grid; grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 380px) {
+      .co-record-listing__page-size label { display: inline; }
+      .co-record-listing__panel-action-group { grid-template-columns: 1fr; }
+    }
+    /* FIM — CORREÇÕES: busca, alinhamento e painel de filtros */
+
+  </style>
+</head>
+<body>
+  <main class="co-listing-demo">
+    <aside class="co-listing-demo__menu">Área do menu lateral</aside>
+    <div class="co-listing-demo__content">
+      <section aria-labelledby="recordListingTitle" class="co-record-listing" id="recordListing">
+<header class="co-record-listing__top">
+<div class="co-record-listing__title-wrap">
+<h1 class="co-record-listing__title" id="recordListingTitle">Revisões</h1>
+<p class="co-record-listing__count" id="recordCountText">41 revisões registradas</p>
+</div>
+<button class="co-record-listing__primary" id="newRecordButton" type="button">Nova revisão</button>
+</header>
+<div aria-live="polite" class="co-record-listing__feedback" hidden="" id="listingFeedback" role="status"></div>
+<section aria-label="Ferramentas da listagem" class="co-record-listing__toolbar-card">
+<div class="co-record-listing__toolbar">
+<div class="co-record-listing__search">
+<span aria-hidden="true" class="co-record-listing__search-icon">
+<svg focusable="false" viewbox="0 0 24 24">
+<circle cx="10.5" cy="10.5" r="6.5"></circle>
+<path d="M15.4 15.4 20 20"></path>
+</svg>
+</span>
+<label class="co-sr-only" for="recordSearch">Buscar revisões</label>
+<input autocomplete="off" class="co-record-listing__search-input" id="recordSearch" placeholder="Buscar revisões..." type="search"/>
+<button aria-label="Limpar busca" class="co-record-listing__search-clear" hidden="" id="clearRecordSearch" type="button">×</button>
+</div>
+<button aria-haspopup="dialog" class="co-record-listing__button" id="openFilters" type="button">
+<svg aria-hidden="true" fill="none" height="17" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="17"><path d="M4 6h16M7 12h10M10 18h4"></path></svg>
+                  Filtros <span class="co-record-listing__filter-count" hidden="" id="activeFilterCount">0</span>
+</button>
+<div class="co-record-listing__page-size">
+<label for="pageSize">Por página</label>
+<select class="co-record-listing__select" id="pageSize"><option>10</option><option selected="">20</option><option>50</option></select>
+</div>
+<div class="co-record-listing__mobile-sort">
+<label class="co-sr-only" for="mobileSort">Ordenar por</label>
+<select class="co-record-listing__select" id="mobileSort">
+<option value="date">Data</option><option value="hive">Colmeia</option><option value="type">Tipo</option><option value="queen">Rainha</option><option value="temperament">Temperamento</option><option value="brood">Cria</option>
+</select>
+<button aria-label="Ordenação decrescente" class="co-record-listing__icon-button" id="mobileSortDirection" title="Alterar direção da ordenação" type="button">
+<svg aria-hidden="true" fill="none" height="17" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="17"><path d="M12 5v14M7 10l5-5 5 5"></path></svg>
+</button>
+</div>
+</div>
+<div aria-label="Filtros ativos" class="co-record-listing__chips" hidden="" id="filterChips"></div>
+<div aria-label="Estados demonstrativos" class="co-record-listing__demo-states">
+<span>Demonstrar:</span>
+<button class="co-record-listing__text-button" data-demo-state="loading" type="button">Carregamento</button>
+<button class="co-record-listing__text-button" data-demo-state="empty" type="button">Lista vazia</button>
+<button class="co-record-listing__text-button" data-demo-state="error" type="button">Erro</button>
+<button class="co-record-listing__text-button" data-demo-state="normal" type="button">Restaurar</button>
+</div>
+</section>
+<div class="co-record-listing__bulk" hidden="" id="bulkActions">
+<strong id="selectedCount">0 registros selecionados</strong>
+<button class="co-record-listing__danger" id="deleteSelected" type="button">Excluir selecionados</button>
+</div>
+<section aria-label="Registros" class="co-record-listing__list-card">
+<div id="normalListState">
+<div class="co-record-listing__table-wrap">
+<table class="co-record-listing__table">
+<thead><tr>
+<th scope="col"><input aria-label="Selecionar todos os registros visíveis" class="co-record-listing__checkbox" id="selectAll" type="checkbox"/></th>
+<th data-col="hive" scope="col"><button aria-sort="none" class="co-record-listing__sort" data-dir="asc" data-sort="hive">Colmeia <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="m7 10 5 5 5-5"></path></svg></button></th>
+<th data-col="date" scope="col"><button aria-sort="descending" class="co-record-listing__sort is-sorted" data-dir="desc" data-sort="date">Data <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="m7 10 5 5 5-5"></path></svg></button></th>
+<th data-col="type" scope="col"><button aria-sort="none" class="co-record-listing__sort" data-dir="asc" data-sort="type">Tipo <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="m7 10 5 5 5-5"></path></svg></button></th>
+<th data-col="queen" scope="col"><button aria-sort="none" class="co-record-listing__sort" data-dir="asc" data-sort="queen">Rainha <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="m7 10 5 5 5-5"></path></svg></button></th>
+<th data-col="temperament" scope="col"><button aria-sort="none" class="co-record-listing__sort" data-dir="asc" data-sort="temperament">Temperamento <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="m7 10 5 5 5-5"></path></svg></button></th>
+<th data-col="brood" scope="col"><button aria-sort="none" class="co-record-listing__sort" data-dir="asc" data-sort="brood">Cria <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="m7 10 5 5 5-5"></path></svg></button></th>
+<th data-col="responsible" scope="col">Responsável</th>
+</tr></thead>
+<tbody id="desktopTableBody"></tbody>
+</table>
+</div>
+<div class="co-record-listing__mobile-list" id="mobileRecordList"></div>
+<footer class="co-record-listing__footer">
+<div class="co-record-listing__summary" id="listSummary">Exibindo 1–10 de 41 revisões</div>
+<nav aria-label="Paginação" class="co-record-listing__pagination">
+<button class="co-record-listing__page-button" id="previousPage" type="button">Anterior</button>
+<button aria-current="page" class="co-record-listing__page-button co-record-listing__page-number is-current" data-page="1" type="button">1</button>
+<button class="co-record-listing__page-button co-record-listing__page-number" data-page="2" type="button">2</button>
+<button class="co-record-listing__page-button co-record-listing__page-number" data-page="3" type="button">3</button>
+<span aria-hidden="true">…</span>
+<button class="co-record-listing__page-button co-record-listing__page-number" data-page="5" type="button">5</button>
+<button class="co-record-listing__page-button" id="nextPage" type="button">Próxima</button>
+</nav>
+</footer>
+</div>
+<div aria-label="Carregando registros" class="co-record-listing__skeleton" hidden="" id="loadingState">
+<div class="co-record-listing__skeleton-row"></div><div class="co-record-listing__skeleton-row"></div><div class="co-record-listing__skeleton-row"></div><div class="co-record-listing__skeleton-row"></div><div class="co-record-listing__skeleton-row"></div>
+</div>
+<div class="co-record-listing__state" hidden="" id="emptyState"><div class="co-record-listing__state-inner"><h2>Nenhuma revisão registrada ainda.</h2><p>Registre a primeira revisão para começar o histórico das suas colmeias.</p><button class="co-record-listing__primary" type="button">Nova revisão</button></div></div>
+<div class="co-record-listing__state" hidden="" id="noResultsState"><div class="co-record-listing__state-inner"><h2>Nenhuma revisão encontrada</h2><p>Nenhuma revisão corresponde à busca ou aos filtros aplicados.</p><div class="co-record-listing__state-actions"><button class="co-record-listing__button" id="clearNoResultSearch" type="button">Limpar busca</button><button class="co-record-listing__button" id="clearNoResultFilters" type="button">Limpar filtros</button></div></div></div>
+<div class="co-record-listing__state" hidden="" id="errorState"><div class="co-record-listing__state-inner"><h2>Não foi possível carregar as revisões.</h2><p>Tente novamente para restaurar a listagem.</p><button class="co-record-listing__primary" id="retryList" type="button">Tentar novamente</button></div></div>
+</section>
+<div aria-hidden="true" class="co-record-listing__overlay" id="filterOverlay">
+<section aria-labelledby="filterTitle" aria-modal="true" class="co-record-listing__panel" role="dialog">
+<header class="co-record-listing__panel-head">
+<div class="co-record-listing__panel-title-wrap">
+<span class="co-record-listing__panel-eyebrow">Refinar listagem</span>
+<h2 id="filterTitle">Filtrar revisões</h2>
+<p>Combine os critérios abaixo. A prévia é atualizada enquanto você preenche.</p>
+</div>
+<button aria-label="Fechar filtros" class="co-record-listing__icon-button" data-close-overlay="filterOverlay" type="button">×</button>
+</header>
+<div class="co-record-listing__panel-body">
+<div class="co-record-listing__filter-grid">
+<div class="co-record-listing__field co-record-listing__field--wide">
+<label for="filterQuery">Colmeia ou espécie</label>
+<input id="filterQuery" placeholder="Ex.: COL-014 ou Mandaguari" type="text"/>
+<p class="co-record-listing__field-help">Pesquise pelo código da colmeia ou pelo nome da espécie.</p>
+</div>
+<div class="co-record-listing__field">
+<label for="filterType">Tipo de registro</label>
+<select id="filterType"><option value="">Todos os tipos</option><option>Observação rápida</option><option>Revisão completa</option></select>
+</div>
+<div class="co-record-listing__field">
+<label for="filterQueen">Rainha visualizada</label>
+<select id="filterQueen"><option value="">Todas as situações</option><option>Sim</option><option>Não</option><option>Não informado</option></select>
+</div>
+<div class="co-record-listing__field">
+<label for="filterTemperament">Temperamento</label>
+<select id="filterTemperament"><option value="">Todos os temperamentos</option><option>Mansa</option><option>Média</option><option>Arisca</option><option>Não informado</option></select>
+</div>
+<fieldset class="co-record-listing__date-group">
+<legend>Período da revisão</legend>
+<div class="co-record-listing__date-grid">
+<div class="co-record-listing__field">
+<label for="filterDateFrom">Data inicial</label>
+<input id="filterDateFrom" type="date"/>
+</div>
+<div class="co-record-listing__field">
+<label for="filterDateTo">Data final</label>
+<input id="filterDateTo" type="date"/>
+</div>
+</div>
+</fieldset>
+</div>
+</div>
+<footer class="co-record-listing__panel-actions">
+<div aria-live="polite" class="co-record-listing__filter-preview">
+<span aria-hidden="true" class="co-record-listing__filter-preview-icon">
+<svg viewbox="0 0 24 24"><path d="M5 12.5 9.2 17 19 7"></path></svg>
+</span>
+<span class="co-record-listing__filter-preview-copy">
+<span>Prévia da listagem</span>
+<strong id="filterPreviewCount">10 resultados encontrados</strong>
+</span>
+</div>
+<div class="co-record-listing__panel-action-group">
+<button class="co-record-listing__button" id="clearFilters" type="button">Limpar filtros</button>
+<button class="co-record-listing__primary" id="applyFilters" type="button">Aplicar filtros</button>
+</div>
+</footer>
+</section>
+</div><div aria-hidden="true" class="co-record-listing__overlay" id="deleteOverlay">
+<section aria-describedby="deleteDescription" aria-labelledby="deleteTitle" aria-modal="true" class="co-record-listing__panel co-record-listing__confirm" role="alertdialog">
+<header class="co-record-listing__panel-head"><h2 id="deleteTitle">Excluir registros selecionados?</h2><button aria-label="Fechar confirmação" class="co-record-listing__icon-button" data-close-overlay="deleteOverlay" type="button">×</button></header>
+<div class="co-record-listing__panel-body"><p id="deleteDescription">Esta é uma confirmação demonstrativa. Nenhum registro real será excluído.</p></div>
+<footer class="co-record-listing__panel-actions"><button class="co-record-listing__button" data-close-overlay="deleteOverlay" type="button">Cancelar</button><button class="co-record-listing__danger" id="confirmDelete" type="button">Excluir selecionados</button></footer>
+</section>
+</div></section>
+    </div>
+  </main>
+  <script>
+
+    (() => {
+      const root = document.getElementById('recordListing');
+      if (!root) return;
+      const rows = [
+        {id:1,date:'2026-07-14',dateLabel:'14/07/2026',hive:'COL-014',species:'Mandaguari',type:'Revisão completa',queen:'Sim',temperament:'Mansa',brood:'Boa',responsible:'Augusto'},
+        {id:2,date:'2026-07-12',dateLabel:'12/07/2026',hive:'COL-008',species:'Uruçu-amarela',type:'Revisão completa',queen:'Não',temperament:'Média',brood:'Moderada',responsible:'Augusto'},
+        {id:3,date:'2026-07-10',dateLabel:'10/07/2026',hive:'COL-021',species:'Lambe-olhos',type:'Observação rápida',queen:'Não informado',temperament:'Não informado',brood:'Não informado',responsible:'Augusto'},
+        {id:4,date:'2026-07-08',dateLabel:'08/07/2026',hive:'COL-005',species:'Mirim',type:'Revisão completa',queen:'Sim',temperament:'Mansa',brood:'Boa',responsible:'Augusto'},
+        {id:5,date:'2026-07-06',dateLabel:'06/07/2026',hive:'COL-017',species:'Jataí',type:'Observação rápida',queen:'Não informado',temperament:'Não informado',brood:'Não informado',responsible:'Augusto'},
+        {id:6,date:'2026-07-03',dateLabel:'03/07/2026',hive:'COL-031',species:'Mandaçaia',type:'Revisão completa',queen:'Não',temperament:'Arisca',brood:'Baixa',responsible:'Augusto'},
+        {id:7,date:'2026-06-28',dateLabel:'28/06/2026',hive:'COL-012',species:'Iraí',type:'Revisão completa',queen:'Sim',temperament:'Mansa',brood:'Boa',responsible:'Augusto'},
+        {id:8,date:'2026-06-24',dateLabel:'24/06/2026',hive:'COL-022',species:'Tubuna',type:'Observação rápida',queen:'Não informado',temperament:'Não informado',brood:'Não informado',responsible:'Augusto'},
+        {id:9,date:'2026-06-20',dateLabel:'20/06/2026',hive:'COL-009',species:'Guaraipo',type:'Revisão completa',queen:'Sim',temperament:'Média',brood:'Moderada',responsible:'Augusto'},
+        {id:10,date:'2026-06-16',dateLabel:'16/06/2026',hive:'COL-003',species:'Jataí',type:'Revisão completa',queen:'Não',temperament:'Mansa',brood:'Boa',responsible:'Augusto'},
+        {id:11,date:'2026-06-11',dateLabel:'11/06/2026',hive:'COL-025',species:'Mirim-droryana',type:'Observação rápida',queen:'Não informado',temperament:'Não informado',brood:'Não informado',responsible:'Augusto'},
+        {id:12,date:'2026-06-05',dateLabel:'05/06/2026',hive:'COL-006',species:'Mandaçaia',type:'Revisão completa',queen:'Sim',temperament:'Mansa',brood:'Boa',responsible:'Augusto'}
+      ];
+      const selected = new Set();
+      let filtered = [...rows];
+      let sortKey = 'date';
+      let sortDir = 'desc';
+      let currentPage = 1;
+      let pageSize = 20;
+      let activeFilters = {};
+      let previousFocus = null;
+
+      const els = {
+        search: document.getElementById('recordSearch'), clearSearch: document.getElementById('clearRecordSearch'),
+        desktopBody: document.getElementById('desktopTableBody'), mobileList: document.getElementById('mobileRecordList'),
+        selectAll: document.getElementById('selectAll'), bulk: document.getElementById('bulkActions'), selectedCount: document.getElementById('selectedCount'),
+        summary: document.getElementById('listSummary'), countText: document.getElementById('recordCountText'), chips: document.getElementById('filterChips'), filterCount: document.getElementById('activeFilterCount'),
+        normal: document.getElementById('normalListState'), loading: document.getElementById('loadingState'), empty: document.getElementById('emptyState'), noResults: document.getElementById('noResultsState'), error: document.getElementById('errorState'), feedback: document.getElementById('listingFeedback'),
+        pageSize: document.getElementById('pageSize'), mobileSort: document.getElementById('mobileSort'), mobileSortDirection: document.getElementById('mobileSortDirection')
+      };
+
+      const escapeHtml = value => String(value).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+      function visibleRows() { return filtered.slice((currentPage-1)*pageSize, currentPage*pageSize); }
+      function sortRows() {
+        filtered.sort((a,b) => String(a[sortKey]).localeCompare(String(b[sortKey]), 'pt-BR', {numeric:true}) * (sortDir==='asc'?1:-1));
+      }
+      function applySearchAndFilters() {
+        const q = els.search.value.trim().toLocaleLowerCase('pt-BR');
+        filtered = rows.filter(row => {
+          const searchText = Object.values(row).join(' ').toLocaleLowerCase('pt-BR');
+          if (q && !searchText.includes(q)) return false;
+          if (activeFilters.type && row.type !== activeFilters.type) return false;
+          if (activeFilters.query && !`${row.hive} ${row.species}`.toLocaleLowerCase('pt-BR').includes(activeFilters.query.toLocaleLowerCase('pt-BR'))) return false;
+          if (activeFilters.queen && row.queen !== activeFilters.queen) return false;
+          if (activeFilters.temperament && row.temperament !== activeFilters.temperament) return false;
+          if (activeFilters.datefrom && row.date < activeFilters.datefrom) return false;
+          if (activeFilters.dateto && row.date > activeFilters.dateto) return false;
+          return true;
+        });
+        sortRows(); currentPage = 1; render();
+      }
+      function rowHtml(row) {
+        const checked = selected.has(row.id);
+        return `<tr class="${checked?'is-selected':''}"><td><input class="co-record-listing__checkbox row-check" type="checkbox" value="${row.id}" ${checked?'checked':''} aria-label="Selecionar revisão de ${escapeHtml(row.hive)}"></td><td data-col="hive"><div class="co-record-listing__hive"><a href="#revisao-${row.id}" class="co-record-listing__record-link" data-open-record="${row.id}"><strong>${escapeHtml(row.hive)}</strong></a><span>${escapeHtml(row.species)}</span></div></td><td data-col="date">${row.dateLabel}</td><td data-col="type"><span class="co-record-listing__tag">${escapeHtml(row.type)}</span></td><td data-col="queen">${escapeHtml(row.queen)}</td><td data-col="temperament">${escapeHtml(row.temperament)}</td><td data-col="brood">${escapeHtml(row.brood)}</td><td data-col="responsible">${escapeHtml(row.responsible)}</td></tr>`;
+      }
+      function mobileHtml(row) {
+        const checked = selected.has(row.id);
+        return `<article class="co-record-listing__mobile-item ${checked?'is-selected':''}" data-mobile-item="${row.id}"><div class="co-record-listing__mobile-head"><input class="co-record-listing__checkbox row-check" type="checkbox" value="${row.id}" ${checked?'checked':''} aria-label="Selecionar revisão de ${escapeHtml(row.hive)}"><div class="co-record-listing__mobile-main"><a href="#revisao-${row.id}" class="co-record-listing__record-link" data-open-record="${row.id}"><strong>${escapeHtml(row.hive)} · ${escapeHtml(row.species)}</strong></a><span>${row.dateLabel} · ${escapeHtml(row.type)}</span></div><button type="button" class="co-record-listing__expand" aria-expanded="false" aria-label="Exibir detalhes da revisão"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m7 10 5 5 5-5"></path></svg></button></div><div class="co-record-listing__mobile-details" hidden><div class="co-record-listing__mobile-grid"><div class="co-record-listing__mobile-detail"><span>Rainha</span><strong>${escapeHtml(row.queen)}</strong></div><div class="co-record-listing__mobile-detail"><span>Temperamento</span><strong>${escapeHtml(row.temperament)}</strong></div><div class="co-record-listing__mobile-detail"><span>Cria</span><strong>${escapeHtml(row.brood)}</strong></div><div class="co-record-listing__mobile-detail"><span>Responsável</span><strong>${escapeHtml(row.responsible)}</strong></div></div></div></article>`;
+      }
+      function render() {
+        const data = visibleRows();
+        els.desktopBody.innerHTML = data.map(rowHtml).join('');
+        els.mobileList.innerHTML = data.map(mobileHtml).join('');
+        const hasResults = filtered.length > 0;
+        els.normal.hidden = !hasResults;
+        els.noResults.hidden = hasResults || (!els.search.value.trim() && !Object.keys(activeFilters).length);
+        els.empty.hidden = true; els.loading.hidden = true; els.error.hidden = true;
+        const start = filtered.length ? (currentPage-1)*pageSize+1 : 0;
+        const end = Math.min(currentPage*pageSize, filtered.length);
+        els.summary.textContent = Object.keys(activeFilters).length || els.search.value.trim() ? `Exibindo ${filtered.length} de 41 revisões` : `Exibindo ${start}–${end} de 41 revisões`;
+        els.countText.textContent = `${filtered.length === rows.length ? 41 : filtered.length} revisões ${filtered.length===1?'registrada':'registradas'}`;
+        updateSelection();
+      }
+      function updateSelection() {
+        const visible = visibleRows();
+        const selectedVisible = visible.filter(r => selected.has(r.id)).length;
+        els.selectAll.checked = visible.length > 0 && selectedVisible === visible.length;
+        els.selectAll.indeterminate = selectedVisible > 0 && selectedVisible < visible.length;
+        els.bulk.hidden = selected.size === 0;
+        els.selectedCount.textContent = `${selected.size} ${selected.size===1?'registro selecionado':'registros selecionados'}`;
+      }
+      function showFeedback(message) { els.feedback.textContent = message; els.feedback.hidden = false; clearTimeout(showFeedback.timer); showFeedback.timer=setTimeout(()=>els.feedback.hidden=true,2600); }
+
+      root.addEventListener('change', event => {
+        if (event.target.classList.contains('row-check')) { const id=Number(event.target.value); event.target.checked?selected.add(id):selected.delete(id); render(); }
+      });
+      els.selectAll.addEventListener('change', () => { visibleRows().forEach(r => els.selectAll.checked?selected.add(r.id):selected.delete(r.id)); render(); });
+      els.search.addEventListener('input', () => { els.clearSearch.hidden=!els.search.value; applySearchAndFilters(); });
+      els.clearSearch.addEventListener('click', () => { els.search.value=''; els.clearSearch.hidden=true; applySearchAndFilters(); els.search.focus(); });
+      root.addEventListener('click', event => {
+        const sort = event.target.closest('[data-sort]');
+        if (sort) { const key=sort.dataset.sort; sortDir = sortKey===key ? (sortDir==='asc'?'desc':'asc') : 'asc'; sortKey=key; syncSortControls(); sortRows(); render(); }
+        const expander = event.target.closest('.co-record-listing__expand');
+        if (expander) { const item=expander.closest('.co-record-listing__mobile-item'); const details=item.querySelector('.co-record-listing__mobile-details'); const open=!details.hidden; details.hidden=open; item.classList.toggle('is-open',!open); expander.setAttribute('aria-expanded',String(!open)); }
+        const recordLink=event.target.closest('[data-open-record]'); if(recordLink){event.preventDefault();showFeedback('Revisão aberta na demonstração.');}
+      });
+      function syncSortControls() {
+        root.querySelectorAll('[data-sort]').forEach(btn => { const active=btn.dataset.sort===sortKey; btn.classList.toggle('is-sorted',active); btn.dataset.dir=active?sortDir:'asc'; btn.setAttribute('aria-sort',active?(sortDir==='asc'?'ascending':'descending'):'none'); });
+        els.mobileSort.value=sortKey; els.mobileSortDirection.setAttribute('aria-label',`Ordenação ${sortDir==='asc'?'crescente':'decrescente'}`);
+      }
+      els.mobileSort.addEventListener('change',()=>{sortKey=els.mobileSort.value;sortRows();syncSortControls();render();});
+      els.mobileSortDirection.addEventListener('click',()=>{sortDir=sortDir==='asc'?'desc':'asc';sortRows();syncSortControls();render();});
+      els.pageSize.addEventListener('change',()=>{pageSize=Number(els.pageSize.value);currentPage=1;render();});
+      document.getElementById('previousPage').addEventListener('click',()=>{if(currentPage>1){currentPage--;render();}});
+      document.getElementById('nextPage').addEventListener('click',()=>{if(currentPage<Math.ceil(filtered.length/pageSize)){currentPage++;render();}});
+      root.querySelectorAll('[data-page]').forEach(btn=>btn.addEventListener('click',()=>{currentPage=Number(btn.dataset.page);render();}));
+
+      function openOverlay(id, trigger) { previousFocus=trigger||document.activeElement; const overlay=document.getElementById(id); overlay.classList.add('is-open'); overlay.setAttribute('aria-hidden','false'); setTimeout(()=>overlay.querySelector('button,input,select').focus(),30); }
+      function closeOverlay(id) { const overlay=document.getElementById(id); overlay.classList.remove('is-open'); overlay.setAttribute('aria-hidden','true'); if(previousFocus) setTimeout(()=>previousFocus.focus(),20); }
+      document.getElementById('openFilters').addEventListener('click',e=>openOverlay('filterOverlay',e.currentTarget));
+      document.getElementById('deleteSelected').addEventListener('click',e=>openOverlay('deleteOverlay',e.currentTarget));
+      document.querySelectorAll('[data-close-overlay]').forEach(btn=>btn.addEventListener('click',()=>closeOverlay(btn.dataset.closeOverlay)));
+      document.querySelectorAll('.co-record-listing__overlay').forEach(overlay=>overlay.addEventListener('click',e=>{if(e.target===overlay)closeOverlay(overlay.id);}));
+      document.addEventListener('keydown',e=>{if(e.key==='Escape'){const open=document.querySelector('.co-record-listing__overlay.is-open');if(open)closeOverlay(open.id);}});
+
+      const filterMap={query:'Colmeia ou espécie',type:'Tipo',queen:'Rainha',temperament:'Temperamento',datefrom:'Data inicial',dateto:'Data final'};
+      const filterInputs=['filterQuery','filterType','filterQueen','filterTemperament','filterDateFrom','filterDateTo'];
+      function draftFilterValues(){
+        return {
+          query:document.getElementById('filterQuery').value.trim(),
+          type:document.getElementById('filterType').value,
+          queen:document.getElementById('filterQueen').value,
+          temperament:document.getElementById('filterTemperament').value,
+          datefrom:document.getElementById('filterDateFrom').value,
+          dateto:document.getElementById('filterDateTo').value
+        };
+      }
+      function countForFilters(filters){
+        return rows.filter(row=>{
+          if(filters.query && !`${row.hive} ${row.species}`.toLocaleLowerCase('pt-BR').includes(filters.query.toLocaleLowerCase('pt-BR'))) return false;
+          if(filters.type && row.type!==filters.type) return false;
+          if(filters.queen && row.queen!==filters.queen) return false;
+          if(filters.temperament && row.temperament!==filters.temperament) return false;
+          if(filters.datefrom && row.date<filters.datefrom) return false;
+          if(filters.dateto && row.date>filters.dateto) return false;
+          return true;
+        }).length;
+      }
+      function updateFilterPreview(){
+        const count=countForFilters(draftFilterValues());
+        document.getElementById('filterPreviewCount').textContent=`${count} ${count===1?'resultado encontrado':'resultados encontrados'}`;
+      }
+      filterInputs.forEach(id=>document.getElementById(id).addEventListener('input',updateFilterPreview));
+      document.getElementById('applyFilters').addEventListener('click',()=>{
+        activeFilters=Object.fromEntries(Object.entries(draftFilterValues()).filter(([,value])=>value));
+        renderChips(); applySearchAndFilters(); closeOverlay('filterOverlay');
+      });
+      function clearFilters() {
+        activeFilters={}; filterInputs.forEach(id=>document.getElementById(id).value=''); updateFilterPreview(); renderChips(); applySearchAndFilters();
+      }
+      document.getElementById('clearFilters').addEventListener('click',clearFilters);
+      document.getElementById('clearNoResultFilters').addEventListener('click',clearFilters);
+      document.getElementById('clearNoResultSearch').addEventListener('click',()=>{els.search.value='';els.clearSearch.hidden=true;applySearchAndFilters();});
+      function renderChips() { const entries=Object.entries(activeFilters); els.chips.hidden=!entries.length; els.filterCount.hidden=!entries.length; els.filterCount.textContent=entries.length; els.chips.innerHTML=entries.map(([key,val])=>`<span class="co-record-listing__chip">${filterMap[key]||key}: ${escapeHtml(val)} <button type="button" data-remove-filter="${key}" aria-label="Remover filtro ${escapeHtml(val)}">×</button></span>`).join(''); }
+      els.chips.addEventListener('click',e=>{const btn=e.target.closest('[data-remove-filter]');if(!btn)return;delete activeFilters[btn.dataset.removeFilter];const id={query:'filterQuery',type:'filterType',queen:'filterQueen',temperament:'filterTemperament',datefrom:'filterDateFrom',dateto:'filterDateTo'}[btn.dataset.removeFilter];if(id)document.getElementById(id).value='';updateFilterPreview();renderChips();applySearchAndFilters();});
+
+      document.getElementById('confirmDelete').addEventListener('click',()=>{const count=selected.size;selected.clear();closeOverlay('deleteOverlay');render();showFeedback(`${count} ${count===1?'registro removido':'registros removidos'} na demonstração.`);});
+      document.getElementById('retryList').addEventListener('click',()=>showState('normal'));
+      document.querySelectorAll('[data-demo-state]').forEach(btn=>btn.addEventListener('click',()=>showState(btn.dataset.demoState)));
+      function showState(state){els.normal.hidden=state!=='normal';els.loading.hidden=state!=='loading';els.empty.hidden=state!=='empty';els.error.hidden=state!=='error';els.noResults.hidden=true;els.bulk.hidden=true;if(state==='normal')render();}
+      document.getElementById('newRecordButton').addEventListener('click',()=>showFeedback('Ação “Nova revisão” demonstrada.'));
+      renderChips(); updateFilterPreview(); syncSortControls(); sortRows(); render();
+    })();
+  
+  </script>
+</body>
+</html>

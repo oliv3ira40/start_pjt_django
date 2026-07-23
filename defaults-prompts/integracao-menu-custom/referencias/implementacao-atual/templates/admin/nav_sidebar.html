@@ -1,0 +1,27 @@
+{% load i18n admin_shell %}
+<div class="co-admin-backdrop" data-admin-shell-backdrop aria-hidden="true"></div>
+<nav class="co-admin-sidebar" id="nav-sidebar" aria-label="{% translate 'Menu administrativo' %}" data-tour="main-menu" data-admin-shell-sidebar>
+  <div class="co-admin-drawer-head"><strong>{% translate 'Menu administrativo' %}</strong><button class="co-admin-icon-button" type="button" aria-label="{% translate 'Fechar menu' %}" data-admin-shell-mobile-close>{% admin_shell_icon "close" %}</button></div>
+  <div class="co-admin-sidebar__inner">
+    <div class="co-admin-sidebar__top"><label class="co-admin-search"><span class="co-admin-search__icon" aria-hidden="true">{% admin_shell_icon "search" %}</span><input type="search" id="nav-filter" placeholder="{% translate 'Buscar no menu' %}" aria-label="{% translate 'Buscar no menu' %}" data-admin-shell-search></label></div>
+    <div class="co-admin-sidebar__scroll">
+      {% if configured_admin_menu %}<div class="co-admin-nav-section">
+        {% for app in configured_admin_menu %}{% with app_active=app.models|admin_menu_group_active:request %}
+          {% if app.models|length == 1 %}{% with model=app.models.0 %}
+            <a class="co-admin-nav-link{% if model|admin_menu_item_active:request %} is-active{% endif %}" href="{{ model.admin_url }}"{% if model|admin_menu_item_active:request %} aria-current="page"{% endif %} data-admin-shell-item data-tooltip="{{ model.name }}"><span class="co-admin-nav-icon" aria-hidden="true">{% admin_shell_icon model.menu_icon %}</span><span class="co-admin-nav-text">{{ model.name }}</span></a>
+          {% endwith %}{% else %}
+            <section class="co-admin-nav-group{% if app_active %} has-active is-open{% endif %}" data-admin-shell-group data-admin-shell-group-key="{{ app.app_label }}-{{ forloop.counter }}">
+              <button class="co-admin-nav-group__trigger{% if app_active %} is-active{% endif %}" type="button" aria-expanded="{% if app_active %}true{% else %}false{% endif %}" aria-controls="co-admin-submenu-{{ forloop.counter }}" data-admin-shell-group-trigger data-tooltip="{{ app.name }}"><span class="co-admin-nav-icon" aria-hidden="true">{% admin_shell_icon app.menu_icon %}</span><span class="co-admin-nav-text">{{ app.name }}</span><span class="co-admin-nav-arrow" aria-hidden="true">{% admin_shell_icon "chevron" %}</span></button>
+              <div class="co-admin-submenu" id="co-admin-submenu-{{ forloop.counter }}"><div class="co-admin-submenu__inner">{% for model in app.models %}<a class="{% if model|admin_menu_item_active:request %}is-active{% endif %}" href="{{ model.admin_url }}"{% if model|admin_menu_item_active:request %} aria-current="page"{% endif %} data-admin-shell-item>{{ model.name }}</a>{% endfor %}</div></div>
+            </section>
+          {% endif %}
+        {% endwith %}{% endfor %}
+      </div>{% else %}<p class="co-admin-menu-empty">{% translate 'Você não tem permissão para visualizar itens de menu.' %}</p>{% endif %}
+    </div>
+    <div class="co-admin-sidebar__bottom">
+      <a class="co-admin-nav-link" href="{% url 'admin:my_subscriptions' %}" data-tooltip="{% translate 'Minhas Assinaturas' %}"><span class="co-admin-nav-icon" aria-hidden="true">{% admin_shell_icon "subscriptions" %}</span><span class="co-admin-nav-text">{% translate "Minhas Assinaturas" %}</span></a>
+      <a class="co-admin-nav-link" href="{% url 'admin:delete_personal_data' %}" data-tooltip="{% translate 'Meus Dados e Privacidade' %}"><span class="co-admin-nav-icon" aria-hidden="true">{% admin_shell_icon "privacy" %}</span><span class="co-admin-nav-text">{% translate "Meus Dados e Privacidade" %}</span></a>
+    </div>
+  </div>
+</nav>
+<div class="co-admin-tooltip" id="co-admin-menu-tooltip" role="tooltip" data-admin-shell-tooltip></div>

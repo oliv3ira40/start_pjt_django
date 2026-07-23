@@ -1,0 +1,579 @@
+Prompt 2 — Criar página administrativa para testes controlados do Sentry
+Objetivo
+
+Criar uma página administrativa personalizada para validar se a integração com o Sentry está funcionando corretamente em cada ambiente.
+
+A página deve ser acessível somente por superusuários e deve permitir disparar, de forma controlada, cinco tipos diferentes de eventos ou erros.
+
+A finalidade é validar:
+
+configuração do SDK;
+captura automática de exceções;
+captura manual;
+integração com logging;
+contexto do ambiente;
+funcionamento em desenvolvimento, homologação e produção.
+
+Antes de iniciar, ler integralmente o AGENTS.md e revisar a configuração atual do Sentry.
+
+Regra principal
+
+A página deve ser uma ferramenta técnica e restrita.
+
+Não pode:
+
+ficar disponível para usuário comum;
+ser indexada;
+aparecer em sitemap;
+expor o DSN;
+exibir tokens;
+permitir execução por requisição GET;
+provocar indisponibilidade global;
+executar testes automaticamente ao abrir.
+
+Cada erro deve acontecer somente após uma ação explícita do superusuário.
+
+1. Rota administrativa
+
+Criar uma rota customizada dentro da área administrativa, com nome estável e utilizando o namespace real do projeto.
+
+Exemplo conceitual:
+
+/admin/sistema/testes-sentry/
+
+O caminho exato deve seguir o padrão do projeto.
+
+Usar rota nomeada e reverse.
+
+Não fixar URLs nos templates ou JavaScript.
+
+Proteção
+
+A rota deve exigir:
+
+usuário autenticado;
+is_staff;
+is_superuser.
+
+Um usuário comum ou staff sem superusuário não pode acessar a página nem executar os endpoints.
+
+A proteção deve existir no backend, independentemente da visibilidade no menu.
+
+2. Visibilidade no menu
+
+Adicionar a página ao menu administrativo somente para superusuários.
+
+Nome sugerido:
+
+Testes do Sentry
+
+Agrupar em uma área técnica apropriada, como:
+
+Sistema;
+Administração;
+Diagnóstico;
+Ferramentas técnicas.
+
+Não mostrar para usuários comuns.
+
+O seed ou configuração do menu deve permanecer idempotente.
+
+Se o projeto não possuir menu customizado compatível, a rota pode ficar acessível por link interno administrativo, sem criar uma solução paralela.
+
+3. Layout
+
+Criar um layout simples, claro e coerente com o Django Admin atual.
+
+A página deve apresentar:
+
+título;
+aviso de uso técnico;
+estado atual da integração;
+ambiente identificado;
+cinco cartões ou linhas de teste;
+botão específico para cada teste;
+área de resultado da última execução.
+
+Não é necessário criar um redesign complexo.
+
+Aviso
+
+Exibir de forma clara:
+
+Esta página gera eventos de teste intencionais. Use somente para validar a integração com o Sentry.
+
+Em produção, adicionar um destaque maior indicando:
+
+Você está executando testes no ambiente de produção.
+
+Não exibir informações secretas.
+
+4. Informações de diagnóstico
+
+Apresentar informações seguras, como:
+
+Sentry habilitado: Sim ou Não;
+DSN configurado: Sim ou Não;
+ambiente;
+release, quando disponível;
+DEBUG;
+data e hora do último teste realizado nesta sessão;
+usuário executor.
+
+Não exibir:
+
+DSN completo;
+chave pública completa, se não for necessário;
+token;
+segredo;
+credenciais;
+variáveis privadas.
+
+Caso o Sentry esteja desabilitado ou sem DSN, os botões podem permanecer disponíveis para validar o comportamento local, mas a interface deve deixar claro que nenhum evento será enviado ao serviço externo.
+
+5. Execução somente por POST
+
+Cada teste deve utilizar uma requisição POST.
+
+Exigir:
+
+CSRF;
+autenticação;
+superusuário;
+identificador permitido do teste;
+confirmação explícita para produção.
+
+Não utilizar query string ou acesso GET para gerar exceções.
+
+A simples abertura da página nunca deve disparar evento.
+
+6. Confirmação em produção
+
+Quando o ambiente for produção, exigir uma confirmação adicional antes de executar qualquer teste.
+
+Pode ser:
+
+modal de confirmação;
+checkbox de ciência;
+texto de confirmação.
+
+Mensagem sugerida:
+
+Confirmo que desejo gerar um evento intencional no Sentry de produção.
+
+Sem essa confirmação, não executar.
+
+Não exigir confirmação adicional em desenvolvimento, salvo se o layout já utilizar um padrão comum.
+
+7. Identificação dos eventos
+
+Todos os eventos gerados devem ser claramente identificáveis como testes intencionais.
+
+Adicionar tags ou contexto como:
+
+sentry_test=true;
+tipo do teste;
+ambiente;
+rota de origem;
+usuário executor por identificador não sensível;
+data da execução.
+
+Usar mensagens que contenham algo como:
+
+Teste intencional do Sentry
+
+Não gerar eventos que pareçam falhas reais de produção sem identificação.
+
+Privacidade
+
+Não enviar:
+
+senha;
+sessão;
+cookie;
+token CSRF;
+dados financeiros;
+informações pessoais desnecessárias.
+8. Cinco testes
+
+Criar exatamente cinco opções de teste.
+
+Teste 1 — Mensagem informativa capturada manualmente
+
+Objetivo:
+
+Validar se o SDK consegue enviar um evento manual sem lançar uma exceção na aplicação.
+
+Usar uma captura equivalente a uma mensagem de teste.
+
+Comportamento esperado:
+
+enviar mensagem identificada;
+retornar resposta controlada;
+não gerar erro 500;
+informar que o evento foi solicitado.
+
+Rótulo sugerido:
+
+Enviar mensagem de teste
+
+Teste 2 — Exceção capturada manualmente
+
+Objetivo:
+
+Validar capture_exception ou mecanismo equivalente.
+
+Fluxo:
+
+gerar uma exceção intencional dentro de bloco controlado;
+capturá-la;
+enviá-la manualmente ao Sentry;
+retornar sucesso para a página.
+
+A requisição não deve terminar em erro 500.
+
+Rótulo sugerido:
+
+Capturar exceção controlada
+
+Teste 3 — Log em nível de erro
+
+Objetivo:
+
+Validar a integração do Sentry com o logging.
+
+Emitir um log em nível ERROR por um logger específico de teste.
+
+A mensagem deve estar identificada como teste intencional.
+
+Não incluir uma exceção junto ao log, salvo se isso for necessário para testar a configuração real.
+
+Rótulo sugerido:
+
+Gerar log de erro
+
+Teste 4 — Exceção HTTP não tratada
+
+Objetivo:
+
+Validar a captura automática de uma exceção não tratada pelo fluxo Django.
+
+Este endpoint deve provocar deliberadamente uma exceção que resulte em resposta 500.
+
+Exemplo conceitual:
+
+exceção de runtime criada especificamente para o teste.
+
+O evento deve ser identificado com tags antes da falha, quando possível.
+
+A interface deve avisar que:
+
+a requisição poderá abrir uma página 500;
+isso é esperado;
+o usuário deve retornar à página de testes depois.
+
+Rótulo sugerido:
+
+Gerar erro 500 controlado
+
+Não utilizar uma exceção que altere dados ou derrube o processo.
+
+Teste 5 — Erro com contexto adicional
+
+Objetivo:
+
+Validar se tags, extras e contexto personalizado aparecem corretamente no evento.
+
+Gerar uma exceção capturada manualmente contendo:
+
+tipo do teste;
+ambiente;
+componente;
+identificador seguro do executor;
+dados fictícios e não sensíveis;
+breadcrumb específico.
+
+Não usar dados reais de clientes ou registros.
+
+Rótulo sugerido:
+
+Testar contexto e tags
+
+9. Não utilizar erros destrutivos
+
+Os testes não podem:
+
+apagar dados;
+alterar registros financeiros;
+criar inconsistências;
+bloquear tabelas;
+encerrar o processo;
+consumir memória excessiva;
+criar loop infinito;
+provocar timeout longo;
+executar divisão de banco perigosa;
+interferir em filas reais;
+derrubar o serviço;
+reiniciar o servidor.
+
+Não incluir testes de:
+
+falta de memória;
+deadlock;
+conexão destruída;
+kill do processo;
+disco cheio.
+
+Os cinco testes devem ser seguros e controlados.
+
+10. Identificador do evento
+
+Quando a chamada do SDK retornar um identificador de evento, apresentar esse identificador na resposta da interface.
+
+Isso permitirá localizar o evento no painel do Sentry.
+
+Não criar link administrativo para o evento caso a URL da organização ou do projeto não esteja configurada de forma segura.
+
+Exibir apenas:
+
+tipo executado;
+resultado;
+event ID, quando disponível;
+horário;
+ambiente.
+
+No teste de exceção não tratada, o event ID pode não estar disponível na resposta.
+
+11. Flush controlado
+
+Revisar se é necessário solicitar um flush curto depois dos testes manuais para melhorar a confiabilidade da validação.
+
+Caso seja utilizado:
+
+aplicar somente nos endpoints de teste;
+usar timeout curto;
+não bloquear indefinidamente;
+não inserir flush em todas as requisições do sistema.
+
+O comportamento normal da aplicação não deve ser alterado.
+
+12. Sentry desabilitado
+
+Quando o Sentry estiver desabilitado:
+
+a página deve continuar acessível ao superusuário;
+informar claramente que os eventos não serão enviados;
+testes controlados não devem derrubar a página, exceto o teste 500 quando executado de forma explícita;
+não afirmar que o evento chegou ao Sentry.
+
+A resposta deve distinguir:
+
+evento solicitado;
+SDK habilitado;
+event ID retornado;
+confirmação externa ainda necessária.
+
+Não prometer que o evento foi recebido apenas porque a função foi chamada.
+
+13. Resultado na interface
+
+Para os testes que retornarem normalmente, apresentar resultado visual com:
+
+nome do teste;
+status da execução;
+ambiente;
+event ID;
+mensagem de orientação.
+
+Exemplo conceitual:
+
+Evento enviado ao SDK. Verifique o projeto e o ambiente correspondentes no painel do Sentry.
+
+Não persistir histórico completo em banco nesta primeira versão.
+
+Pode manter apenas feedback da requisição atual por mensagem do Django ou resposta renderizada.
+
+14. Controle de repetição
+
+Evitar disparos acidentais em sequência.
+
+Aplicar:
+
+botão desabilitado durante a requisição;
+prevenção de duplo clique;
+pequena limitação por sessão ou usuário, caso já exista infraestrutura apropriada;
+confirmação adicional em produção.
+
+Não criar um sistema complexo de rate limit apenas para essa página.
+
+O backend deve tolerar requisições repetidas sem afetar dados.
+
+15. Auditoria mínima
+
+Registrar em log local:
+
+superusuário que executou;
+tipo do teste;
+ambiente;
+horário;
+resultado da chamada;
+event ID, quando disponível.
+
+Não registrar:
+
+DSN;
+cookies;
+tokens;
+payload sensível.
+
+O log deve indicar claramente que foi uma ação intencional de teste.
+
+Não criar um novo model somente para auditoria nesta etapa.
+
+16. Templates e JavaScript
+
+O JavaScript deve ser mínimo.
+
+Usar apenas para:
+
+confirmação;
+estado de carregamento;
+prevenção de duplo clique;
+atualização visual controlada.
+
+A segurança não pode depender do JavaScript.
+
+Não simular eventos apenas no navegador.
+
+Todos os cinco testes devem ser executados no backend.
+
+17. SEO e exposição pública
+
+A página deve possuir:
+
+noindex;
+ausência no sitemap;
+proteção de autenticação;
+proteção de superusuário.
+
+Não incluir a rota em páginas públicas.
+
+Não expor informações de diagnóstico em metadados.
+
+18. Ambientes
+
+A página deve funcionar em:
+
+desenvolvimento;
+homologação;
+produção.
+
+Apresentar claramente o ambiente atual.
+
+Não apontar sempre para um único ambiente do Sentry.
+
+A configuração do SDK deve determinar o destino real do evento.
+
+Não permitir que a página escolha ou altere o DSN.
+
+19. Testes automatizados
+
+Criar testes garantindo que:
+
+usuário anônimo é redirecionado ou bloqueado;
+usuário comum não acessa;
+staff sem superusuário não acessa;
+superusuário acessa;
+GET não executa testes;
+POST sem CSRF é rejeitado;
+tipo de teste inválido é rejeitado;
+cada teste chama o mecanismo correto;
+testes manuais retornam event ID quando simulado;
+log de erro utiliza o logger esperado;
+teste 500 realmente levanta exceção;
+confirmação é obrigatória em produção;
+DSN não aparece no HTML;
+tokens não aparecem no HTML;
+página usa noindex;
+nenhuma ação altera dados do negócio;
+menu aparece somente para superusuário.
+
+Usar mocks para não enviar eventos reais durante a suíte.
+
+20. Validação manual
+
+Validar em desenvolvimento:
+
+acessar com superusuário;
+confirmar diagnóstico;
+executar mensagem;
+executar exceção capturada;
+executar log;
+executar erro 500;
+executar contexto e tags;
+verificar os eventos no ambiente de desenvolvimento do Sentry;
+conferir event IDs;
+confirmar tags e contexto.
+
+Validar em produção de forma controlada:
+
+confirmar que o ambiente exibido é produção;
+usar confirmação adicional;
+executar um teste por vez;
+localizar os eventos no projeto correto;
+confirmar que nenhum evento aparece como desenvolvimento;
+verificar logs do serviço;
+confirmar que a aplicação continua funcionando.
+21. Documentação no AGENTS.md
+
+Registrar objetivamente:
+
+existência da página de testes;
+acesso exclusivo de superusuário;
+finalidade de diagnóstico;
+uso somente por POST;
+cinco testes disponíveis;
+necessidade de confirmação em produção;
+proibição de expor DSN e tokens;
+identificação obrigatória como teste intencional;
+proibição de adicionar testes destrutivos;
+regra de usar mocks na suíte automatizada.
+
+Não copiar todo o prompt para o documento.
+
+22. Fora do escopo
+
+Não implementar:
+
+painel de eventos do Sentry;
+consumo da API do Sentry;
+resolução de issues;
+exclusão de eventos;
+alertas;
+métricas completas;
+tracing visual;
+profiling;
+monitoramento de cron;
+testes destrutivos;
+acesso para usuários comuns;
+escolha dinâmica de DSN;
+persistência de histórico em banco;
+exposição de secrets.
+
+Melhorias adicionais devem ser somente relatadas como sugestões.
+
+Critérios de aceite
+Existe uma página customizada de testes do Sentry.
+Somente superusuários conseguem acessá-la.
+Nenhum teste é executado ao abrir a página.
+Todos os testes usam POST e CSRF.
+Existem exatamente cinco tipos de teste.
+Os eventos são identificados como testes intencionais.
+Mensagem manual, exceção capturada, logging, erro 500 e contexto são validados.
+Em produção existe confirmação adicional.
+O DSN e os tokens não são exibidos.
+Os testes não alteram dados do sistema.
+A página funciona em desenvolvimento e produção.
+A suíte automatizada não envia eventos reais.
+O AGENTS.md documenta a ferramenta.
+Nenhuma funcionalidade fora deste escopo é implementada.

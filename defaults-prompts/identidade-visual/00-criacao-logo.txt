@@ -1,0 +1,339 @@
+# PROMPT — criar do zero apenas a logo do Colmeias Online
+
+## 1. Objetivo
+
+Criar do zero uma nova proposta de **logo principal** para o **Colmeias Online**.
+
+Nesta etapa, o foco é **somente a logo**.
+
+Não criar ainda:
+
+- guia de identidade;
+- paleta completa;
+- favicon;
+- ícones;
+- imagem social;
+- pasta de assets;
+- pacote zipado;
+- aplicações completas da marca.
+
+O trabalho agora é exclusivamente encontrar uma **logo boa, coerente e madura**, que possa depois servir de base para o restante da identidade visual.
+
+---
+
+## 2. Contexto da marca
+
+O **Colmeias Online** é um sistema voltado para:
+
+- organização de meliponários;
+- controle de colmeias;
+- revisões e manejos;
+- histórico;
+- divisões;
+- observações;
+- produção;
+- plantas e floradas relacionadas ao manejo.
+
+O público principal é adulto e composto por pessoas ligadas à meliponicultura, incluindo usuários que trabalham com abelhas, mel, colmeias e rotina de manejo.
+
+A marca precisa parecer:
+
+- profissional;
+- confiável;
+- moderna;
+- amigável;
+- organizada;
+- ligada à natureza;
+- ligada à meliponicultura.
+
+A marca **não** deve parecer infantil, exageradamente fofa, caricata ou agressiva.
+
+---
+
+## 3. Problema das propostas anteriores
+
+As propostas anteriores seguiram por caminhos errados e **não devem ser reaproveitadas**.
+
+Erros que já aconteceram e não devem se repetir:
+
+- abelha com aparência de vespa;
+- ferrão muito evidente;
+- silhueta agressiva;
+- símbolo que não remete claramente ao universo do sistema;
+- símbolo abstrato demais sem conexão com abelha, colmeia ou meliponicultura;
+- abelha fofa demais, com carinha, rosto ou expressão;
+- mascote infantil;
+- ilustração completa de abelha ao lado do nome;
+- solução visual que parece desenho infantil;
+- símbolo sem relação clara com o conceito da marca, como o caso do desenho com aparência de infinito e tracinhos abaixo.
+
+A nova proposta deve fugir desses extremos.
+
+---
+
+## 4. Direção obrigatória da nova logo
+
+A nova logo deve ser:
+
+- moderna;
+- amigável;
+- arredondada;
+- limpa;
+- profissional;
+- visualmente bonita;
+- madura;
+- simples o suficiente para funcionar bem digitalmente.
+
+Ela deve remeter a **abelhas sem ferrão**, mas sem cair em dois extremos:
+
+### Não pode parecer:
+- uma vespa agressiva;
+- uma abelha com ferrão;
+- um inseto ameaçador;
+- uma mascote infantil;
+- um personagem fofo;
+- um desenho de criança.
+
+### Também não deve:
+- virar um símbolo genérico sem relação com o tema;
+- usar um ícone abstrato demais que perca a conexão com colmeias, abelhas ou meliponicultura.
+
+A referência à abelha sem ferrão deve ser feita de forma **elegante e parcial**, e não necessariamente com o corpo inteiro desenhado.
+
+---
+
+## 5. Direção criativa desejada
+
+A logo pode explorar uma solução mais gráfica e sofisticada.
+
+Buscar uma linguagem visual que lembre:
+
+- traço;
+- desenho parcial;
+- silhueta incompleta;
+- marca sugerida;
+- forma insinuada, e não totalmente literal;
+- composição limpa e inteligente.
+
+Pode haver referência a abelha, mas de forma:
+
+- parcial;
+- sugerida;
+- simplificada;
+- estilizada;
+- integrada à marca.
+
+A sensação desejada é de uma forma que “lembra” uma abelha sem ferrão, sem precisar desenhar uma abelha completa de forma óbvia.
+
+Pode trabalhar com:
+
+- parte do corpo;
+- parte das asas;
+- sugestão de voo;
+- sugestão de movimento;
+- traço incompleto;
+- composição que dialogue com o lettering;
+- formas que lembrem colmeia, meliponicultura ou natureza.
+
+Mas isso precisa ser feito de forma clara e bonita.
+
+---
+
+## 6. O que a logo deve evitar
+
+Não usar:
+
+- símbolo de infinito;
+- tracinhos soltos sem significado claro;
+- ferrão aparente;
+- abdômen pontudo;
+- silhueta de vespa;
+- rosto;
+- olhos;
+- sorriso;
+- antenas caricatas;
+- pernas caricatas;
+- personagem;
+- mascote;
+- desenho cartoon;
+- abelha inteira muito ilustrada;
+- abelha excessivamente redonda e “fofa”;
+- ícone infantil;
+- excesso de favos;
+- excesso de hexágonos;
+- estética de desenho infantil;
+- estética de selo agro genérico;
+- aparência de clipart;
+- símbolo desconectado do nome.
+
+---
+
+## 7. Construção da marca
+
+O nome oficial deve ser apresentado exatamente como:
+
+**Colmeias Online**
+
+A proposta deve trabalhar a logo principal com:
+
+- lettering + símbolo;
+ou
+- lettering com integração gráfica sutil.
+
+A composição precisa ser visualmente equilibrada.
+
+O símbolo pode ficar:
+
+- integrado ao nome;
+ou
+- próximo ao nome, desde que faça parte real da construção da marca.
+
+Não quero uma solução em que existe simplesmente:
+
+- um desenho de abelha de um lado;
+- e o nome do outro lado;
+como se fossem duas peças sem relação.
+
+A marca precisa parecer pensada como um todo.
+
+---
+
+## 8. Estilo visual do lettering
+
+O lettering deve ser:
+
+- moderno;
+- limpo;
+- robusto na medida certa;
+- bem legível;
+- elegante;
+- amigável;
+- com cantos suaves ou formas levemente arredondadas.
+
+Não usar:
+
+- tipografia infantil;
+- tipografia manuscrita;
+- tipografia excessivamente decorativa;
+- tipografia frágil demais;
+- tipografia com aparência de desenho animado.
+
+A palavra **Colmeias** deve ter maior protagonismo.
+
+A palavra **Online** deve acompanhar bem, sem parecer um apêndice mal encaixado.
+
+---
+
+## 9. Cores da logo
+
+Nesta etapa, trabalhar a logo já com uma direção de cor coerente com o sistema.
+
+Usar como base:
+
+- amarelo/dourado;
+- verde natural;
+- verde escuro;
+- tons terrosos suaves;
+- contraste limpo.
+
+Evitar:
+
+- amarelo neon;
+- preto + amarelo com clima de alerta/perigo;
+- cores infantis;
+- muitas cores ao mesmo tempo;
+- degradês desnecessários;
+- composição chamativa demais.
+
+A logo deve funcionar bem em:
+
+- fundo claro;
+- fundo escuro.
+
+---
+
+## 10. Entregas desta etapa
+
+Entregar apenas o necessário para validar a **logo principal**.
+
+Incluir:
+
+1. proposta principal da logo;
+2. pequena variação da logo, se necessário, mantendo a mesma linha;
+3. versão em fundo claro;
+4. versão em fundo escuro;
+5. versão monocromática;
+6. símbolo isolado derivado da logo;
+7. breve explicação visual/conceitual da solução.
+
+Não criar ainda o pacote completo de identidade visual.
+
+Não gerar uma prancha gigantesca com todos os ativos do projeto.
+
+O foco é aprovar a logo.
+
+---
+
+## 11. Forma de apresentação
+
+Apresentar a proposta de forma organizada e objetiva.
+
+Mostrar:
+
+- logo principal;
+- símbolo isolado;
+- versão em fundo claro;
+- versão em fundo escuro;
+- versão monocromática;
+- explicação curta da lógica adotada.
+
+Não transformar esta entrega em uma identidade visual completa.
+
+Não gerar favicons, pasta de assets, imagens sociais, manual completo ou zip nesta fase.
+
+---
+
+## 12. Limites da tarefa
+
+Nesta etapa, não fazer:
+
+- identidade visual completa;
+- guia da marca;
+- pasta de arquivos;
+- exportação completa de ícones;
+- favicon;
+- PWA;
+- imagem social;
+- HTML de guia;
+- zip;
+- aplicações em páginas;
+- redesign do sistema;
+- código;
+- backend;
+- Django;
+- SEO;
+- qualquer coisa fora da logo.
+
+Se houver sugestão de próximos passos, apenas mencionar ao final, sem executar.
+
+---
+
+## 13. Critérios de aceite
+
+A nova logo será considerada adequada se:
+
+- for claramente melhor que as propostas anteriores;
+- não parecer uma vespa;
+- não parecer agressiva;
+- não parecer infantil;
+- não parecer uma mascote;
+- não tiver rosto ou carinha;
+- não tiver ferrão evidente;
+- não usar símbolo sem conexão com a marca;
+- remeter ao universo de abelhas sem ferrão de forma elegante;
+- tiver aparência moderna, bonita e profissional;
+- funcionar bem digitalmente;
+- tiver boa leitura do nome Colmeias Online;
+- apresentar símbolo coerente com a marca;
+- funcionar em fundo claro e escuro;
+- abrir caminho para a futura identidade visual completa.

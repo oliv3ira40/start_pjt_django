@@ -1,0 +1,314 @@
+# PROMPT — Eliminar o zoom automático dos campos no iPhone em todo o Colmeias Online
+
+## Objetivo
+
+Corrigir definitivamente, em todo o Colmeias Online, o zoom automático que o iPhone aplica ao tocar em campos de formulário.
+
+O problema ainda ocorre, por exemplo, na edição de Colmeia:
+
+`/admin/apiary/hive/8/change/`
+
+Ao tocar em um input de texto no iPhone, a página aproxima o campo automaticamente. Esse comportamento é incômodo e deve ser eliminado de forma compartilhada, sem correções isoladas por página.
+
+A solução deve abranger todo o sistema:
+
+* Django Admin customizado;
+* páginas administrativas customizadas;
+* formulários CRUD;
+* autenticação;
+* páginas públicas que possuam formulários;
+* modais;
+* componentes próprios de select;
+* Air Datepicker;
+* demais controles reutilizáveis.
+
+Não aplicar a correção a outros projetos.
+
+## Causa esperada
+
+No iOS, Safari e Chrome utilizam WebKit e podem aplicar zoom automático quando um campo editável possui fonte renderizada menor que `16px`.
+
+A correção deve garantir que, no mobile, os controles editáveis tenham tamanho de fonte efetivo de pelo menos `16px`.
+
+Não considerar suficiente alterar apenas um template ou um formulário.
+
+## Auditoria obrigatória
+
+Antes de modificar:
+
+* ler integralmente o `AGENTS.md`;
+* localizar todos os CSS globais e específicos de formulários;
+* identificar onde os tamanhos de fonte dos controles são definidos;
+* auditar regras aplicadas por media queries;
+* verificar estilos do Django Admin;
+* verificar estilos de páginas customizadas;
+* verificar inputs dentro de modais;
+* verificar Air Datepicker;
+* verificar selects customizados;
+* verificar formulários de login, cadastro e recuperação de senha;
+* verificar estilos inline e regras com alta especificidade;
+* localizar regras abaixo de `16px` que ainda vençam a cascata no mobile.
+
+Auditar o valor realmente computado no navegador, e não apenas o valor aparentemente declarado em um arquivo CSS.
+
+## Controles abrangidos
+
+No mobile, garantir fonte efetiva mínima de `16px` para controles editáveis, incluindo:
+
+* `input[type="text"]`;
+* `input[type="email"]`;
+* `input[type="password"]`;
+* `input[type="search"]`;
+* `input[type="tel"]`;
+* `input[type="url"]`;
+* `input[type="number"]`;
+* `input[type="date"]`;
+* `input[type="time"]`;
+* `input[type="datetime-local"]`;
+* `textarea`;
+* `select`;
+* campos textuais utilizados pelo Air Datepicker;
+* campos visuais dos componentes customizados de select;
+* componentes equivalentes que aceitem digitação.
+
+Não alterar desnecessariamente:
+
+* checkbox;
+* radio;
+* range;
+* color;
+* botão;
+* submit;
+* ícones;
+* textos comuns da página.
+
+## Implementação compartilhada
+
+Criar ou consolidar uma regra compartilhada para formulários mobile.
+
+Preferir uma variável de design reutilizável, por exemplo conceitualmente:
+
+`--form-control-font-size-mobile: 16px`
+
+Os componentes e formulários devem utilizar essa mesma referência, evitando números divergentes espalhados por várias páginas.
+
+Aplicar a regra em viewport mobile e, quando adequado à arquitetura atual, também considerar dispositivos com ponteiro de toque.
+
+A correção deve:
+
+* ter especificidade suficiente para vencer regras antigas;
+* não depender de JavaScript;
+* não precisar ser repetida em cada template;
+* não alterar o tamanho do texto no desktop;
+* não quebrar altura, padding ou alinhamento dos campos;
+* não provocar overflow horizontal;
+* não cortar placeholders ou valores;
+* manter labels e mensagens de erro intactos.
+
+Usar `!important` somente se a auditoria comprovar que uma regra externa ou estrutural não pode ser corrigida de forma mais limpa. Não espalhar `!important` por vários arquivos.
+
+## Componentes customizados
+
+### Air Datepicker
+
+Garantir que o input textual visível do componente tenha pelo menos `16px` no mobile.
+
+Preservar:
+
+* calendário;
+* seletor de hora;
+* formatação;
+* foco;
+* validação;
+* layout aprovado.
+
+### Selects customizados
+
+Garantir fonte mínima de `16px` nos elementos interativos e editáveis dos quatro tipos de select:
+
+* único com AJAX e busca;
+* múltiplo com AJAX e busca;
+* único local sem busca;
+* múltiplo local sem busca.
+
+Especialmente:
+
+* campo de busca;
+* texto do controle;
+* campo interno que recebe digitação.
+
+Não aumentar desnecessariamente ícones, setas ou chips.
+
+### Modais
+
+Campos dentro de modais também devem receber a correção, sem depender do CSS da página ao fundo.
+
+## Viewport e acessibilidade
+
+Confirmar que o projeto utiliza uma configuração correta de viewport, como:
+
+`width=device-width, initial-scale=1`
+
+Não utilizar como solução:
+
+* `maximum-scale=1`;
+* `user-scalable=no`;
+* bloqueio de pinch zoom;
+* JavaScript para redefinir o zoom;
+* JavaScript para desfocar o campo após o toque;
+* manipulação dinâmica do meta viewport;
+* transformação CSS da página.
+
+O usuário deve continuar podendo ampliar manualmente a página por acessibilidade.
+
+## Limpeza de regras conflitantes
+
+Remover ou consolidar regras antigas que:
+
+* definam controles com `12px`, `13px`, `14px` ou `15px` no mobile;
+* diminuam a fonte especificamente em telas pequenas;
+* sobrescrevam componentes compartilhados;
+* tenham sido adicionadas em tentativas anteriores;
+* usem transformações para simular tamanho visual;
+* façam um campo parecer maior, mas mantenham fonte computada abaixo de `16px`.
+
+Não apenas adicionar uma nova regra ao final sem entender a cascata.
+
+## Página prioritária para reprodução
+
+Reproduzir e validar primeiro na adição e edição de Colmeias, incluindo:
+
+* Nome/código;
+* Meliponário/Apiário;
+* Espécie;
+* Situação;
+* campos de observação;
+* datas;
+* demais inputs textuais.
+
+Usar como referência funcional a página:
+
+`/admin/apiary/hive/<id>/change/`
+
+Não hardcodar o ID em código ou teste.
+
+## Validação em todo o sistema
+
+Validar amostras representativas de:
+
+* edição de Colmeia;
+* inclusão de Colmeia;
+* Meliponário;
+* Revisão;
+* Revisão em sequência;
+* Manejo externo;
+* Perfil;
+* login;
+* cadastro;
+* recuperação de senha;
+* modais com campos;
+* páginas públicas com formulário;
+* selects customizados;
+* Air Datepicker.
+
+Não é necessário modificar individualmente cada página quando a regra compartilhada resolver corretamente, mas é necessário conferir que todas recebem o asset correto.
+
+## Teste em dispositivo real
+
+Esse problema não deve ser considerado validado somente por emulação no DevTools.
+
+Testar, quando houver ambiente disponível, em:
+
+* Safari no iPhone;
+* Chrome no iPhone;
+* orientação vertical;
+* viewport estreita.
+
+Em cada cenário:
+
+1. abrir a página sem zoom manual;
+2. tocar em um input de texto;
+3. tocar em um textarea;
+4. tocar em um campo de busca;
+5. tocar no Air Datepicker;
+6. tocar em um select customizado;
+7. confirmar que a viewport não aproxima automaticamente;
+8. confirmar que o usuário ainda consegue aplicar zoom manualmente com gesto.
+
+Caso não seja possível testar em aparelho real, declarar isso explicitamente no relatório.
+
+## Testes automatizados
+
+Adicionar ou atualizar testes para confirmar que:
+
+* o stylesheet compartilhado é carregado nas páginas administrativas;
+* o stylesheet é carregado nas páginas públicas e de autenticação que possuem formulários;
+* componentes customizados utilizam as classes compartilhadas;
+* não existe meta viewport bloqueando zoom;
+* não existe `user-scalable=no`;
+* não existe `maximum-scale=1`;
+* os templates prioritários continuam renderizando os campos corretos;
+* a correção não depende de estilos inline específicos por página.
+
+Quando a infraestrutura permitir, adicionar teste de navegador que verifique o tamanho de fonte computado dos principais controles em viewport mobile.
+
+Executar também:
+
+* testes de layouts de autenticação;
+* testes do Admin;
+* testes dos componentes de formulário;
+* testes dos selects customizados;
+* testes do Air Datepicker;
+* `python3 manage.py check`;
+* `python3 manage.py makemigrations --check --dry-run`;
+* `git diff --check`.
+
+## Preservação obrigatória
+
+Não alterar:
+
+* models;
+* migrations;
+* regras de negócio;
+* ownership;
+* permissões;
+* valores dos campos;
+* formatos enviados ao backend;
+* layout desktop;
+* funcionalidade dos componentes;
+* menu lateral;
+* PWA;
+* identidade visual.
+
+Não aproveitar a tarefa para redesenhar formulários.
+
+## Critérios de aceite
+
+* Tocar em inputs no iPhone não provoca zoom automático.
+* A correção funciona em Safari e Chrome no iPhone.
+* Todos os controles editáveis mobile possuem fonte computada mínima de `16px`.
+* Air Datepicker não provoca zoom.
+* Campos de busca dos selects customizados não provocam zoom.
+* Textareas não provocam zoom.
+* A edição de Colmeia está corrigida.
+* A solução é compartilhada por todo o sistema.
+* Não existem correções duplicadas por página.
+* O desktop permanece visualmente inalterado.
+* O usuário continua podendo usar zoom manual.
+* Não foram usados `maximum-scale=1` nem `user-scalable=no`.
+* Não há overflow ou quebra de altura causada pelo novo tamanho de fonte.
+
+## Relatório final
+
+Informar:
+
+* quais regras causavam fonte menor que `16px`;
+* em quais assets elas estavam;
+* qual regra compartilhada passou a controlar os formulários;
+* quais componentes precisaram de ajuste específico;
+* se regras antigas foram removidas;
+* quais páginas foram conferidas;
+* qual tamanho computado foi verificado nos controles;
+* se houve teste em iPhone real;
+* quais navegadores foram testados;
+* quais testes automatizados foram executados.

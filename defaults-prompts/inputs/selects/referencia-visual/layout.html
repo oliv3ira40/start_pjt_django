@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Referência visual — selects</title>
+  <link rel="stylesheet" href="selects.css">
+</head>
+<body>
+  <main>
+    <h1>Quatro selects compartilhados</h1>
+    <p class="intro">O botão abre um dropdown. O select real continua no formulário, mas é ocultado somente após a inicialização.</p>
+    <form data-select-demo>
+      <section class="grid">
+        <div class="select-field" data-select-mode="single-local">
+          <label for="apiario">Meliponário/Apiário</label>
+          <button type="button" class="select-trigger" aria-haspopup="listbox" aria-expanded="false"><span>Selecione uma opção</span><b aria-hidden="true">⌄</b></button>
+          <div class="select-dropdown" hidden><ul role="listbox"></ul></div>
+          <select id="apiario" name="apiario"><option value="">Selecione uma opção</option><option value="1">Apiário do sítio</option><option value="2">Meliponário da varanda</option></select>
+          <small>Único, local, sem busca.</small>
+        </div>
+        <div class="select-field" data-select-mode="multiple-local">
+          <label for="situacoes">Situações</label>
+          <button type="button" class="select-trigger" aria-haspopup="listbox" aria-expanded="false"><span>Selecione opções</span><b aria-hidden="true">⌄</b></button>
+          <div class="select-dropdown" hidden><ul role="listbox" aria-multiselectable="true"></ul><button type="button" class="done">Concluir</button></div>
+          <select id="situacoes" name="situacoes" multiple><option value="ativa">Ativa</option><option value="producao">Em produção</option><option value="revisao">Precisa de revisão</option></select>
+          <small>Múltiplo, local, sem busca.</small>
+        </div>
+        <div class="select-field" data-select-mode="single-ajax" data-search-items="Jataí|Melipona subnitida;Mandaçaia|Melipona quadrifasciata;Uruçu-amarela|Melipona rufiventris">
+          <label for="especie">Espécie</label>
+          <button type="button" class="select-trigger" aria-haspopup="listbox" aria-expanded="false"><span>Busque uma espécie</span><b aria-hidden="true">⌄</b></button>
+          <div class="select-dropdown" hidden><input type="search" placeholder="Buscar espécie" autocomplete="off"><ul role="listbox"></ul></div>
+          <select id="especie" name="especie"><option value="">Busque uma espécie</option></select>
+          <small>Único, AJAX, com busca.</small>
+        </div>
+        <div class="select-field" data-select-mode="multiple-ajax" data-search-items="Pólen|Recurso alimentar;Própolis|Produto da colmeia;Mel|Produto da colmeia;Cera|Material da colmeia">
+          <label for="produtos">Produtos</label>
+          <button type="button" class="select-trigger" aria-haspopup="listbox" aria-expanded="false"><span>Busque produtos</span><b aria-hidden="true">⌄</b></button>
+          <div class="select-dropdown" hidden><input type="search" placeholder="Buscar produto" autocomplete="off"><ul role="listbox" aria-multiselectable="true"></ul><button type="button" class="done">Concluir</button></div>
+          <select id="produtos" name="produtos" multiple></select>
+          <small>Múltiplo, AJAX, com busca.</small>
+        </div>
+      </section>
+    </form>
+  </main>
+  <script src="selects.js"></script>
+</body>
+</html>

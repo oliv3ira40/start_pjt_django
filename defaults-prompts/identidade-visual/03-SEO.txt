@@ -1,0 +1,881 @@
+# Finances Hub — Implementar SEO técnico e compartilhamento de links
+
+## Objetivo
+
+Preparar as páginas públicas do Finances Hub para:
+
+* indexação adequada por mecanismos de busca;
+* compartilhamento de links com logo, imagem, título e descrição;
+* identificação clara da marca e do produto;
+* geração de sitemap;
+* controle de rastreamento e indexação;
+* uso de dados estruturados;
+* funcionamento correto em produção no domínio oficial.
+
+Utilizar os ativos da nova identidade visual já integrados ao projeto.
+
+A pasta oficial de referência é:
+
+`core/static/identidade-visual/`
+
+O domínio público oficial do sistema é:
+
+`https://finances.nodera.com.br`
+
+Antes de iniciar:
+
+* ler integralmente o `AGENTS.md`;
+* revisar a documentação da identidade visual;
+* identificar os assets oficiais de favicon, logo e imagem social;
+* revisar a estrutura atual das páginas públicas e autenticadas.
+
+## Escopo
+
+Implementar nesta etapa:
+
+* metadados das páginas públicas;
+* Open Graph;
+* metadados para compartilhamento social;
+* favicon e ícones públicos;
+* URL canônica;
+* `robots.txt`;
+* `sitemap.xml`;
+* dados estruturados em JSON-LD;
+* proteção contra indexação das páginas privadas;
+* títulos e descrições públicas;
+* ajustes mínimos de conteúdo e estrutura semântica da Home;
+* testes e documentação.
+
+Não criar blog, artigos ou novas páginas extensas nesta etapa.
+
+---
+
+# 1. Separar páginas públicas e privadas
+
+Antes de aplicar as configurações, mapear as URLs do projeto.
+
+## Páginas públicas indexáveis
+
+Considerar indexáveis somente páginas públicas que apresentem o produto ou informações institucionais, como:
+
+* Home pública;
+* página de planos, caso exista;
+* recursos, caso exista;
+* termos de uso;
+* política de privacidade;
+* proteção de dados;
+* outras páginas institucionais públicas existentes.
+
+Não inventar páginas que ainda não existem.
+
+## Páginas privadas
+
+Não devem ser indexadas:
+
+* Django Admin;
+* Dashboard;
+* despesas;
+* rendas;
+* metas e provisões;
+* listas de compras;
+* Catálogo de compras;
+* Abastecimentos;
+* Perfil;
+* páginas internas autenticadas;
+* URLs de criação, edição ou exclusão;
+* links públicos temporários que não tenham finalidade de aparecer em buscadores.
+
+## Autenticação
+
+Também não indexar:
+
+* login;
+* cadastro;
+* recuperação de senha;
+* confirmação e redefinição de senha;
+* logout;
+* páginas de erro ou confirmação de autenticação.
+
+Essas páginas podem continuar acessíveis normalmente, mas devem possuir diretivas de não indexação.
+
+---
+
+# 2. Estrutura de metadados reutilizável
+
+Criar uma estrutura centralizada para metadados públicos.
+
+O template-base público deve aceitar valores como:
+
+* título da página;
+* descrição;
+* URL canônica;
+* imagem social;
+* tipo Open Graph;
+* diretiva de robots;
+* dados estruturados específicos.
+
+Evitar repetir manualmente todos os metadados em cada template.
+
+Usar blocos Django ou uma estrutura equivalente, mantendo valores padrão seguros.
+
+Exemplo conceitual de variáveis:
+
+* `seo_title`;
+* `seo_description`;
+* `seo_canonical_url`;
+* `seo_image_url`;
+* `seo_robots`;
+* `seo_json_ld`.
+
+Não exigir exatamente esses nomes caso o projeto já possua outro padrão.
+
+## Títulos
+
+Cada página pública deve possuir um `<title>` específico.
+
+Evitar usar o mesmo título genérico em todas as páginas.
+
+Usar uma estrutura coerente, por exemplo:
+
+* `Finances Hub — Organize suas finanças pessoais`;
+* `Planos | Finances Hub`;
+* `Política de Privacidade | Finances Hub`.
+
+Não repetir o nome do produto duas vezes no mesmo título.
+
+## Descrições
+
+Cada página pública deve possuir uma descrição própria e objetiva.
+
+A descrição padrão da Home pode seguir a ideia:
+
+**Organize despesas, rendas, metas, listas de compras e o planejamento financeiro da sua família em um só lugar.**
+
+Não utilizar textos promocionais enganosos nem promessas de enriquecimento.
+
+---
+
+# 3. Página Home pública
+
+Aplicar à Home pública os metadados oficiais.
+
+## Título sugerido
+
+**Finances Hub — Organize suas finanças pessoais**
+
+## Descrição sugerida
+
+**Controle despesas, rendas, metas, compras parceladas e listas de compras em um só lugar, de forma simples e organizada.**
+
+Adaptar somente se a Home atual já possuir um posicionamento institucional aprovado mais específico.
+
+## Estrutura semântica
+
+Revisar a Home para garantir:
+
+* apenas um título principal `<h1>`;
+* subtítulos em sequência lógica;
+* textos reais em HTML;
+* links descritivos;
+* imagens com `alt`;
+* botões implementados como links quando realizarem navegação;
+* ausência de textos importantes inseridos somente como imagem.
+
+Não redesenhar a Home.
+
+Não adicionar blocos grandes ou funcionalidades novas.
+
+## Conteúdo mínimo
+
+Garantir que a Home tenha conteúdo textual suficiente para explicar:
+
+* o que é o Finances Hub;
+* para quem ele é útil;
+* quais problemas ajuda a organizar;
+* principais recursos;
+* chamada para cadastro ou acesso.
+
+Caso essas informações já existam, apenas melhorar a estrutura semântica.
+
+Não preencher a página com palavras-chave repetidas artificialmente.
+
+---
+
+# 4. Open Graph
+
+Adicionar metadados Open Graph às páginas públicas.
+
+Implementar pelo menos:
+
+* `og:type`;
+* `og:site_name`;
+* `og:title`;
+* `og:description`;
+* `og:url`;
+* `og:image`;
+* `og:image:secure_url`;
+* `og:image:width`;
+* `og:image:height`;
+* `og:image:alt`;
+* `og:locale`.
+
+Usar:
+
+* `og:type = website` para páginas institucionais comuns;
+* `og:site_name = Finances Hub`;
+* locale compatível com português do Brasil;
+* URL absoluta em produção.
+
+## Imagem social
+
+Usar o asset oficial de compartilhamento no formato horizontal criado pelo DevFront, preferencialmente:
+
+* proporção 1200 × 630;
+* arquivo otimizado para web;
+* URL pública e absoluta;
+* sem autenticação;
+* sem redirecionamento;
+* disponível em produção.
+
+Não usar:
+
+* imagem em base64;
+* caminho relativo no HTML final;
+* logo pequena como imagem social principal;
+* arquivo da pasta de referência se houver uma cópia oficial otimizada para consumo.
+
+A imagem deve possuir um `alt` coerente, como:
+
+**Finances Hub — Organize suas finanças de forma simples**
+
+---
+
+# 5. Metadados para outras plataformas
+
+Adicionar metadados compatíveis com plataformas que utilizam formato semelhante ao Twitter Cards.
+
+Implementar:
+
+* tipo de card com imagem ampla;
+* título;
+* descrição;
+* imagem;
+* texto alternativo da imagem.
+
+Não exigir ou inventar uma conta oficial em rede social caso ela não exista ou não esteja definida.
+
+Os valores devem reutilizar os mesmos dados do Open Graph para evitar divergências.
+
+---
+
+# 6. URLs absolutas e domínio oficial
+
+Todos os metadados que exijam URL devem gerar endereço absoluto.
+
+Em produção, utilizar:
+
+`https://finances.nodera.com.br`
+
+Não fixar o domínio diretamente em vários templates.
+
+Reutilizar a configuração já existente, como:
+
+* `SITE_HOST`;
+* `SITE_PREFIX`;
+* configuração de ambiente equivalente;
+* utilitário central de URL absoluta.
+
+Garantir comportamento adequado em:
+
+* desenvolvimento;
+* produção;
+* testes.
+
+Não permitir que os metadados de produção apontem para:
+
+* `localhost`;
+* `127.0.0.1`;
+* domínio interno;
+* protocolo HTTP.
+
+## Proxy e HTTPS
+
+Considerar a infraestrutura atual com proxy e Cloudflare.
+
+Usar as configurações já consolidadas para identificar corretamente o protocolo HTTPS.
+
+Não implementar uma segunda lógica conflitante para detecção de host ou esquema.
+
+---
+
+# 7. URL canônica
+
+Adicionar uma tag canônica às páginas públicas indexáveis.
+
+A URL canônica deve:
+
+* apontar para a própria URL oficial;
+* usar HTTPS;
+* usar o domínio oficial;
+* remover parâmetros irrelevantes;
+* preservar somente parâmetros que representem conteúdo realmente diferente, caso existam.
+
+Não adicionar canonical apontando todas as páginas para a Home.
+
+## Páginas privadas
+
+Páginas privadas não precisam utilizar canonical como substituição de `noindex`.
+
+O controle principal dessas páginas deve ser a não indexação e a autenticação.
+
+---
+
+# 8. Diretivas de indexação
+
+Definir metadados de robots por tipo de página.
+
+## Páginas públicas
+
+Usar diretivas que permitam indexação e acompanhamento dos links, salvo regra específica.
+
+## Páginas privadas e de autenticação
+
+Aplicar:
+
+* `noindex`;
+* `nofollow`, quando adequado ao contexto;
+* impedimento de cache de snippets quando já fizer parte da política do projeto.
+
+A regra deve ser centralizada para evitar que uma página interna customizada seja publicada sem proteção.
+
+## Respostas de erro
+
+Páginas de:
+
+* erro 404;
+* erro 403;
+* erro 500;
+* confirmação temporária;
+
+não devem ser indexadas.
+
+---
+
+# 9. `robots.txt`
+
+Criar uma rota pública:
+
+`/robots.txt`
+
+O conteúdo deve ser servido como texto simples.
+
+Permitir o rastreamento das páginas públicas.
+
+Bloquear o rastreamento de áreas claramente privadas e administrativas, como:
+
+* `/admin/`;
+* URLs técnicas internas;
+* endpoints que não devem ser rastreados.
+
+Incluir a URL absoluta do sitemap.
+
+Não usar o `robots.txt` como única proteção para dados privados.
+
+As páginas privadas continuam dependendo de:
+
+* autenticação;
+* autorização;
+* diretivas `noindex`.
+
+Não bloquear no `robots.txt` recursos estáticos necessários para renderização das páginas públicas.
+
+---
+
+# 10. `sitemap.xml`
+
+Criar um sitemap XML usando a estrutura nativa do Django ou a solução já existente no projeto.
+
+Incluir somente URLs públicas, canônicas e indexáveis.
+
+Não incluir:
+
+* Django Admin;
+* Dashboard;
+* autenticação;
+* páginas de perfil;
+* CRUDs;
+* links temporários;
+* páginas que exigem sessão;
+* parâmetros de filtro;
+* URLs duplicadas.
+
+## Datas de modificação
+
+Adicionar `lastmod` somente quando houver uma fonte real e confiável.
+
+Não gerar datas artificiais em toda requisição.
+
+## Localização
+
+Disponibilizar o sitemap em:
+
+`/sitemap.xml`
+
+Referenciá-lo no `robots.txt`.
+
+Garantir que as URLs dentro dele sejam absolutas e utilizem o domínio oficial.
+
+---
+
+# 11. Dados estruturados — NODERA
+
+Adicionar JSON-LD de organização nas páginas públicas apropriadas, principalmente na Home.
+
+Representar a organização:
+
+**NODERA**
+
+Utilizar o tipo:
+
+`Organization`
+
+Incluir somente informações reais e confirmadas, como:
+
+* nome;
+* URL oficial;
+* logo pública;
+* produto associado;
+* perfis sociais oficiais, caso estejam documentados.
+
+Não inventar:
+
+* endereço;
+* telefone;
+* redes sociais;
+* avaliações;
+* número de funcionários;
+* informações de contato não publicadas.
+
+A logo informada no JSON-LD deve:
+
+* possuir URL absoluta;
+* ser pública;
+* ter tamanho adequado;
+* usar o ativo oficial.
+
+---
+
+# 12. Dados estruturados — Finances Hub
+
+Adicionar JSON-LD para o produto Finances Hub utilizando tipo compatível com aplicação de software.
+
+Incluir somente dados reais, como:
+
+* nome;
+* URL;
+* descrição;
+* categoria de aplicação;
+* sistema operacional ou plataforma web;
+* organização responsável;
+* logo ou imagem oficial.
+
+O produto deve ser descrito como aplicação web de organização financeira pessoal e familiar.
+
+Não adicionar:
+
+* nota de avaliação sem avaliações reais;
+* número de avaliações fictício;
+* preço incorreto;
+* promoção;
+* oferta inexistente;
+* funcionalidades que o sistema não possui;
+* promessa de resultado financeiro.
+
+Caso seja incluída uma oferta, usar somente os planos e valores reais disponíveis no sistema e garantir atualização centralizada. Caso isso ainda não esteja pronto, omitir a oferta nesta etapa.
+
+---
+
+# 13. Favicon e ícones
+
+Integrar os ativos oficiais disponíveis na identidade visual.
+
+Configurar, conforme os arquivos existentes:
+
+* favicon comum;
+* ícone em PNG;
+* ícone para dispositivos Apple;
+* ícones adequados para PWA já existente;
+* `theme-color`, quando aplicável.
+
+Não gerar automaticamente arquivos com baixa qualidade caso os assets oficiais já existam.
+
+Não utilizar a logo horizontal inteira como favicon.
+
+Usar o símbolo quadrado ou isolado previsto no guia.
+
+## Cache
+
+Utilizar nomes estáveis ou versionamento de arquivo adequado para evitar que navegadores mantenham indefinidamente o favicon antigo.
+
+Não adicionar parâmetros aleatórios a cada carregamento.
+
+---
+
+# 14. Manifesto e PWA
+
+O Finances Hub já possui recursos de PWA.
+
+Revisar o manifesto existente e alinhar somente os dados de identidade:
+
+* nome;
+* nome curto;
+* descrição;
+* ícones;
+* cor do tema;
+* cor de fundo;
+* URL inicial;
+* escopo.
+
+Não modificar nesta tarefa:
+
+* estratégia offline;
+* service worker;
+* cache de dados;
+* sincronização;
+* comportamento de instalação.
+
+Ajustar somente a identidade e referências de arquivos quando necessário.
+
+Garantir que os ícones apontem para os novos assets oficiais.
+
+---
+
+# 15. Imagens e textos alternativos
+
+Revisar as imagens das páginas públicas.
+
+Adicionar `alt` descritivo quando a imagem tiver conteúdo relevante.
+
+Para imagens puramente decorativas:
+
+* utilizar `alt=""`;
+* evitar texto redundante para leitores de tela.
+
+A logo deve possuir texto alternativo coerente:
+
+**Finances Hub**
+
+Não repetir palavras-chave desnecessariamente.
+
+---
+
+# 16. Performance dos assets
+
+Usar formatos adequados para web.
+
+Preferir, quando disponíveis:
+
+* SVG para logos vetoriais;
+* WebP ou formato otimizado para imagens públicas;
+* PNG para casos em que transparência e compatibilidade sejam necessárias.
+
+Garantir:
+
+* dimensões explícitas;
+* ausência de layout shift desnecessário;
+* compressão adequada;
+* carregamento da imagem social sem autenticação;
+* logos sem arquivos excessivamente grandes.
+
+Não aplicar lazy loading à imagem principal quando isso prejudicar a renderização inicial ou a identificação visual da Home.
+
+---
+
+# 17. Compartilhamento de links
+
+Validar o compartilhamento da Home pública em:
+
+* WhatsApp;
+* Facebook;
+* LinkedIn;
+* aplicativos que utilizam Open Graph;
+* serviços genéricos de mensagens.
+
+O preview esperado deve apresentar:
+
+* imagem oficial;
+* título do Finances Hub;
+* descrição;
+* domínio oficial.
+
+Não depender de JavaScript para inserir os metadados depois do carregamento.
+
+As tags devem estar presentes no HTML inicial retornado pelo servidor.
+
+---
+
+# 18. Cache de previews
+
+Considerar que plataformas de compartilhamento podem manter cache do preview.
+
+Não implementar lógica específica para cada plataforma.
+
+Garantir apenas que:
+
+* a URL da imagem seja estável;
+* o arquivo seja público;
+* a resposta tenha tipo de conteúdo correto;
+* não exista bloqueio por autenticação;
+* não exista redirecionamento inesperado.
+
+Documentar que a atualização de previews antigos pode exigir o uso das ferramentas de inspeção das próprias plataformas.
+
+---
+
+# 19. Conteúdo público inicial
+
+Sem realizar um redesign, revisar a Home para que o conteúdo explique claramente os recursos existentes.
+
+Garantir menções naturais, dentro do texto público, a funcionalidades como:
+
+* controle de despesas e rendas;
+* organização financeira pessoal ou familiar;
+* metas e provisões;
+* compras parceladas;
+* listas de compras;
+* acompanhamento financeiro mensal.
+
+Não inserir listas artificiais de palavras-chave invisíveis.
+
+Não usar:
+
+* texto oculto;
+* `meta keywords`;
+* repetição excessiva;
+* conteúdo gerado apenas para mecanismos de busca.
+
+O texto deve continuar sendo útil para uma pessoa real.
+
+---
+
+# 20. Área autenticada
+
+Aplicar uma proteção consistente para que as páginas internas não sejam usadas como resultados públicos.
+
+Além da autenticação existente, garantir a diretiva adequada nos templates internos.
+
+Não permitir que páginas customizadas recentes fiquem sem a configuração, incluindo:
+
+* Dashboard;
+* Perfil;
+* Metas e Provisões;
+* Classificações financeiras;
+* Catálogo de compras;
+* Abastecimentos;
+* páginas de lista de compras.
+
+Não expor dados privados em:
+
+* sitemap;
+* JSON-LD;
+* Open Graph;
+* descrição;
+* título público.
+
+---
+
+# 21. Segurança e privacidade
+
+Não incluir em metadados:
+
+* nome do usuário autenticado;
+* valores financeiros;
+* despesas;
+* rendas;
+* metas;
+* itens de compras;
+* informações pessoais;
+* IDs internos;
+* conteúdo de páginas privadas.
+
+Os metadados padrão das páginas internas devem ser genéricos e não indexáveis.
+
+Não gerar imagem de compartilhamento dinâmica com dados do usuário.
+
+---
+
+# 22. Ambientes
+
+## Desenvolvimento
+
+Permitir que os recursos sejam testados localmente, mas não gerar URLs canônicas ou sociais de produção usando host incorreto por acidente.
+
+## Produção
+
+Garantir:
+
+* HTTPS;
+* domínio oficial;
+* assets coletados;
+* imagem social acessível;
+* sitemap acessível;
+* robots acessível;
+* páginas públicas sem dependência de sessão.
+
+## Ambientes intermediários
+
+Ambientes de homologação, staging ou preview não devem ser indexados.
+
+Aplicar `noindex` global nesses ambientes por configuração.
+
+Não depender somente do domínio para essa decisão caso já exista uma variável de ambiente apropriada.
+
+---
+
+# 23. Configurações
+
+Centralizar as principais informações institucionais e de SEO em configuração ou contexto apropriado, como:
+
+* nome do produto;
+* nome da organização;
+* domínio público;
+* descrição padrão;
+* caminho da imagem social;
+* caminho da logo;
+* ambiente indexável.
+
+Não espalhar strings divergentes em vários templates.
+
+Não criar um painel administrativo novo para SEO nesta etapa.
+
+---
+
+# 24. Testes automatizados
+
+Criar ou ajustar testes para validar:
+
+## Metadados públicos
+
+* Home possui `<title>`;
+* Home possui descrição;
+* Open Graph está presente;
+* imagem social possui URL absoluta;
+* canonical usa HTTPS e domínio oficial;
+* JSON-LD é JSON válido;
+* dados estruturados não possuem campos fictícios.
+
+## Privacidade
+
+* Dashboard possui `noindex`;
+* Perfil possui `noindex`;
+* páginas administrativas possuem proteção adequada;
+* autenticação não aparece no sitemap;
+* páginas privadas não aparecem no sitemap;
+* dados de usuário não entram em metadados.
+
+## Sitemap e robots
+
+* `/robots.txt` responde como texto;
+* referencia o sitemap;
+* `/sitemap.xml` responde como XML;
+* sitemap contém somente páginas públicas;
+* URLs são absolutas;
+* não existem URLs do Admin.
+
+## Assets
+
+* favicon é encontrado;
+* logo pública é encontrada;
+* imagem social é encontrada;
+* arquivos possuem resposta pública;
+* manifesto aponta para os novos ícones.
+
+## Ambientes
+
+* produção permite indexação das páginas públicas;
+* ambiente não produtivo aplica `noindex`;
+* canonical não utiliza localhost em configuração de produção.
+
+---
+
+# 25. Validação manual
+
+Após a implementação:
+
+1. abrir o código-fonte HTML da Home;
+2. confirmar que as tags estão presentes sem depender de JavaScript;
+3. abrir diretamente a imagem social;
+4. verificar favicon no navegador;
+5. acessar `/robots.txt`;
+6. acessar `/sitemap.xml`;
+7. validar o JSON-LD;
+8. testar o preview de compartilhamento;
+9. confirmar `noindex` nas páginas autenticadas;
+10. testar com `DEBUG=False` e arquivos estáticos coletados.
+
+Não considerar concluído apenas porque as tags aparecem no inspetor após execução de JavaScript.
+
+---
+
+# 26. Documentação no `AGENTS.md`
+
+Registrar objetivamente:
+
+* páginas públicas podem ser indexadas;
+* área autenticada e Admin devem usar `noindex`;
+* sitemap contém apenas URLs públicas;
+* metadados devem vir da estrutura central;
+* domínio oficial é obtido pela configuração do projeto;
+* assets oficiais ficam na estrutura da identidade visual;
+* imagem social padrão deve ser reutilizada;
+* não usar `meta keywords`;
+* não adicionar dados estruturados fictícios;
+* ambientes não produtivos não devem ser indexados.
+
+Não copiar todo este prompt para o arquivo.
+
+---
+
+# 27. Não realizar nesta etapa
+
+Não implementar:
+
+* blog;
+* artigos;
+* CMS;
+* painel administrativo de SEO;
+* geração automática de textos;
+* páginas específicas para dezenas de palavras-chave;
+* backlinks;
+* anúncios;
+* integração com Google Ads;
+* criação automática de conta no Search Console;
+* mudanças profundas no layout público;
+* SEO das páginas privadas;
+* páginas dinâmicas indexáveis baseadas em dados pessoais;
+* avaliações ou classificações fictícias.
+
+O cadastro do domínio em ferramentas externas será realizado manualmente após a implementação técnica.
+
+---
+
+# Critérios de aceite
+
+* A Home possui título e descrição adequados.
+* Links compartilhados exibem imagem, título, descrição e domínio.
+* Open Graph usa os ativos oficiais.
+* Favicon e ícones usam a nova identidade.
+* Existe URL canônica nas páginas públicas.
+* `robots.txt` está disponível.
+* `sitemap.xml` contém somente páginas públicas.
+* A Home possui JSON-LD para NODERA e Finances Hub.
+* Não existem avaliações ou informações fictícias nos dados estruturados.
+* A área autenticada e o Admin não são indexáveis.
+* Ambientes não produtivos usam `noindex`.
+* As URLs absolutas utilizam a configuração oficial do domínio.
+* Nenhum dado privado aparece em metadados.
+* A Home possui estrutura semântica adequada sem redesign.
+* Os metadados estão presentes no HTML inicial.
+* O `AGENTS.md` documenta a regra técnica atual.
+* Nenhuma funcionalidade fora deste escopo deve ser implementada.
+* Melhorias adicionais devem ser apenas relatadas como sugestões, sem implementação.

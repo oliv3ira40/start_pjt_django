@@ -1,99 +1,65 @@
-### Esboço do projeto:
+# Projeto base Django
 
-### Comandos úteis
+Base reutilizável para novos sistemas Django. O projeto prioriza convenções nativas do framework, administração customizável, segurança no backend, isolamento de dados quando aplicável e documentação próxima da implementação.
+
+## Ambiente local
 
 ```bash
+# Criar e ativar o ambiente virtual
+python3 -m venv venv
+source venv/bin/activate
 
-# Criar a env
-$ python3 -m venv venv
+# Instalar dependências
+pip install -r requirements.txt
 
-# Ativar a env
-$ source venv/bin/activate
+# Configurar variáveis locais em .env e aplicar o banco
+python manage.py migrate
 
-# Instalar as dependências
-$ pip install -r requirements.txt
+# Iniciar o servidor
+python manage.py runserver
 
-# Gerar nova secret key
-$ python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
-# Colar no arquivo .env
-
-# Desativar a env
-$ deactivate
-
-# Criar o banco de dados
-$ python manage.py migrate
-
-# Iniciar o projeto
-$ python manage.py runserver
-
-# Criar um super usuário
-$ python manage.py createsuperuser
-
-# Compilar as mensagens
-$ python manage.py compilemessages
-
-# Criar arquivo requirements.txt
-$ pip freeze > requirements.txt
-
-# Mandar dependências para o arquivo requirements.txt
-$ pip freeze > requirements.txt
-
-# Reiniciar o gunicorn e o nginx
-sudo systemctl restart gunicorn
-sudo systemctl restart nginx
-
-# Coletar arquivos estáticos
-python manage.py collectstatic --noinput
-
+# Criar um superusuário local, se necessário
+python manage.py createsuperuser
 ```
 
-<!-- django-admin makemessages -l pt_BR -d django -->
+O `direnv` ativa automaticamente a `venv` quando ela existe e o `.envrc` foi autorizado.
 
-### Padrões de desenvolvimento
-Clique [aqui](docs/padroes.md) para ver os padrões de desenvolvimento utilizados neste projeto.
+## Comandos de verificação
 
-### Tema Django utilizado - Django admin interface:
-Clique [aqui](https://github.com/fabiocaccamo/django-admin-interface?tab=readme-ov-file) para ver o tema utilizado neste projeto.
+```bash
+python manage.py check
+python manage.py test
+python manage.py makemigrations --check
+python manage.py collectstatic --noinput
+```
 
-### Menu personalizado do Django Admin
+Para gerar uma nova chave secreta local:
 
-Superusuários continuam visualizando o menu padrão do Django. Para usuários não-super é possível definir menus específicos por escopo (grupos ou o padrão "Não superusuários") seguindo os passos abaixo:
+```bash
+python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+```
 
-1. No admin, acesse **Menu do Admin → Escopos** e cadastre os escopos desejados:
-   - Informe um **Nome** amigável.
-   - Opcionalmente relacione um **Grupo** do Django. Usuários pertencentes ao grupo utilizarão o menu desse escopo.
-   - Utilize o campo **Prioridade** para desempate quando um usuário participar de mais de um grupo (valores maiores têm precedência).
-   - Garanta que exista um escopo sem grupo para servir como fallback para todos os demais usuários não-super.
-2. Em **Menu do Admin → Configurações de menu**, crie uma configuração para cada escopo e marque **Ativa** na opção que deve valer. Apenas uma configuração fica ativa por escopo.
-3. Cadastre os itens diretamente no inline "Itens de menu":
-   - **Modelo**: informe `app_label` e `model_name` (em minúsculo). As permissões padrão do admin continuam valendo.
-   - **Link personalizado**: informe um `Nome da URL` (ex.: `dashboard:index`) ou uma `URL absoluta`. O campo `Permissão extra` aceita `app_label.codename` quando o link exigir uma permissão específica.
-   - Utilize o campo **Seção** para agrupar itens sob um título customizado (ex.: “Operações”). Quando vazio, o nome do aplicativo ou "Links" é utilizado.
-   - Ajuste **Ordem** para controlar a sequência de exibição dentro do menu.
+Nunca versione o arquivo `.env`, chaves, tokens ou credenciais.
 
-Quando o usuário não possuir escopo configurado (ou quando nenhuma configuração ativa estiver disponível), o menu volta automaticamente para o comportamento padrão do Django Admin.
+## Administração
 
-## Tratamento de imagens
+O projeto utiliza [django-admin-interface](https://github.com/fabiocaccamo/django-admin-interface) como base visual do Django Admin. Superusuários usam o Admin padrão; usuários comuns podem receber menus específicos por escopo quando essa configuração for habilitada.
 
-Todos os campos de upload de imagens passam por conversão e compressão automática para o formato WebP antes de serem salvos. Isso vale para fotos de colmeias, meliponários, anexos de revisões e observações rápidas, garantindo arquivos menores e padronizados sem necessidade de intervenção manual.
+Itens de menu podem apontar para models ou URLs nomeadas. A navegação não substitui permissões, ownership ou validações no backend.
 
-## Recursos do Admin (JS-only)
+## Documentação
 
-- [Boot global do Admin](docs/admin_boot.md)
-- [Prévia de imagem](docs/preview-image.md)
+- [Guia definitivo para agentes](AGENTS.md)
+- [Contexto geral do projeto](docs/contexto_do_sistema.txt)
+- [Padrões de desenvolvimento](docs/padroes.md)
+- [Política de testes](docs/qualidade/politica-de-testes.md)
+- [Proteção de dados e exclusão de conta](docs/privacidade/protecao-de-dados-e-exclusao-de-conta.md)
+- [Boot compartilhado do Admin](docs/admin_boot.md)
 - [Campos condicionais](docs/campos-condicionais.md)
-- [Select2](docs/select2.md)
-- [Remoção do monitoramento interno de acessos](docs/remocao-monitoramento-acessos.md)
+- [Prévia de imagem](docs/preview-image.md)
+- [Select2 no Admin](docs/select2.md)
+- [Base de onboarding com Driver.js](docs/onboarding/driverjs-base.md)
+- [Remoção de monitoramento interno](docs/remocao-monitoramento-acessos.md)
+- [Convenções para seeds](docs/seeds/)
 
-**Checklist de integração rápida**
-- [ ] Herdar `BaseAdmin`/`OwnerRestrictedAdmin` e `BaseInline` ao registrar novos modelos.
-- [ ] Garantir que inputs de imagem usem `data-image-preview="true"` ou sigam os sufixos `photo`/`file`.
-- [ ] Definir/atualizar `RULES` para campos condicionais antes de carregar o Admin.
-- [ ] Confirmar que os selects relevantes estão cobertos pelo script Select2 ou adicionados manualmente.
-- [ ] Testar eventos `formset:added` para inlines (prévia, condicionais e Select2).
-
-### Tema utilizado no admin
-As páginas criadas devem seguir o tema bootstrap do django-admin-interface, que oferece uma interface mais amigável e moderna para o administrador do Django.
-- [Documentação do django-admin-interface](https://github.com/fabiocaccamo/django-admin-interface?tab=readme-ov-file)
-- Intalação do tema bootstrap do django-admin-interface: python manage.py loaddata admin_interface_theme_bootstrap.json
-- Para customizar templates do admin, é necessário consultar a documentação/arquivos do template, por exemplo: https://github.com/fabiocaccamo/django-admin-interface/blob/main/admin_interface/templates/admin/base_site.html
+Antes de alterar o projeto, leia o `AGENTS.md` e a documentação técnica relacionada à área afetada.

@@ -1,0 +1,75 @@
+IDENTIDADE DO PROJETO
+Projeto base Django para criação de novos sistemas.
+Abordagem arquitetural: componentes Django reutilizáveis, com possibilidade de Django Admin customizado e páginas públicas quando aprovadas.
+Não pressupõe um domínio de negócio, app principal, modelo de dados, dashboard, integração ou fluxo de produto específico.
+
+FINALIDADE DESTE ARQUIVO
+Este é o contexto expandido para retomada de trabalho em novos chats com IA.
+Use-o como complemento do AGENTS.md, README.md e da documentação técnica aplicável à mudança.
+Atualize-o apenas quando houver uma decisão estrutural, estável e já implementada no projeto base.
+
+FORMA ESPERADA DE GERAÇÃO DE PROMPTS
+Prompts devem ser objetivos, explícitos e limitados ao escopo autorizado.
+Não inferir implementação a partir de brainstorm, referências indiretas ou comportamento legado.
+Em caso de dúvida, preservar o comportamento atual e pedir direcionamento.
+
+Quando a resposta incluir um prompt pronto para execução:
+- apresente contexto e observações fora do bloco;
+- isole o prompt em um bloco de código;
+- mantenha dentro do bloco apenas o texto a ser executado.
+
+CONVENÇÕES CONSOLIDADAS
+- Documentos e subpastas usam nomes em minúsculo; `AGENTS.md` é a exceção intencional.
+- Use o termo `seed` para comandos de carga inicial, demonstração ou configuração idempotente.
+- Nomes de código seguem `snake_case` para funções, variáveis, módulos e campos; classes e models usam `PascalCase`.
+- Textos de interface devem ser claros, internacionalizáveis quando aplicável e validados pelo backend.
+- Branches e commits seguem os padrões registrados em `docs/padroes.md`.
+- Não versione segredos, credenciais, tokens ou arquivos de ambiente.
+
+SEGURANÇA, OWNERSHIP E PRIVACIDADE
+- Regras de negócio críticas, permissão, integridade e isolamento são validadas no servidor.
+- Endpoints que alteram estado validam método, autenticação, autorização, CSRF, entrada e escopo do usuário.
+- IDs e parâmetros enviados pelo cliente não são confiáveis por padrão.
+- Em modelos com `owner` ou vínculo equivalente, usuário comum acessa apenas o próprio escopo e superusuário tem visão global somente quando prevista.
+- Querysets, formulários, relações, actions, páginas customizadas e URLs diretas devem respeitar ownership no backend.
+- Não relaxar controles de acesso ou remover testes de segurança sem autorização explícita.
+- Dados sensíveis não podem aparecer em logs, templates, respostas JSON, mensagens de erro ou integrações de terceiros.
+- Fluxos destrutivos exigem confirmação explícita, escopo estrito e testes de regressão.
+
+ARQUITETURA E IMPLEMENTAÇÃO
+- Prefira as convenções e extensões nativas do Django para models, forms, Admin, auth, CSRF, transações e migrations.
+- Reutilize serviços, formulários, componentes, validadores, políticas e assets existentes; não crie fontes de verdade paralelas.
+- Use rotas nomeadas, nunca URLs hardcoded, e não use navegação como mecanismo de autorização.
+- Mude schema por novas migrations; não edite migrations aplicadas.
+- Use constraints para invariantes importantes e transações para operações compostas.
+- Efeitos externos ocorrem após o commit local e devem ser idempotentes.
+- Seeds devem criar ou atualizar apenas o que gerenciam, sem duplicar dados ou apagar personalizações não relacionadas.
+
+ADMIN, UX E PÁGINAS PÚBLICAS
+- Páginas customizadas mantêm autenticação, autorização e ownership equivalentes às telas relacionadas.
+- Layouts aprovados são contratos visuais: conecte-os a dados reais e não copie mocks, dados fictícios ou persistência simulada.
+- CSS e JavaScript específicos ficam isolados por página ou componente.
+- Interfaces devem ser responsivas, acessíveis e usar linguagem simples.
+- Ações destrutivas permanecem separadas de edição e têm confirmação explícita.
+- Conteúdo público fica isolado da área autenticada. Tokens públicos são restritos, aleatórios, revogáveis quando aplicável e nunca substituem ownership.
+- Somente páginas públicas intencionais podem ser indexadas; Admin, autenticação, dados privados e tokens temporários usam `noindex`.
+
+QUALIDADE E TESTES
+- Implementações e correções relevantes incluem testes automatizados proporcionais ao risco.
+- Testes devem verificar persistência, validação, contagens, ordenação, limites, respostas, permissões, ownership e regressões dos consumidores afetados.
+- Mudanças de multi-tenancy exigem cenários de listagem, formulário, relacionamento e bloqueio por URL direta.
+- Testes visuais não substituem testes de segurança ou regra de negócio.
+- Antes de concluir, execute a suíte afetada, `python manage.py check` e verificações de migration quando aplicáveis; informe o que foi validado.
+
+DOCUMENTOS-BASE
+AGENTS.md.
+README.md.
+docs/padroes.md.
+docs/qualidade/politica-de-testes.md.
+docs/privacidade/protecao-de-dados-e-exclusao-de-conta.md.
+docs/onboarding/driverjs-base.md.
+docs/seeds/.
+
+MANUTENÇÃO
+Não use este arquivo como changelog ou repositório de regras de produto. Detalhes de domínio, decisões temporárias, pendências e contratos de funcionalidades pertencem a documentos específicos.
+Mantenha este arquivo alinhado ao AGENTS.md e à implementação consolidada.

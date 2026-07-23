@@ -1,0 +1,643 @@
+# PROMPT — Criar seed idempotente de usuário vitrine para testes autenticados
+
+## Objetivo
+
+Criar uma seed oficial e idempotente para disponibilizar no Colmeias Online um **usuário vitrine**, com dados fictícios suficientes para:
+
+* testar o sistema como um cliente comum;
+* validar páginas autenticadas;
+* permitir testes manuais realizados pelo Codex;
+* demonstrar o sistema sem utilizar dados pessoais reais;
+* reproduzir cenários com Meliponários, Colmeias, Revisões, Observações rápidas e Manejos externos.
+
+O usuário deve representar um cliente normal do sistema.
+
+Ele não pode ser:
+
+* superusuário;
+* administrador global;
+* proprietário de dados de outros usuários;
+* exceção às regras de ownership;
+* usuário com permissões artificiais incompatíveis com um cliente real.
+
+Após implementar, executar a seed no ambiente local atual e validar o login.
+
+## Credenciais oficiais do usuário vitrine
+
+Criar ou atualizar o usuário com:
+
+* **Username:** `teste`
+* **Senha:** `123@teste`
+* **E-mail:** `teste@colmeias.invalid`
+
+A senha deve ser configurada corretamente pelo mecanismo de hash do Django.
+
+Nunca armazenar a senha diretamente em campo de banco, fixture serializada ou código de autenticação.
+
+Essas credenciais são deliberadamente públicas e exclusivas para desenvolvimento, testes e demonstração em ambiente controlado. Elas não representam um segredo de produção.
+
+## Restrição de ambiente
+
+A seed não pode criar ou redefinir esse usuário em produção.
+
+Reutilizar o mecanismo já existente no projeto para identificar o ambiente e recusar a execução quando o ambiente for de produção.
+
+A seed deve ser permitida apenas em ambientes como:
+
+* desenvolvimento local;
+* testes;
+* demonstração;
+* staging controlado.
+
+Não inventar uma nova variável de ambiente caso o projeto já possua uma forma oficial de identificar produção.
+
+A recusa em produção deve apresentar uma mensagem clara e encerrar sem alterações.
+
+A conta com senha pública não deve existir na base de produção real.
+
+## Comando oficial
+
+Criar um management command oficial e reutilizável:
+
+```bash
+python3 manage.py seed_demo_user
+```
+
+Seguir a convenção já utilizada pelas demais seeds do projeto.
+
+Não criar:
+
+* script solto;
+* código executado automaticamente ao iniciar o servidor;
+* signal;
+* migration de dados para criar o usuário;
+* fixture dependente de IDs;
+* criação automática em produção.
+
+## Auditoria inicial obrigatória
+
+Antes de modificar:
+
+* ler integralmente o `AGENTS.md`;
+* auditar as seeds existentes do Colmeias Online;
+* localizar o fluxo real de criação de um cliente comum;
+* identificar o model de usuário;
+* identificar o model de perfil ou pessoa;
+* identificar os registros necessários para acesso ao Admin customizado;
+* verificar como um cliente comum recebe permissões;
+* verificar se usuários comuns precisam de `is_staff=True` para acessar a interface administrativa;
+* verificar o mecanismo de assinatura ou entitlement atualmente exigido;
+* localizar os models reais de Meliponário, Colmeia, Revisão, Observação rápida e Manejo externo;
+* localizar os catálogos compartilhados, como espécies;
+* identificar os campos obrigatórios e regras de validação;
+* verificar ownership, filtros e restrições multi-tenant;
+* verificar quais serviços ou forms já centralizam a criação desses registros.
+
+Não presumir nomes de campos ou relações.
+
+Não criar dados diretamente de forma incompatível com as regras atuais quando já existir um serviço oficial para isso.
+
+## Usuário comum
+
+Configurar o usuário exatamente como um cliente real.
+
+Obrigatoriamente:
+
+* `is_superuser=False`;
+* sem permissões administrativas globais;
+* sem acesso aos dados de outros usuários;
+* sem bypass de middleware;
+* sem bypass de ownership;
+* sem grupo exclusivo criado apenas para testes.
+
+O valor de `is_staff` deve seguir o comportamento real dos clientes comuns do Colmeias Online. Caso a interface customizada sob `/admin/` exija esse atributo para clientes, configurá-lo conforme o onboarding real.
+
+Não conceder permissões extras apenas para facilitar o teste.
+
+## Perfil do usuário
+
+Criar ou atualizar o perfil relacionado exigido pelo sistema.
+
+Utilizar dados claramente fictícios e sem relação com o usuário real.
+
+Exemplo de identidade:
+
+* nome de exibição: `Meliponicultor Demonstração`;
+* cidade e estado fictícios válidos;
+* descrição curta relacionada à criação de abelhas sem ferrão;
+* demais campos obrigatórios preenchidos com valores seguros.
+
+Não utilizar:
+
+* nome Augusto;
+* e-mail pessoal;
+* telefone pessoal;
+* endereço pessoal;
+* cidade ou propriedade do usuário real;
+* qualquer dado retirado de contas existentes.
+
+Se houver validação obrigatória para telefone ou endereço, utilizar valores explicitamente fictícios e não contatáveis, compatíveis com os validadores existentes.
+
+Não publicar dados sensíveis ou desnecessários na rede de criadores.
+
+## Assinatura e acesso
+
+Auditar se um cliente precisa de assinatura, trial, entitlement ou vínculo com aplicação para acessar o sistema.
+
+Se necessário:
+
+* criar o estado local mínimo por meio do serviço oficial existente;
+* utilizar plano ou trial próprio para teste;
+* manter o registro associado apenas ao usuário vitrine;
+* não chamar Mercado Pago;
+* não criar cobrança;
+* não executar webhook;
+* não chamar Subscription Core externo;
+* não criar pagamento fictício como se fosse real.
+
+O usuário deve acessar o sistema pelo mesmo caminho funcional de um cliente normal, sem bypass permanente de assinatura.
+
+## Dados de demonstração
+
+Criar um conjunto coerente, realista e determinístico de dados.
+
+A quantidade pode ser ajustada apenas quando os models reais exigirem, mas a seed deve produzir aproximadamente:
+
+* 2 Meliponários;
+* 8 Colmeias;
+* entre 12 e 16 registros de Revisão;
+* mistura de Revisões completas e Observações rápidas;
+* 4 Manejos externos.
+
+Não criar imagens ou arquivos.
+
+## Meliponários
+
+Criar dois Meliponários fictícios, com identificadores estáveis para reexecução.
+
+Exemplos de nomes:
+
+* `Meliponário Ipê`
+* `Quintal das Nativas`
+
+Preencher somente os campos necessários e úteis para a demonstração.
+
+Adicionar observações curtas e fictícias quando o model possuir esse campo.
+
+Não adicionar fotografias.
+
+## Colmeias
+
+Criar aproximadamente oito Colmeias distribuídas entre os dois Meliponários.
+
+Utilizar códigos estáveis e fáceis de reconhecer, por exemplo:
+
+* `COL-DEMO-001`
+* `COL-DEMO-002`
+* até `COL-DEMO-008`.
+
+Usar espécies reais já existentes no catálogo oficial do sistema.
+
+Preferir espécies conhecidas e variadas, como Jataí, Mandaçaia, Iraí e Uruçu, desde que elas existam nos dados oficiais.
+
+Não duplicar espécies globais.
+
+Caso as espécies dependam de uma seed oficial anterior:
+
+* reutilizar os identificadores estáveis;
+* executar ou reutilizar a seed oficial conforme a arquitetura;
+* falhar com mensagem clara se um pré-requisito obrigatório estiver ausente e não puder ser criado corretamente.
+
+Distribuir as Colmeias em diferentes situações para enriquecer a demonstração, preservando as opções realmente existentes no model.
+
+A composição deve permitir validar:
+
+* Colmeias em produção;
+* Colmeia em observação;
+* Colmeia órfã, quando o status existir;
+* Colmeia vendida ou doada, quando o status existir.
+
+Manter pelo menos cinco ou seis Colmeias em produção.
+
+Entre as Colmeias em produção:
+
+* algumas devem possuir Revisões recentes;
+* algumas devem possuir Revisões antigas;
+* pelo menos uma deve nunca ter sido revisada.
+
+Isso deve permitir testar corretamente a fila de Revisão em sequência.
+
+Não criar Colmeia morta apenas para aumentar variedade caso isso prejudique os cenários principais de demonstração.
+
+## Revisões completas
+
+Criar Revisões completas realistas e distribuídas em datas anteriores à execução da seed.
+
+Utilizar datas relativas à data local de execução para que o usuário vitrine continue parecendo atual ao longo do tempo.
+
+Distribuir registros, por exemplo:
+
+* Revisão recente;
+* Revisão de aproximadamente uma semana;
+* Revisão de aproximadamente duas semanas;
+* Revisão com mais de 30 dias;
+* Revisão mais antiga.
+
+Preencher combinações realistas dos campos existentes, como:
+
+* rainha visualizada;
+* postura;
+* alimento energético;
+* alimento proteico;
+* força da colônia;
+* temperamento;
+* peso;
+* tipos de Revisão;
+* observações;
+* alimentação ou colheita, quando aplicável.
+
+Não preencher todos os campos com o mesmo valor.
+
+Não criar valores biologicamente incoerentes apenas para completar o formulário.
+
+Não criar imagens.
+
+## Observações rápidas
+
+Criar registros usando o tipo oficial de Observação rápida já consolidado no model de Revisão.
+
+Não recriar model antigo ou estrutura paralela.
+
+As observações devem conter textos curtos e variados, como:
+
+* movimentação normal na entrada;
+* necessidade de conferir alimento na próxima visita;
+* presença de forídeos não confirmada;
+* caixa mantida em observação;
+* atividade reduzida em dia frio.
+
+Não criar registros vazios.
+
+Preservar a regra de que Observação rápida conta como última Revisão quando essa já for a regra oficial do produto.
+
+## Manejos externos
+
+Criar aproximadamente quatro Manejos externos fictícios.
+
+Distribuir entre os Meliponários e usar datas recentes.
+
+Utilizar somente tipos, campos e opções reais do model.
+
+Exemplos de contexto:
+
+* reorganização de caixas;
+* limpeza da área;
+* preparação de suporte;
+* verificação externa após chuva.
+
+Não criar imagens ou anexos.
+
+## Sem imagens e arquivos
+
+A seed não deve criar:
+
+* imagens de Colmeias;
+* imagens de Meliponários;
+* imagens de Revisões;
+* anexos;
+* documentos;
+* arquivos temporários;
+* base64;
+* referências para arquivos inexistentes.
+
+Todos os componentes de galeria devem permanecer vazios no usuário vitrine.
+
+A ausência de imagens não pode gerar caminhos quebrados ou thumbnails inválidas.
+
+## Idempotência
+
+A seed deve poder ser executada repetidamente.
+
+Em todas as execuções:
+
+* localizar o usuário pelo username estável;
+* garantir a senha oficial de teste;
+* atualizar os campos canônicos do perfil;
+* localizar dados de demonstração por identificadores estáveis;
+* criar registros ausentes;
+* atualizar registros canônicos existentes;
+* não duplicar Meliponários;
+* não duplicar Colmeias;
+* não duplicar Revisões;
+* não duplicar Manejos externos;
+* não criar novo perfil;
+* não criar nova assinatura equivalente.
+
+Não depender de IDs fixos do banco.
+
+Usar chaves naturais e estáveis adequadas a cada model.
+
+## Preservação de registros extras
+
+A conta é dedicada a testes, mas a seed não deve apagar indiscriminadamente tudo que pertença ao usuário.
+
+Ao reexecutar:
+
+* reconciliar apenas os registros canônicos criados pela própria seed;
+* preservar registros adicionais criados manualmente durante testes;
+* não excluir dados apenas porque não fazem parte da vitrine original.
+
+Não usar `delete()` geral sobre todos os dados do usuário.
+
+Se for necessário identificar registros da seed e os models não possuírem campo próprio, utilizar códigos e nomes determinísticos, sem criar migration apenas para marcar a origem.
+
+## Transação e falhas
+
+Executar a criação e atualização dentro de transação atômica quando compatível com os serviços existentes.
+
+Em caso de erro:
+
+* não deixar metade do conjunto criado;
+* não deixar usuário sem perfil obrigatório;
+* não deixar Colmeias sem Meliponário;
+* apresentar mensagem clara;
+* retornar código de saída de erro.
+
+Não esconder exceções relevantes.
+
+## Saída do comando
+
+Ao terminar, exibir um resumo seguro, contendo:
+
+* usuário criado ou atualizado;
+* quantidade de Meliponários;
+* quantidade de Colmeias;
+* quantidade de Revisões completas;
+* quantidade de Observações rápidas;
+* quantidade de Manejos externos;
+* confirmação de ausência de imagens;
+* URL local de login ou rota nomeada correspondente;
+* confirmação de que o usuário não é superusuário.
+
+Pode exibir as credenciais oficiais de teste na saída do comando, pois elas são deliberadamente públicas para esse ambiente.
+
+Não exibir:
+
+* hash de senha;
+* tokens;
+* cookies;
+* chaves;
+* credenciais de contas reais.
+
+## Atualização do AGENTS.md
+
+Adicionar ao `AGENTS.md` uma seção curta e operacional, com um título como:
+
+## Usuário vitrine para testes autenticados
+
+Registrar:
+
+* finalidade da conta;
+* comando da seed;
+* username `teste`;
+* senha `123@teste`;
+* indicação de que é um usuário comum;
+* indicação de que só pode existir em ambiente local, teste ou demonstração controlada;
+* orientação para o Codex utilizar essa conta ao precisar validar páginas autenticadas;
+* proibição de usar contas pessoais para testes;
+* proibição de executar essa seed em produção.
+
+A seção deve deixar explícito:
+
+> Para testes autenticados do Colmeias Online, utilize exclusivamente o usuário vitrine criado por `python3 manage.py seed_demo_user`. Não solicite nem utilize credenciais pessoais do usuário.
+
+Remover do `AGENTS.md`, caso existam:
+
+* username pessoal;
+* senha pessoal;
+* instruções para utilizar a conta Augusto;
+* referências a credenciais pessoais anteriores.
+
+Não modificar a conta real do usuário.
+
+Não mencionar nem reproduzir as antigas credenciais no relatório final.
+
+## Uso pelo Codex
+
+Documentar que, quando uma tarefa exigir validação autenticada, o Codex deve:
+
+1. executar a seed, caso a conta ainda não exista;
+2. iniciar o ambiente local;
+3. autenticar com o usuário vitrine;
+4. validar como usuário comum;
+5. testar ownership;
+6. encerrar a sessão quando necessário;
+7. informar no relatório quais páginas foram realmente conferidas.
+
+O Codex não deve afirmar que validou visualmente uma página autenticada quando executou somente testes de template ou requisições não autenticadas.
+
+## Segurança e ownership
+
+Validar que o usuário vitrine:
+
+* vê somente seus Meliponários;
+* vê somente suas Colmeias;
+* vê somente suas Revisões;
+* vê somente seus Manejos externos;
+* não acessa registros de outro usuário por URL direta;
+* não visualiza ações exclusivas de superusuário;
+* não consegue acessar configurações administrativas globais;
+* recebe o menu correspondente a cliente comum;
+* utiliza o mesmo middleware e as mesmas permissões dos demais clientes.
+
+Criar um segundo usuário apenas dentro dos testes automatizados quando necessário para validar isolamento.
+
+Não adicionar outro usuário permanente à seed sem necessidade.
+
+## Testes obrigatórios
+
+### Criação inicial
+
+Validar que a primeira execução:
+
+* cria o usuário;
+* configura uma senha válida;
+* cria o perfil;
+* cria os dados esperados;
+* não cria imagens;
+* permite autenticação;
+* permite acesso às páginas autorizadas.
+
+### Usuário comum
+
+Confirmar:
+
+* `is_superuser=False`;
+* permissões iguais às de um cliente;
+* acesso ao Admin customizado conforme a regra real;
+* ausência de privilégios globais.
+
+### Idempotência
+
+Executar a seed duas vezes no teste.
+
+Confirmar que a segunda execução:
+
+* não duplica usuário;
+* não duplica perfil;
+* não duplica Meliponários;
+* não duplica Colmeias;
+* não duplica Revisões;
+* não duplica Manejos externos;
+* mantém as contagens canônicas;
+* redefine a senha oficial caso ela tenha sido alterada;
+* preserva registros adicionais não canônicos.
+
+### Dados coerentes
+
+Validar:
+
+* todas as Colmeias pertencem ao usuário vitrine;
+* os Meliponários pertencem ao usuário vitrine;
+* Revisões pertencem às Colmeias corretas;
+* Manejos externos pertencem ao escopo correto;
+* não existem relações com usuários reais;
+* datas relativas estão válidas;
+* nenhum registro obrigatório ficou incompleto.
+
+### Fila de Revisão
+
+Confirmar que os dados permitem testar:
+
+* Colmeia nunca revisada;
+* Colmeia com Revisão antiga;
+* Colmeia com Revisão recente;
+* exclusão das situações não elegíveis;
+* ordenação real da fila.
+
+Não alterar as regras da fila para fazer a seed passar.
+
+### Ownership
+
+Criar nos testes outro usuário e dados separados.
+
+Confirmar que o usuário vitrine não consegue:
+
+* listar;
+* editar;
+* excluir;
+* abrir por URL direta;
+
+registros do outro usuário.
+
+### Ambiente
+
+Validar que:
+
+* execução em desenvolvimento é permitida;
+* execução em teste é permitida;
+* execução identificada como produção é recusada;
+* nenhuma alteração ocorre quando a execução é recusada.
+
+### AGENTS.md
+
+Confirmar por revisão que:
+
+* a nova conta está documentada;
+* credenciais pessoais não permanecem;
+* o comando está correto;
+* a restrição de produção está clara.
+
+## Validação manual obrigatória
+
+Após implementar:
+
+1. executar `python3 manage.py seed_demo_user`;
+2. executar novamente para confirmar idempotência;
+3. iniciar o servidor local;
+4. acessar a tela de login;
+5. autenticar com `teste`;
+6. abrir a Home administrativa;
+7. abrir a lista de Meliponários;
+8. abrir a lista de Colmeias;
+9. abrir uma Colmeia;
+10. abrir a lista de Revisões;
+11. abrir uma Revisão completa;
+12. abrir uma Observação rápida;
+13. abrir Manejos externos;
+14. abrir Revisão em sequência;
+15. confirmar que o menu é de usuário comum;
+16. confirmar que não existem imagens quebradas;
+17. confirmar que dados de outros usuários não aparecem.
+
+Não declarar essa validação como executada se ela não tiver sido realizada em uma sessão autenticada real.
+
+## Preservação obrigatória
+
+Não alterar:
+
+* conta real do usuário;
+* credenciais pessoais;
+* models, salvo necessidade indispensável comprovada;
+* migrations;
+* ownership;
+* permissões;
+* regras de Revisão;
+* fila de Revisão em sequência;
+* menu;
+* layout;
+* componentes de lista;
+* componentes de select;
+* Air Datepicker;
+* galerias;
+* assinatura real;
+* integrações externas;
+* produção.
+
+Não adicionar imagens ou arquivos de exemplo.
+
+Não criar bypass para facilitar login.
+
+## Critérios de aceite
+
+* Existe o comando `python3 manage.py seed_demo_user`.
+* O comando cria ou atualiza o usuário `teste`.
+* A senha oficial é `123@teste`.
+* O usuário não é superusuário.
+* O usuário possui o mesmo perfil de acesso de um cliente normal.
+* O usuário possui dados fictícios de demonstração.
+* Existem Meliponários, Colmeias, Revisões completas, Observações rápidas e Manejos externos.
+* Nenhuma imagem ou arquivo é criado.
+* Os dados são realistas e úteis para testar as principais páginas.
+* A fila de Revisão possui cenários variados.
+* A seed é idempotente.
+* A seed preserva registros adicionais criados manualmente.
+* A seed recusa execução em produção.
+* Nenhuma integração externa é chamada.
+* O login foi validado.
+* Ownership foi validado.
+* O `AGENTS.md` documenta a conta de teste.
+* O `AGENTS.md` orienta o Codex a utilizar exclusivamente essa conta.
+* Não permanecem referências a credenciais pessoais.
+* A conta real do usuário não foi alterada.
+
+## Relatório final
+
+Informar objetivamente:
+
+* nome e caminho do management command;
+* como o ambiente de produção é bloqueado;
+* como o cliente comum é configurado;
+* quais models foram incluídos;
+* quantos registros canônicos foram criados;
+* quais identificadores estáveis garantem idempotência;
+* como registros adicionais são preservados;
+* se foi necessário criar estado local de assinatura;
+* confirmação de que nenhuma integração externa foi chamada;
+* resultado da primeira execução;
+* resultado da segunda execução;
+* confirmação de login com o usuário vitrine;
+* páginas autenticadas realmente validadas;
+* testes de ownership executados;
+* alterações realizadas no `AGENTS.md`;
+* confirmação de que referências a credenciais pessoais foram removidas.

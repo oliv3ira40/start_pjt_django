@@ -1,0 +1,556 @@
+DevFront
+    Finances Hub — Redesign das telas de autenticação
+    Objetivo
+
+    Criar no DevFront uma nova proposta visual para as telas públicas de autenticação do Finances Hub:
+
+    logout;
+    login;
+    solicitação de redefinição de senha;
+    confirmação de solicitação enviada;
+    cadastro.
+
+    As telas atuais possuem aparência muito próxima do Django Admin padrão e precisam ser modernizadas para seguir a nova identidade visual do Finances Hub.
+
+    Rotas de referência
+
+    Considerar os fluxos correspondentes a:
+
+    /admin/logout/
+    /admin/login/?next=/admin/
+    /admin/password_reset/
+    /admin/password_reset/done/
+    /accounts/registrar/
+
+    A página de cadastro deve considerar que, após o registro concluído com sucesso, o usuário será autenticado automaticamente e direcionado para a área interna.
+
+    Nesta etapa, criar somente os layouts estáticos no DevFront.
+
+    Não implementar backend Django.
+
+    1. Direção visual
+
+    As telas devem seguir a identidade visual oficial mais recente do Finances Hub.
+
+    Usar como referência:
+
+    nova logo;
+    paleta oficial;
+    tipografia;
+    bordas;
+    botões;
+    campos;
+    ícones;
+    elementos gráficos definidos no guia de identidade.
+
+    A logo oficial deve aparecer em todas as telas.
+
+    Não utilizar a aparência padrão do Django Admin.
+
+    O resultado deve transmitir:
+
+    organização;
+    confiança;
+    simplicidade;
+    modernidade;
+    facilidade de uso.
+
+    Evitar aparência excessivamente corporativa, bancária ou complexa.
+
+    2. Estrutura principal
+
+    Usar uma estrutura centralizada, compacta e mobile-first.
+
+    A página deve possuir:
+
+    fundo suave relacionado à identidade;
+    logo na parte superior;
+    card principal centralizado;
+    título;
+    texto auxiliar curto;
+    formulário ou mensagem correspondente;
+    ações principais;
+    links secundários;
+    rodapé institucional discreto, quando houver espaço.
+    Não utilizar layout dividido
+
+    Não criar:
+
+    formulário ocupando uma metade da tela;
+    ilustração grande na outra metade;
+    texto promocional lateral;
+    duas colunas independentes;
+    painel decorativo que desapareça ou fique empilhado de forma ruim no mobile.
+
+    Mesmo no desktop, manter um card central.
+
+    Elementos decorativos podem existir apenas no fundo e de maneira discreta.
+
+    3. Mobile-first
+
+    As telas devem ser desenvolvidas primeiro para celular.
+
+    No mobile:
+
+    o card deve respeitar margens laterais;
+    nenhum campo deve ultrapassar a viewport;
+    botões devem ter boa área de toque;
+    o teclado virtual não deve esconder ações importantes;
+    não deve existir rolagem horizontal;
+    conteúdo principal deve ser acessível sem esforço;
+    textos devem ser curtos;
+    links secundários devem continuar fáceis de tocar.
+
+    Evitar cards excessivamente altos.
+
+    Nas telas com pouco conteúdo, centralizar verticalmente quando houver espaço.
+
+    Nas telas maiores, permitir rolagem natural da página.
+
+    4. Componente visual compartilhado
+
+    As cinco páginas devem parecer partes do mesmo fluxo.
+
+    Criar uma base visual compartilhada contendo:
+
+    logo;
+    card;
+    títulos;
+    descrições;
+    campos;
+    botões;
+    links;
+    mensagens;
+    rodapé;
+    estados de erro e sucesso.
+
+    Não criar uma identidade diferente para cada tela.
+
+    Os arquivos podem ser separados, mas devem reutilizar o mesmo CSS e os mesmos componentes.
+
+    5. Tela de login
+
+    Criar a tela correspondente ao acesso do usuário.
+
+    Conteúdo
+
+    Usar:
+
+    Título:
+    Entrar no Finances Hub
+
+    Texto auxiliar:
+    Acesse sua conta para continuar organizando suas finanças.
+
+    Campos
+    Usuário ou e-mail;
+    Senha.
+
+    Cada campo deve possuir:
+
+    label visível;
+    placeholder discreto;
+    estado de foco;
+    estado de erro;
+    mensagem de validação;
+    preenchimento compatível com gerenciadores de senha.
+    Senha
+
+    Adicionar controle para:
+
+    mostrar senha;
+    ocultar senha.
+
+    Usar botão acessível e compacto dentro ou ao lado do campo.
+
+    Ações
+
+    Botão principal:
+
+    Entrar
+
+    Links secundários:
+
+    Esqueci minha senha;
+    Criar uma conta.
+
+    Caso exista parâmetro next, o layout não precisa exibi-lo, mas deve prever campo oculto para a futura implementação.
+
+    Erro geral
+
+    Criar estado visual para mensagens como:
+
+    usuário ou senha inválidos;
+    conta inativa;
+    sessão expirada.
+
+    Não usar o alerta bruto do Django Admin.
+
+    6. Tela de cadastro
+
+    Criar a tela de criação de conta.
+
+    Conteúdo
+
+    Título:
+    Crie sua conta
+
+    Texto auxiliar:
+    Comece a organizar suas finanças de forma simples.
+
+    Campos
+
+    Considerar os campos atualmente utilizados pelo sistema, prevendo visualmente:
+
+    Nome;
+    Sobrenome;
+    E-mail;
+    Senha;
+    Confirmar senha.
+
+    Caso o backend atual utilize nome de usuário, prever o campo sem reorganizar toda a página.
+
+    Não inventar campos adicionais.
+
+    Senhas
+
+    Incluir:
+
+    mostrar ou ocultar senha;
+    orientação curta sobre os requisitos;
+    validação visual;
+    confirmação de senha.
+
+    Evitar uma lista grande de regras aparecendo permanentemente.
+
+    Apresentar os requisitos de maneira compacta e útil.
+
+    Ações
+
+    Botão principal:
+
+    Criar conta
+
+    Link secundário:
+
+    Já tenho uma conta
+
+    Pós-cadastro
+
+    O texto da página não deve indicar que será necessário fazer login depois.
+
+    O fluxo previsto é:
+
+    criar conta;
+    autenticar automaticamente;
+    seguir para o sistema.
+
+    Não criar uma tela intermediária de “cadastro concluído, faça login”.
+
+    7. Solicitação de redefinição de senha
+
+    Criar a tela correspondente a:
+
+    /admin/password_reset/
+
+    Conteúdo
+
+    Título:
+    Recuperar senha
+
+    Texto auxiliar:
+    Informe o e-mail cadastrado para receber as instruções de redefinição.
+
+    Campo
+    E-mail.
+    Ação
+
+    Botão principal:
+
+    Enviar instruções
+
+    Link secundário:
+
+    Voltar para o login
+
+    Estados
+
+    Prever:
+
+    campo inválido;
+    e-mail obrigatório;
+    e-mail não encontrado;
+    limite de tentativas;
+    erro inesperado.
+
+    Não usar mensagens genéricas quando o sistema já possuir uma validação explícita para e-mail inexistente.
+
+    8. Confirmação do envio
+
+    Criar a tela correspondente a:
+
+    /admin/password_reset/done/
+
+    Conteúdo
+
+    Usar um estado de confirmação claro e compacto.
+
+    Incluir:
+
+    ícone discreto de e-mail ou confirmação;
+    título;
+    explicação;
+    botão para voltar ao login.
+    Título sugerido
+
+    Confira seu e-mail
+
+    Texto sugerido
+
+    Enviamos as instruções de redefinição para o endereço informado. Verifique também a caixa de spam.
+
+    Não exibir o endereço completo do usuário caso não esteja disponível com segurança.
+
+    Ação
+
+    Botão:
+
+    Voltar para o login
+
+    A tela deve continuar usando o mesmo card e a mesma identidade das demais.
+
+    9. Tela de logout
+
+    Criar a tela correspondente a:
+
+    /admin/logout/
+
+    A tela não deve parecer uma página de erro nem exibir somente o texto padrão do Django.
+
+    Conteúdo
+
+    Título:
+    Você saiu da sua conta
+
+    Texto auxiliar:
+    Sua sessão foi encerrada com segurança.
+
+    Ações
+
+    Botão principal:
+
+    Entrar novamente
+
+    Link secundário:
+
+    Voltar para a página inicial
+
+    Usar um ícone discreto de confirmação ou saída.
+
+    Não criar um formulário.
+
+    10. Logo e cabeçalho
+
+    Usar a versão oficial da logo adequada para fundo claro.
+
+    A logo deve:
+
+    aparecer acima do card ou dentro do cabeçalho do card;
+    respeitar proporção;
+    não ficar grande demais;
+    permanecer legível no mobile;
+    não repetir o nome do produto em outro título institucional desnecessário.
+
+    O título de cada tela deve descrever a ação atual, não repetir apenas “Finances Hub”.
+
+    11. Fundo e elementos decorativos
+
+    O fundo pode utilizar:
+
+    tonalidade clara da identidade;
+    gradiente suave;
+    formas abstratas discretas;
+    pequenos elementos geométricos.
+
+    Não usar:
+
+    ilustrações financeiras genéricas grandes;
+    pessoas;
+    notas de dinheiro;
+    gráficos exagerados;
+    muitos cartões flutuantes;
+    fundo visualmente pesado.
+
+    Os elementos decorativos não devem competir com o formulário.
+
+    12. Campos e botões
+    Campos
+
+    Os inputs devem possuir:
+
+    altura confortável;
+    borda leve;
+    cantos coerentes com o sistema;
+    foco visível;
+    mensagem de erro próxima;
+    texto legível;
+    compatibilidade com autofill.
+
+    O autofill do navegador não pode deixar o campo ilegível.
+
+    Botões
+
+    O botão principal deve:
+
+    ocupar toda a largura do card no mobile;
+    possuir contraste adequado;
+    apresentar estado de hover;
+    apresentar estado de foco;
+    apresentar estado desabilitado;
+    apresentar estado de carregamento.
+
+    Não criar botões gigantes no desktop.
+
+    13. Estados de carregamento
+
+    Criar visual para envio em andamento.
+
+    Exemplos:
+
+    Entrando...
+    Criando conta...
+    Enviando...
+
+    Durante o carregamento:
+
+    desabilitar envio duplicado;
+    preservar o conteúdo;
+    manter feedback claro.
+
+    Não substituir todo o card por um spinner.
+
+    14. Mensagens
+
+    Criar padrões para:
+
+    erro de campo;
+    erro geral;
+    sucesso;
+    aviso;
+    informação.
+
+    As mensagens devem:
+
+    usar cores semânticas;
+    ter ícone discreto;
+    ser fáceis de entender;
+    não depender somente da cor;
+    não ocupar espaço excessivo.
+    15. Acessibilidade
+
+    Garantir no protótipo:
+
+    labels reais;
+    ordem lógica de tabulação;
+    foco visível;
+    contraste adequado;
+    botões com texto ou descrição acessível;
+    mensagens associadas aos campos;
+    compatibilidade com teclado;
+    controle de mostrar senha acessível;
+    títulos hierarquicamente corretos.
+
+    Não usar placeholder como substituto de label.
+
+    16. Responsividade
+
+    Validar pelo menos:
+
+    celular estreito;
+    celular comum;
+    tablet;
+    notebook;
+    desktop.
+
+    No desktop:
+
+    manter card central;
+    limitar largura do formulário;
+    preservar bastante respiro sem transformar a página em duas colunas.
+
+    No mobile:
+
+    reduzir margens;
+    manter logo proporcional;
+    manter links acessíveis;
+    evitar grandes vazios;
+    permitir rolagem quando necessário.
+    17. Arquivos esperados
+
+    Criar arquivos estáticos separados para demonstração, utilizando CSS compartilhado.
+
+    Sugestão de estrutura:
+
+    n-finances-hub-login.html
+    n-finances-hub-cadastro.html
+    n-finances-hub-recuperar-senha.html
+    n-finances-hub-recuperar-senha-enviado.html
+    n-finances-hub-logout.html
+    CSS compartilhado;
+    JavaScript compartilhado somente quando necessário.
+
+    Os nomes podem ser adaptados ao padrão utilizado pelo DevFront.
+
+    Não incorporar CSS completo duplicado em cada arquivo.
+
+    18. Limites desta etapa
+
+    Não implementar:
+
+    integração com Django;
+    autenticação real;
+    envio de e-mail;
+    cadastro real;
+    redirecionamentos;
+    validações de backend;
+    login social;
+    captcha;
+    autenticação em dois fatores;
+    novos campos;
+    redesign das páginas internas;
+    alteração no tema do Django Admin.
+
+    Criar somente os layouts e interações visuais necessárias para demonstrar os estados.
+
+    Entrega esperada
+
+    Entregar as cinco telas completas:
+
+    Login;
+    Cadastro;
+    Recuperar senha;
+    Instruções enviadas;
+    Logout.
+
+    Também entregar:
+
+    estados de erro;
+    estados de sucesso;
+    carregamento;
+    visual mobile e desktop;
+    CSS compartilhado;
+    JavaScript mínimo para demonstrações;
+    indicação clara dos arquivos produzidos.
+    Critérios de aceite
+    Todas as telas usam a nova identidade visual.
+    A logo aparece em todas elas.
+    A aparência padrão do Django Admin é removida.
+    O layout é centralizado e não utiliza duas colunas.
+    O uso no mobile é simples e confortável.
+    Os formulários não ficam largos demais no desktop.
+    Login, cadastro e recuperação mantêm coerência visual.
+    A página de logout possui apresentação adequada.
+    O cadastro considera login automático após concluir.
+    Estados de erro e carregamento estão demonstrados.
+    Nenhuma funcionalidade de backend é implementada.
+    Nenhuma melhoria fora deste escopo deve ser adicionada.

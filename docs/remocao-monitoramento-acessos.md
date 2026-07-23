@@ -1,25 +1,15 @@
-# Remoção do monitoramento interno de acessos
-
-Data: 2026-05-14
+# Remoção de monitoramento interno de acessos
 
 ## Resumo
 
-O monitoramento interno de acessos baseado no app `syshealth` foi removido completamente da base de código.
+O projeto não possui monitoramento interno de acessos por middleware, dashboard administrativo ou coleta própria de eventos. Essa ausência é intencional.
 
-## O que foi removido
+## Diretriz
 
-- App `syshealth` e seus módulos (models, admin, views, middleware, forms, metrics, testes e comandos de management).
-- Rotas e endpoints de dashboard de acessos no admin customizado.
-- Middleware de registro de eventos de acesso.
-- Templates do admin vinculados ao painel de saúde/acessos.
-- Registro do app em `INSTALLED_APPS`.
+- Não reintroduza coleta de eventos de acesso, painéis de monitoramento ou rastreamento interno por inferência.
+- Qualquer proposta de observabilidade deve ser isolada, ter finalidade definida, passar por avaliação de privacidade e receber aprovação explícita.
+- Logs técnicos necessários devem evitar dados pessoais e segredos, seguir retenção proporcional e permanecer protegidos contra acesso indevido.
 
-## Impacto esperado
+## Dados legados
 
-- O sistema continua funcionando sem monitoramento interno de acessos.
-- Não foi introduzido monitoramento substituto nesta etapa.
-- Regras de autenticação, permissões e ownership fora do escopo não foram alteradas.
-
-## Observação sobre dados antigos
-
-Se existirem tabelas/dados legados no banco referentes ao `syshealth`, a remoção física no banco deve ser feita depois, por migração planejada e aprovada.
+Se existirem tabelas ou registros de uma solução anterior, a remoção física deve ocorrer somente em migration planejada, revisada e aprovada. A base de código não deve depender desses dados.

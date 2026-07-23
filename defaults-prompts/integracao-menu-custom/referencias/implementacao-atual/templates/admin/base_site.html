@@ -1,0 +1,42 @@
+{% extends 'admin/base.html' %}
+{% load admin_interface_tags i18n static %}
+
+{% block title %}
+{% get_admin_interface_theme as theme %}
+{% if title %}{{ title }} | {% endif %}{% if theme.title %}{% translate theme.title %}{% else %}{{ site_title|default:_('Django administration') }}{% endif %}
+{% endblock title %}
+
+{% block extrastyle %}
+{{ block.super }}
+{% get_admin_interface_theme as theme %}
+<style>
+  body.co-admin-shell {
+    --co-theme-primary: {{ theme.css_module_background_color|default:'#193315' }};
+    --co-theme-primary-strong: {{ theme.css_header_background_color|default:'#0B2717' }};
+    --co-theme-accent: {{ theme.css_header_link_hover_color|default:'#F6AF08' }};
+    --co-theme-active-surface: {{ theme.css_module_background_selected_color|default:'#DCEBCF' }};
+    --co-theme-active-text: {{ theme.css_module_link_selected_color|default:'#193315' }};
+    --co-theme-link: {{ theme.css_generic_link_color|default:'#193315' }};
+  }
+</style>
+<link rel="stylesheet" href="{% get_admin_interface_static 'admin_interface/css/admin-interface.css' %}">
+<link rel="stylesheet" href="{% static 'core/css/admin-shell.css' %}?v=20260721.7">
+{% endblock extrastyle %}
+
+{% block blockbots %}
+{{ block.super }}
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+{% include "admin_interface/favicon.html" %}
+{% endblock blockbots %}
+
+{% block extrahead %}
+{{ block.super }}
+<meta name="robots" content="noindex, nofollow, noarchive">
+<script defer src="{% static 'core/js/admin-shell.js' %}?v=20260721.4"></script>
+{% endblock extrahead %}
+
+{% block bodyclass %}{{ block.super }} co-admin-shell co-admin-shell--initializing{% endblock bodyclass %}
+
+{% block header %}{% include "admin/includes/shell_header.html" %}{% endblock header %}
+{% block nav-breadcrumbs %}{% endblock nav-breadcrumbs %}
+{% block nav-sidebar %}{% include "admin/nav_sidebar.html" %}{% endblock nav-sidebar %}

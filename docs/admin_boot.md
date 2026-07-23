@@ -1,50 +1,35 @@
-# Boot global do Django Admin
+# Boot compartilhado do Django Admin
 
-## Visão geral
-O app `apiary` inicializa comportamentos de Select2, campos condicionais e prévia de imagens para todas as telas do Django Admin através do mixin `Select2AdminMixin`. Esse mixin concentra a declaração de mídia (CSS/JS) e é estendido por `BaseAdmin` e `BaseInline`, garantindo que qualquer `ModelAdmin` ou inline herdando dessas classes carregue automaticamente os recursos compartilhados.【F:apiary/admin.py†L28-L54】
+## Objetivo
 
-## Arquivos injetados (ordem exata)
-1. `https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css`
-2. `apiary/css/image-preview.css`
-3. `https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.full.min.js`
-4. `apiary/js/hive_species_filter.js`
-5. `apiary/js/conditional-fields.js`
-6. `apiary/js/image-preview.js`
+Centralizar os assets e os comportamentos reutilizáveis do Django Admin em classes-base ou mixins. Essa organização evita que cada `ModelAdmin` e inline registre manualmente os mesmos CSS, JavaScript e regras de inicialização.
 
-A ordem acima segue o bloco `Media` do `Select2AdminMixin`, garantindo que a folha de estilo local seja carregada após o CSS do Select2 e que o CDN seja inicializado antes dos scripts que o utilizam.【F:apiary/admin.py†L28-L41】
+## Estrutura recomendada
 
-## Como herdar em novos Admin/Inline
-- `BaseAdmin` combina `Select2AdminMixin` com `admin.ModelAdmin`. Qualquer classe que estenda `BaseAdmin` recebe automaticamente os assets globais e pode sobrepor configurações padrão se necessário.【F:apiary/admin.py†L44-L47】  
-- `OwnerRestrictedAdmin` estende `BaseAdmin` para aplicar filtros de proprietário e é usado por admins que precisam restringir dados por usuário.【F:apiary/admin.py†L56-L104】  
-- `BaseInline` é um `admin.TabularInline` pronto para reutilização; embora não injete mídia própria, herdar dele garante consistência e evita duplicação futura. Inlines customizados podem adicionar mídia extra declarando um `class Media` próprio.【F:apiary/admin.py†L50-L53】
+- Um mixin de mídia declara os assets compartilhados e sua ordem de carregamento.
+- Uma classe-base de `ModelAdmin` reutiliza esse mixin.
+- Uma classe-base de inline preserva a mesma convenção e pode acrescentar mídia quando necessário.
+- Uma classe restrita por proprietário, quando houver multi-tenancy, estende a classe-base e concentra queryset, atribuição automática de owner e filtros de relações.
 
-Exemplos atuais:
-- `SpeciesAdmin`, `BoxModelAdmin`, `CityAdmin`, `SeasonAdmin`, `MellitophilousPlantAdmin`, `RevisionAdmin` e `RevisionAttachmentAdmin` herdam diretamente de `BaseAdmin` para compartilhar os recursos JS/CSS.【F:apiary/admin.py†L106-L403】
-- `ApiaryAdmin`, `ColmeiaAdmin`, `QuickObservationAdmin` e `CreatorNetworkEntryAdmin` herdam de `OwnerRestrictedAdmin`, recebendo o mesmo boot global mais as regras de proprietário.【F:apiary/admin.py†L225-L370】
-- Inlines como `RevisionAttachmentInline`, `QuickObservationAttachmentInline` e `PlantAttachmentInline` usam `BaseInline`, permitindo que o JavaScript trate eventos como `formset:added` de maneira consistente.【F:apiary/admin.py†L235-L244】【F:flora/admin.py†L17-L27】
+## Ordem de carregamento
 
-## Trecho de referência (`Media`)
-```python
-class Select2AdminMixin:
-    class Media:
-        css = {
-            "all": (
-                "https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css",
-                "apiary/css/image-preview.css",
-            )
-        }
-        js = (
-            "https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.full.min.js",
-            "apiary/js/hive_species_filter.js",
-            "apiary/js/conditional-fields.js",
-            "apiary/js/image-preview.js",
-        )
-```
-【F:apiary/admin.py†L28-L41】
+1. CSS de bibliotecas de terceiros.
+2. CSS local que complementa essas bibliotecas.
+3. JavaScript das bibliotecas.
+4. Scripts locais dependentes das bibliotecas.
+5. Scripts independentes, como campos condicionais e prévia de imagem.
 
-## Como adicionar um novo app/modelo
-1. **Importe** `BaseAdmin` (ou `OwnerRestrictedAdmin`) e `BaseInline` a partir de `apiary.admin`.  
-2. **Herde** sua classe de admin de `BaseAdmin` ou `OwnerRestrictedAdmin` para carregar Select2, campos condicionais e prévia de imagem automaticamente.  
-3. **Reuse** `BaseInline` para inlines relacionados, adicionando `formfield_for_dbfield` apenas quando precisar marcar inputs (por exemplo, prévia de imagem).  
-4. **Opcional:** sobrescreva `class Media` na nova classe somente se precisar incluir assets adicionais — o `Select2AdminMixin.Media` será mantido via herança.  
-5. **Teste** o formulário no Admin conferindo se os selects renderizam com Select2, os campos condicionais respondem às mudanças e as prévias de imagem aparecem para inputs marcados.
+Mantenha a ordem documentada no `class Media`. Prefira assets locais ou vendorizados; um CDN só deve ser usado com decisão explícita, integridade adequada e comportamento aceitável em caso de indisponibilidade.
+
+## Uso em novos admins e inlines
+
+1. Herde da classe-base apropriada.
+2. Declare mídia adicional somente se ela for exclusiva da tela.
+3. Para regras de isolamento, use a classe ou política centralizada; não replique filtros em cada admin.
+4. Teste o formulário principal e os inlines dinâmicos, verificando carregamento de assets, acessibilidade e validação no servidor.
+
+## Cuidados
+
+- A camada JavaScript melhora a experiência, mas não substitui formulários e validações Django.
+- Scripts que atendem inlines devem reagir a `formset:added` e evitar inicialização duplicada.
+- Não transforme um boot global em dependência obrigatória de uma funcionalidade específica de domínio.

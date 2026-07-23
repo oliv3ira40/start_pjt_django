@@ -1,0 +1,67 @@
+# PROMPT 2 — Criar selects AJAX com busca e sem Select2
+
+## Objetivo
+
+Criar dois componentes reutilizáveis e compatíveis com Django: (1) select único com busca AJAX; (2) select múltiplo com busca AJAX.
+
+Usá-los quando a relação puder crescer, a busca remota for necessária ou o endpoint precisar aplicar ownership, permissões e paginação. Não instalar Select2, `django-select2`, NPM ou usar CDN.
+
+## Auditoria antes de alterar
+
+Ler integralmente o `AGENTS.md` do projeto de destino. Auditar formulários, widgets, `ModelAdmin`, templates, CSS, JavaScript, Media, testes e endpoints de autocomplete/pesquisa existentes.
+
+Pesquisar `select2`, `.select2()`, `select2:*`, `django-select2`, `ModelSelect2Widget`, `AutocompleteSelect`, `autocomplete_fields`, CSS `select2-*`, vendor, CDN e scripts globais. `autocomplete_fields` do Django Admin usa Select2 indiretamente e deve entrar na auditoria.
+
+Para cada consumidor, mapear único/múltiplo, volume, busca, valor inicial, obrigatoriedade, opções desabilitadas, retorno após erro, endpoint, ordenação, paginação, ownership e permissões. Não apagar endpoint apenas por ter “autocomplete” no nome: verificar todos os consumidores primeiro.
+
+## Base e integração Django
+
+Criar uma base idempotente, por atributos `data-*`, sem IDs hardcoded. Compartilhar somente sincronização com o controle real, foco, fechamento, estados, eventos e acessibilidade. Não tratar opções locais e remotas como se fossem o mesmo componente.
+
+O select Django real é a fonte de submissão e validação:
+
+* único mantém `<select>`; múltiplo mantém `<select multiple>`;
+* preservar `name`, `id`, valores iniciais, `required`, `disabled`, ajuda, erros e submissão normal;
+* sincronizar a seleção e disparar `input` e `change` com `bubbles: true`;
+* em POST inválido, manter escolhas submetidas e reinicializar sem listeners ou markup duplicados;
+* revalidar no backend IDs, obrigatoriedade, regras, ownership e permissões.
+
+Seleções existentes devem ficar visíveis mesmo quando ausentes da primeira página de busca. Nunca confiar em IDs enviados pelo navegador.
+
+## Endpoint e busca
+
+Usar endpoint próprio, de mesma origem, com resposta mínima e estável:
+
+```json
+{"results": [{"id": "42", "name": "Nome", "secondary": "Contexto"}]}
+```
+
+Definir termo de busca, paginação e indicação de próxima página quando houver. No endpoint, aplicar sempre queryset autorizado, ownership, permissões, ordenação determinística e limite de resultados. Não carregar a relação inteira no HTML nem expor registros alheios para o select funcionar.
+
+No JavaScript, buscar após interação apropriada, aplicar debounce, tratar carregamento, vazio e falha de rede, cancelar ou ignorar respostas obsoletas e usar credenciais de mesma origem quando aplicável. Falha de rede não pode quebrar a submissão tradicional.
+
+## Único e múltiplo
+
+O único seleciona uma opção, atualiza o select real e fecha após a escolha. Permitir limpar apenas quando a regra do campo permitir.
+
+O múltiplo adiciona e remove várias opções sem perder escolhas anteriores, mantém a lista aberta durante adições e apresenta as escolhas claramente. Não definir limite global; se necessário, configurá-lo por instância e validá-lo definitivamente no backend.
+
+## Django Admin e remoção de Select2
+
+Substituir cada `autocomplete_fields` por formulário/widget próprio quando a relação exigir busca remota. Preservar endpoints úteis aos novos componentes e remover apenas os exclusivos de Select2, junto com rota, imports, Media, CSS, JS, testes e documentação órfãos.
+
+Não usar como substituição definitiva `raw_id_fields`, ID em texto livre ou lista integral de milhares de itens. Não editar `site-packages` ou arquivos do Django. Remover inicializadores globais, eventos, assets e dependências Select2 quando não houver consumidores restantes.
+
+## Acessibilidade, visual e mobile
+
+Garantir label associado, foco visível, área de toque adequada, `role="combobox"`/`role="listbox"`, `aria-expanded`, `aria-controls`, estado selecionado, `aria-multiselectable` no múltiplo, `aria-describedby` e `aria-invalid`.
+
+Tab alcança o controle; Enter/Espaço e setas operam; Escape e clique fora fecham; abrir uma instância fecha outra. No mobile, não abrir picker nativo, não ultrapassar a viewport nem causar rolagem horizontal; manter resultados com toque e rolagem interna adequados. Carregar CSS/JS só nas páginas consumidoras, pela infraestrutura de `Media` ou bloco de assets, nunca por CDN.
+
+## Testes e relatório
+
+Cobrir único e múltiplo: valores iniciais, vazio, obrigatório, disabled, submissão, POST inválido, clique, teclado, Escape, clique fora, múltiplas instâncias e idempotência. Cobrir busca, debounce, carregamento, vazio, falha, paginação quando houver, preservação de seleção e isolamento entre owners.
+
+Testar formulários/Admin migrados e confirmar ausência de `autocomplete_fields`, assets, imports, eventos e chamadas Select2 quando essa migração estiver no escopo. Executar testes afetados, `python3 manage.py check`, `python3 manage.py makemigrations --check --dry-run`, checagem sintática do JavaScript e `git diff --check`.
+
+No relatório, informar consumidores migrados, decisão AJAX de cada campo, endpoints preservados/adaptados/removidos, `autocomplete_fields` substituídos, assets/dependências removidos e testes executados.

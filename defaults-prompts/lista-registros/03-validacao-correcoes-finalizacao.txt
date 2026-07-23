@@ -1,0 +1,135 @@
+# PROMPT — Validar e finalizar a listagem administrativa reutilizável
+
+## Contexto
+
+Este é o fechamento obrigatório do prompt `02-funcionalidade-componente.txt`.
+Use-o depois de implementar a listagem funcional e antes de considerar a
+entrega concluída. Ele registra correções descobertas no uso real e prevalece
+sobre instruções conflitantes do prompt anterior.
+
+O objetivo não é redesenhar a lista nem criar uma segunda implementação. É
+validar o componente server-rendered integrado ao `ChangeList` real e corrigir
+as causas estruturais que normalmente passam despercebidas em testes apenas
+visuais.
+
+## Escopo e isolamento
+
+* Aplicar somente ao primeiro `ModelAdmin` que adotou o componente nesta
+  entrega. Não migrar outros changelists por conveniência.
+* Continuar usando queryset, permissões, ownership, ações, filtros, busca,
+  ordenação e paginação do Django Admin.
+* Não criar rota, API ou cópia de dados para a listagem.
+* Manter CSS e JavaScript sob um contêiner raiz exclusivo da listagem.
+* Não duplicar o shell administrativo e não renderizar o título/subtítulo
+  padrão do Django dentro de `#content`. O conteúdo deve ficar livre para o
+  design DevFront; só renderize título se ele existir no layout aprovado.
+
+## Controles que devem refletir o layout aprovado
+
+* Não expor botão ou painel de seleção de colunas se o layout aprovado não o
+  contém ou se o produto decidiu que as colunas são pré-definidas pelo admin.
+  A infraestrutura interna só pode permanecer se não for exposta ao usuário.
+* Usar a quantidade por página aprovada. Para Revisões, o padrão é `10`; as
+  opções permitidas são processadas no backend e valores manipulados são
+  ignorados.
+* Exibir contador e paginação reais tanto antes quanto depois da tabela ou
+  lista: a tabela fica entre os dois controles.
+* Limitar campos textuais longos configurados como resumo/descrição a duas
+  linhas visuais, com reticências, sem alterar o dado real ou a versão mobile
+  indevidamente.
+* Desktop e mobile não podem aparecer simultaneamente; no mobile não usar
+  tabela horizontal.
+
+## Modal de filtros: regra crítica de parâmetros GET
+
+O modal deve ser um único formulário GET composto pelos filtros reais do
+`ChangeList`. Uma opção visual “Todos” representa ausência de filtro — **não é
+um lookup vazio válido**.
+
+Ao implementar, obrigatoriamente:
+
+1. Descobrir os nomes de lookup nos `filter_specs` reais, sem hardcode de
+   campos ou opções.
+2. Antes do submit, não enviar `<select>` cujo valor seja vazio (por exemplo,
+   desabilitando-o no evento de submit ou construindo a query apenas com
+   valores preenchidos).
+3. No backend/`ChangeList` compartilhado, normalizar defensivamente parâmetros
+   `lookup=` vazios antes de o Django derivar filtros, links preservados e
+   queryset. Isso evita o redirecionamento de erro `?e=1` caso o cliente envie
+   a query manualmente ou o JavaScript não execute.
+4. Não remover busca, ordenação, quantidade por página ou outros controles
+   válidos durante essa normalização; remover somente valores vazios que
+   significam “Todos” e parâmetros internos da listagem.
+5. Ao aplicar ou remover um filtro, remover o parâmetro de página para voltar à
+   primeira página, preservando os demais controles válidos.
+
+Não aceitar como concluído um fluxo que apenas parece filtrar no navegador. A
+URL final deve conter exclusivamente os filtros escolhidos e o resultado deve
+vir do queryset do Admin.
+
+## Prévia, chips e acessibilidade do modal
+
+* A prévia deve consultar o backend com os mesmos parâmetros efetivos do
+  formulário e mostrar `ChangeList.result_count`; ela não pode contar somente
+  as linhas já renderizadas.
+* Na prévia via AJAX, também omitir valores vazios e cancelar/rejeitar respostas
+  antigas para não sobrescrever a última escolha.
+* A prévia pode ser assíncrona, mas `Aplicar filtros` continua uma submissão GET
+  normal e funcional sem JavaScript.
+* Cada chip deve ser criado a partir do filtro efetivamente ativo, com
+  `label`, valor de exibição e URL para remover somente aquele lookup. Não
+  passar o objeto de filtro externo quando os dados do chip estiverem aninhados:
+  isso produz chips quebrados como `: ×`.
+* O botão de filtros deve mostrar a quantidade real de filtros ativos.
+* Cada `<select>` precisa de label associado ou `aria-label`; o modal deve
+  fechar por botão, backdrop e Escape, restaurar o foco e bloquear rolagem no
+  mobile.
+* Todos os controles acionáveis do modal — selects, fechar, limpar e aplicar —
+  devem ter `cursor: pointer` no escopo do componente, além de foco visível.
+  Não confiar no estilo padrão do navegador ou do Admin.
+
+## Verificação manual obrigatória
+
+Com uma conta que possua registros reais e valores variados, validar no
+navegador, não apenas por inspeção de código:
+
+1. Abrir a lista sem parâmetros e anotar contador/paginação.
+2. Selecionar um filtro de escolha (por exemplo, situação da cria), confirmar
+   que a prévia muda antes de aplicar e que a URL final contém somente esse
+   lookup, sem `?e=1` e sem os outros `lookup=` vazios.
+3. Repetir com um segundo filtro de outro tipo (por exemplo, temperamento ou
+   tipo de registro), confirmar prévia, queryset, chip legível e remoção
+   individual do chip.
+4. Combinar filtros, limpar todos e confirmar que busca/ordenação/por página
+   permanecem quando essa for a regra da ação.
+5. Conferir busca, ordenação, paginação, quantidade por página, botão de novo,
+   links de edição e ação em massa com os dados reais.
+6. Conferir o modal em desktop e largura equivalente a iPhone SE: sem rolagem
+   horizontal, controles tocáveis, foco e cursor corretos.
+
+Se a prévia ou a aplicação não mudar, investigar a query enviada, os
+`filter_specs`, `cl.params` e `cl.get_filters_params()`; não mascarar o defeito
+com contagem simulada ou filtragem local em JavaScript.
+
+## Testes automatizados mínimos adicionais
+
+Adicionar testes que falhariam antes da correção para:
+
+* formulário com todos os filtros não selecionados como `""` e um lookup real
+  selecionado: resposta 200, nenhum `?e=1`, queryset filtrado e prévia correta;
+* chips com label e valor reais, sem o texto `: ×`;
+* busca, ordenação e tamanho de página preservados ao filtrar e paginar;
+* valor de quantidade por página inválido ignorado no backend;
+* ownership para usuário comum e escopo de superusuário;
+* assets e template aplicados somente ao changelist migrado.
+
+Executar também as suítes de Admin/ownership/shell afetadas, `manage.py check`,
+`makemigrations --check --dry-run`, verificação sintática do JavaScript e
+`git diff --check`.
+
+## Critério de encerramento
+
+Considere concluído somente quando os filtros reais alterarem a prévia e a
+lista renderizada no servidor, a URL estiver limpa, os chips forem legíveis,
+os controles do modal tiverem feedback de interação e os demais changelists
+permanecerem inalterados.

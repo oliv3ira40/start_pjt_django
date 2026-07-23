@@ -1,0 +1,16 @@
+{% load i18n static admin_shell %}
+<header class="co-admin-header" id="header">
+  <div class="co-admin-header__left">
+    <button class="co-admin-icon-button co-admin-mobile-menu-button" type="button" aria-label="{% translate 'Abrir menu' %}" aria-controls="nav-sidebar" aria-expanded="false" data-admin-shell-mobile-toggle>{% admin_shell_icon "menu" %}</button>
+    <a class="co-admin-brand" href="{% url 'admin:index' %}" aria-label="{% translate 'Colmeias Online — início administrativo' %}"><img class="co-admin-brand__logo" src="{% static 'identidade-visual/assets/logos/colmeias-online-logo-principal-transparente.png' %}" alt="Colmeias Online"><img class="co-admin-brand__symbol" src="{% static 'identidade-visual/assets/logos/colmeias-online-simbolo-abelha-transparente.png' %}" alt=""></a>
+    <button class="co-admin-icon-button co-admin-desktop-menu-button" type="button" aria-label="{% translate 'Minimizar menu lateral' %}" aria-controls="nav-sidebar" aria-expanded="true" data-admin-shell-desktop-toggle>{% admin_shell_icon "collapse" %}</button>
+  </div>
+  <div class="co-admin-header__right"><span class="co-admin-greeting">{% translate 'Bem-vindo,' %} {% firstof user.get_short_name user.get_username %}</span><a class="co-admin-header-link" href="{% url 'home' %}">{% admin_shell_icon "site" %}<span>{% translate 'Ir para o site' %}</span></a><form class="co-admin-logout" method="post" action="{% url 'admin:logout' %}">{% csrf_token %}<button class="co-admin-header-link co-admin-header-link--danger" type="submit">{% admin_shell_icon "logout" %}<span>{% translate 'Encerrar sessão' %}</span></button></form></div>
+  <div class="co-admin-mobile-account">
+    <button class="co-admin-icon-button co-admin-mobile-account__toggle" type="button" aria-label="{% translate 'Abrir ações da conta' %}" aria-controls="co-admin-mobile-account-menu" aria-expanded="false" data-admin-shell-mobile-account-toggle>{% admin_shell_icon "user" %}</button>
+    <div class="co-admin-mobile-account__menu" id="co-admin-mobile-account-menu" hidden data-admin-shell-mobile-account-menu>
+      <a class="co-admin-header-link" href="{% url 'home' %}">{% admin_shell_icon "site" %}<span>{% translate 'Ir para o site' %}</span></a>
+      <form class="co-admin-logout" method="post" action="{% url 'admin:logout' %}">{% csrf_token %}<button class="co-admin-header-link co-admin-header-link--danger" type="submit">{% admin_shell_icon "logout" %}<span>{% translate 'Encerrar sessão' %}</span></button></form>
+    </div>
+  </div>
+</header>

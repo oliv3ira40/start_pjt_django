@@ -1,0 +1,460 @@
+# PROMPT — Integrar o layout aprovado na listagem de Revisões
+
+## Objetivo
+
+Implementar na página real de listagem de Revisões o layout aprovado no arquivo:
+
+`n-colmeias-online-listagem-registros.html`
+
+Página afetada:
+
+`/admin/apiary/revision/`
+
+Esta é a primeira etapa da implementação. O objetivo agora é integrar com fidelidade o **layout visual e estrutural** desenvolvido pelo DevFront.
+
+A funcionalização completa e a futura transformação da listagem em um componente reutilizável para outros models serão tratadas em etapas posteriores.
+
+## Escopo
+
+Substituir somente a apresentação atual da listagem de Revisões.
+
+Não aplicar ainda o novo layout em:
+
+* Colmeias;
+* Meliponários;
+* Manejos externos;
+* outros changelists;
+* outras páginas do Admin.
+
+Não transformar ainda todos os changelists em um componente global.
+
+A implementação desta etapa deve ficar restrita ao `RevisionAdmin` e à rota já existente.
+
+## Fonte visual obrigatória
+
+Usar como referência principal e obrigatória:
+
+`n-colmeias-online-listagem-registros.html`
+
+Antes de alterar:
+
+* ler integralmente o `AGENTS.md`;
+* localizar e analisar por completo o arquivo mais recente do DevFront;
+* comparar o protótipo com a listagem atual de Revisões;
+* identificar quais trechos pertencem ao shell demonstrativo e quais pertencem ao componente de listagem;
+* auditar o contexto real fornecido pelo changelist do Django Admin.
+
+Não redesenhar a página.
+
+Não criar uma interpretação simplificada.
+
+Preservar com máxima fidelidade:
+
+* estrutura;
+* proporções;
+* espaçamentos;
+* tipografia;
+* bordas;
+* botões;
+* estados visuais;
+* tabela desktop;
+* cards ou linhas mobile;
+* busca;
+* área de filtros;
+* seletor de colunas;
+* ações em massa;
+* paginação;
+* contador;
+* responsividade.
+
+## Integração com o shell atual
+
+A página deve continuar utilizando o novo:
+
+* cabeçalho;
+* menu lateral;
+* conteúdo principal do Admin.
+
+Não copiar do arquivo do DevFront:
+
+* cabeçalho demonstrativo;
+* menu lateral demonstrativo;
+* dados fictícios do usuário;
+* cards usados apenas para simular o shell.
+
+Integrar somente a área da listagem ao shell real já implementado.
+
+Não alterar nesta tarefa:
+
+* cabeçalho;
+* menu lateral;
+* busca do menu;
+* tema;
+* logo;
+* comportamento mobile do drawer.
+
+## Dados reais
+
+Não transportar os registros fictícios do DevFront para o sistema.
+
+A listagem deve renderizar as Revisões reais já fornecidas pelo Django.
+
+Preservar os dados e relações reais disponíveis, incluindo o que atualmente for exibido sobre:
+
+* data;
+* colmeia;
+* tipo de registro;
+* rainha;
+* temperamento;
+* cria;
+* demais colunas configuradas no `RevisionAdmin`.
+
+Não criar dados falsos para preencher a tela.
+
+Não duplicar consultas desnecessariamente.
+
+## Estrutura específica do changelist
+
+Usar o mecanismo real do Django Admin para manter:
+
+* queryset;
+* paginação;
+* ordenação;
+* busca;
+* filtros;
+* ações em massa;
+* permissões;
+* links de edição;
+* contador;
+* mensagens;
+* preservação de query string.
+
+A apresentação deve ser personalizada, mas a fonte de dados e as proteções devem continuar sendo do backend atual.
+
+Não criar nova rota para a listagem.
+
+Não criar uma view paralela apenas para reproduzir o protótipo.
+
+## Funcionalidades nesta primeira etapa
+
+Nesta fase, preservar as funcionalidades que já existem atualmente no changelist.
+
+Não implementar ainda novas regras avançadas além do que o backend já oferece.
+
+Por exemplo:
+
+* a busca atual deve continuar submetendo os parâmetros existentes;
+* os filtros atuais devem continuar disponíveis;
+* a ordenação existente deve continuar funcionando;
+* a paginação existente deve continuar funcionando;
+* os checkboxes e ações atuais não podem ser perdidos;
+* o botão de adicionar deve utilizar a rota real já existente.
+
+Elementos novos do DevFront que ainda não possuam suporte real no backend podem ser integrados estruturalmente e preparados com hooks claros, mas não devem:
+
+* usar dados fictícios;
+* simular sucesso;
+* alterar registros apenas no JavaScript;
+* aparentar estar funcionais quando ainda não estiverem.
+
+A funcionalização completa desses elementos será solicitada no próximo prompt.
+
+## Busca
+
+Integrar visualmente a busca conforme o layout aprovado.
+
+Preservar:
+
+* termo atual;
+* submissão GET;
+* filtros já aplicados;
+* botão de limpar quando aplicável;
+* label acessível;
+* comportamento do Django Admin.
+
+Não criar busca exclusivamente em JavaScript.
+
+Não perder parâmetros ativos de paginação, filtro ou ordenação de forma indevida.
+
+## Filtros
+
+Integrar a área visual destinada aos filtros reais de Revisões.
+
+A página possui diversos filtros, como os relacionados a:
+
+* tipo de registro;
+* rainha;
+* temperamento;
+* cria;
+* demais filtros já registrados no Admin.
+
+Nesta primeira etapa:
+
+* preservar a fonte real dos filtros;
+* apresentar visualmente os filtros no espaço definido pelo DevFront;
+* preservar contagens e opções fornecidas pelo Django;
+* não hardcodar opções;
+* não alterar a lógica dos filtros.
+
+Não criar filtros novos por iniciativa própria.
+
+## Tabela desktop
+
+No desktop, implementar a tabela conforme o layout aprovado.
+
+Garantir:
+
+* cabeçalhos alinhados;
+* colunas reais;
+* ordenação visual compatível com a ordenação atual;
+* checkbox de seleção;
+* linhas clicáveis somente onde fizer sentido;
+* link seguro para edição;
+* densidade semelhante ao protótipo;
+* ausência da aparência crua do Django Admin.
+
+Não envolver toda a página em cards adicionais não existentes no layout.
+
+## Mobile-first
+
+A versão mobile é prioridade.
+
+Não reduzir a tabela desktop até ela caber no celular.
+
+Usar a apresentação mobile criada pelo DevFront, transformando cada Revisão em um item compacto e legível.
+
+Garantir no mobile:
+
+* nenhuma rolagem horizontal;
+* campos e textos dentro da viewport;
+* checkbox com boa área de toque;
+* informações principais visíveis;
+* informações secundárias organizadas;
+* botão de adicionar acessível;
+* busca em largura adequada;
+* filtros acessíveis;
+* paginação adequada;
+* respeito às safe areas do iPhone.
+
+Validar especialmente em largura equivalente ao iPhone SE.
+
+## Ações em massa
+
+Preservar a infraestrutura real de seleção e ações do Django Admin.
+
+Nesta primeira etapa:
+
+* manter os checkboxes reais;
+* manter a seleção de todos;
+* manter a ação permitida atualmente;
+* preservar CSRF;
+* preservar permissões;
+* preservar confirmação quando aplicável.
+
+Adaptar a apresentação ao layout do DevFront.
+
+Não implementar exclusão simulada apenas no navegador.
+
+Não criar novas ações em massa.
+
+## Paginação e quantidade de registros
+
+Integrar a paginação real ao layout aprovado.
+
+Preservar:
+
+* página atual;
+* anterior;
+* próxima;
+* total de registros;
+* filtros e busca durante a navegação;
+* parâmetros de ordenação.
+
+O contador deve usar o total real de Revisões visíveis ao usuário.
+
+Não hardcodar valores como `41 revisões`.
+
+Caso o seletor de quantidade por página ainda não exista funcionalmente, preparar sua estrutura visual sem criar comportamento falso. Sua funcionalização será tratada depois.
+
+## Seletor de colunas
+
+Integrar a estrutura visual prevista para escolha de colunas.
+
+Nesta primeira etapa:
+
+* não criar persistência;
+* não ocultar colunas apenas no navegador como comportamento definitivo;
+* não alterar o `list_display` dinamicamente sem uma regra consolidada;
+* não gravar preferências do usuário.
+
+Preparar classes, atributos e estrutura necessários para a etapa funcional posterior.
+
+Se o controle ainda não tiver comportamento real, isso deve ficar claro na implementação e no relatório.
+
+## Estados
+
+Adaptar os estados aprovados do DevFront às condições reais:
+
+* lista com registros;
+* lista vazia;
+* nenhum resultado após busca ou filtros;
+* mensagens de erro;
+* mensagens de sucesso.
+
+Não criar loading artificial para consultas que continuam sendo renderizadas no servidor.
+
+Não simular erro ou sucesso com dados fictícios.
+
+## Isolamento de CSS
+
+O CSS desta listagem deve ser rigorosamente isolado.
+
+Utilizar um contêiner raiz exclusivo para a página de listagem.
+
+Não criar regras globais para:
+
+* todas as tabelas;
+* todos os inputs;
+* todos os botões;
+* todos os checkboxes;
+* todos os changelists;
+* todo o `#content`;
+* todas as páginas do Admin.
+
+Garantir que:
+
+* estilos do novo menu não alterem a listagem;
+* estilos antigos do Django Admin não deformem o protótipo;
+* a listagem não altere outras páginas;
+* os componentes próprios de select e Air Datepicker não sejam afetados;
+* `hidden` continue funcionando;
+* não haja `max-width` artificial;
+* não haja padding duplicado;
+* não haja background global não solicitado.
+
+## JavaScript
+
+Transportar somente o JavaScript necessário para a estrutura visual desta etapa.
+
+Não copiar:
+
+* arrays de Revisões fictícias;
+* paginação simulada;
+* busca local fictícia;
+* exclusão falsa;
+* filtros simulados;
+* persistência demonstrativa;
+* mudanças de dados somente no navegador.
+
+Preparar inicialização idempotente e seletores isolados para a etapa posterior.
+
+Preservar o JavaScript nativo necessário às ações reais do Django Admin.
+
+## Responsividade
+
+Validar:
+
+* desktop largo;
+* notebook;
+* tablet;
+* iPhone SE;
+* iPhones recentes;
+* Android estreito.
+
+Garantir:
+
+* ausência de rolagem horizontal;
+* ausência de conteúdo escondido atrás do menu;
+* filtros e controles sem estouro;
+* paginação acessível;
+* tabela desktop não exibida incorretamente no mobile;
+* versão mobile não exibida simultaneamente com a tabela desktop.
+
+## Preservação obrigatória
+
+Não alterar:
+
+* model `Revision`;
+* migrations;
+* regras de Revisão;
+* tipos de registro;
+* ownership;
+* permissões;
+* filtros existentes;
+* busca existente;
+* rotas;
+* menu lateral;
+* cabeçalho;
+* componentes de data e hora;
+* componentes de select;
+* galeria;
+* Revisão em sequência;
+* formulário de inclusão ou edição;
+* organização dos demais changelists.
+
+Não aproveitar esta tarefa para componentizar todas as listas.
+
+## Testes
+
+Adicionar ou atualizar testes para comprovar que:
+
+* somente a listagem de Revisões usa o novo template;
+* outros changelists permanecem inalterados;
+* Revisões reais são renderizadas;
+* usuário comum visualiza somente os próprios registros permitidos;
+* superusuário mantém o comportamento esperado;
+* busca continua funcionando;
+* filtros continuam funcionando;
+* ordenação continua funcionando;
+* paginação continua funcionando;
+* botão de adicionar usa a rota nomeada real;
+* links de edição estão corretos;
+* checkboxes e ações continuam presentes;
+* lista vazia possui o estado correto;
+* nenhum dado fictício do DevFront aparece;
+* os assets são carregados somente nessa página;
+* o shell administrativo não foi duplicado.
+
+Executar também:
+
+* testes do `RevisionAdmin`;
+* testes de ownership de Revisões;
+* testes do shell administrativo;
+* testes de rotas;
+* `python3 manage.py check`;
+* `python3 manage.py makemigrations --check --dry-run`;
+* verificação sintática do JavaScript;
+* `git diff --check`.
+
+## Critérios de aceite
+
+* `/admin/apiary/revision/` utiliza o layout de `n-colmeias-online-listagem-registros.html`.
+* O layout foi integrado com fidelidade.
+* Somente a listagem de Revisões foi alterada.
+* Registros reais são exibidos.
+* Nenhum dado demonstrativo foi mantido.
+* Busca, filtros, ordenação, paginação e ações atuais não foram perdidos.
+* A tabela desktop segue o layout aprovado.
+* A versão mobile utiliza a apresentação própria do DevFront.
+* A página funciona corretamente em iPhone SE.
+* Não existe rolagem horizontal.
+* O CSS não vaza para outras páginas.
+* Estilos externos não deformam o layout.
+* O cabeçalho e o menu lateral atuais foram preservados.
+* Nenhuma nova funcionalidade foi simulada.
+* A estrutura ficou preparada para a próxima etapa funcional.
+* A componentização global ficou fora desta tarefa.
+
+## Relatório final
+
+Informar:
+
+* qual template específico da listagem de Revisões foi utilizado;
+* como o contexto real do changelist foi conectado ao layout;
+* quais partes demonstrativas do DevFront foram removidas;
+* quais funcionalidades atuais foram preservadas;
+* quais controles permanecem apenas preparados para a próxima etapa;
+* como desktop e mobile foram separados;
+* como o CSS foi isolado;
+* quais testes foram executados;
+* confirmação de que os outros changelists não foram alterados.

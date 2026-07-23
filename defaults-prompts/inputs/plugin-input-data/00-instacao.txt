@@ -1,0 +1,217 @@
+PROMPT 1 — Incorporar localmente o Air Datepicker ao projeto
+Objetivo
+
+Incorporar ao Colmeias Online uma versão local, fixa e versionada do Air Datepicker, preparando o projeto para utilizá-lo posteriormente em componentes reutilizáveis de:
+
+data;
+hora;
+data e hora.
+
+Esta etapa deve cuidar somente da incorporação segura dos arquivos da biblioteca ao projeto.
+
+Não aplicar ainda o Air Datepicker aos formulários.
+
+Biblioteca oficial
+
+Utilizar:
+
+site oficial: https://air-datepicker.com/
+repositório oficial: https://github.com/t1m0n/air-datepicker
+
+Fixar a versão 3.6.0.
+
+Não usar:
+
+CDN;
+arquivos carregados diretamente do GitHub;
+referência para latest;
+instalação dinâmica em produção;
+dependência externa em tempo de execução;
+atualização automática.
+Auditoria inicial
+
+Antes de modificar:
+
+ler integralmente o AGENTS.md;
+localizar como bibliotecas frontend locais já são armazenadas;
+identificar especialmente onde e como o Select2 foi incorporado;
+verificar a convenção atual para arquivos de terceiros;
+verificar como licenças de bibliotecas são documentadas;
+verificar a configuração de arquivos estáticos;
+confirmar como collectstatic e cache busting funcionam em produção.
+
+Seguir a organização já utilizada pelo projeto.
+
+Caso não exista uma convenção clara, utilizar uma estrutura equivalente a:
+
+core/static/vendor/air-datepicker/3.6.0/
+
+Não misturar os arquivos da biblioteca com JavaScript ou CSS próprios do sistema.
+
+Arquivos locais
+
+Baixar dos artefatos oficiais compilados da versão 3.6.0 somente o necessário para uso em navegador:
+
+JavaScript compilado;
+CSS compilado;
+localização em português brasileiro, caso seja fornecida separadamente;
+arquivo da licença MIT.
+
+Não copiar:
+
+node_modules;
+configuração de Webpack;
+testes da biblioteca;
+documentação completa;
+código-fonte de desenvolvimento;
+exemplos;
+dependências usadas apenas para construir o projeto original.
+
+Não executar build próprio do Air Datepicker.
+
+NPM
+
+Não adicionar o Air Datepicker como dependência do projeto via NPM.
+
+Não criar:
+
+package.json novo;
+package-lock.json;
+node_modules;
+etapa de build;
+comando NPM obrigatório para desenvolvimento ou produção.
+
+Os arquivos compilados devem permanecer versionados no repositório e servidos pelo sistema de arquivos estáticos do Django.
+
+Integridade dos arquivos
+
+Confirmar que os arquivos baixados pertencem à versão 3.6.0 oficial.
+
+Registrar em documentação local:
+
+nome da biblioteca;
+versão;
+repositório oficial;
+página oficial;
+data de incorporação;
+licença;
+arquivos incorporados;
+origem exata dos artefatos;
+procedimento futuro de atualização.
+
+Quando viável, registrar também o checksum dos arquivos incorporados.
+
+Não modificar os arquivos compilados da biblioteca diretamente.
+
+Qualquer personalização futura deve ser feita em CSS ou JavaScript próprio do Colmeias Online.
+
+Licença
+
+Preservar a licença MIT.
+
+Manter uma cópia da licença junto à biblioteca ou na estrutura oficial de licenças de terceiros do projeto.
+
+Não remover comentários de licença presentes nos arquivos compilados.
+
+Documentar que a biblioteca pode ser utilizada comercialmente sob os termos da licença MIT.
+
+Localização
+
+Confirmar a disponibilidade da localização em português brasileiro.
+
+Caso a biblioteca forneça locale oficial pt-BR, incorporá-lo localmente junto aos demais arquivos.
+
+Não criar ainda configurações específicas de formato, calendário ou horário. Isso será feito no segundo prompt.
+
+Carregamento
+
+Não carregar os assets globalmente nesta etapa.
+
+Os arquivos devem ficar disponíveis para uso futuro, mas não devem ser adicionados indiscriminadamente:
+
+ao template base;
+ao novo shell administrativo;
+a todas as páginas;
+ao login;
+às páginas públicas.
+
+O carregamento será feito somente nas páginas que utilizarem o componente compartilhado.
+
+Segurança e privacidade
+
+Confirmar que os arquivos incorporados:
+
+não fazem chamadas externas;
+não carregam recursos remotos;
+não enviam telemetria;
+não dependem de cookies;
+não dependem de CDN;
+funcionam sem conexão com o site oficial.
+
+Não adicionar rastreamento ou integração externa.
+
+Preservação obrigatória
+
+Não alterar nesta etapa:
+
+formulários;
+widgets Django;
+campos de data;
+campos de hora;
+models;
+migrations;
+templates de Colmeias;
+Select2;
+componente de select único;
+menu lateral;
+PWA;
+configurações de tema;
+comportamentos existentes.
+
+Não iniciar ainda a substituição dos inputs nativos.
+
+Validação
+
+Validar que:
+
+os arquivos estão dentro da estrutura de estáticos;
+o Django consegue encontrá-los com findstatic;
+collectstatic consegue incluí-los;
+não existem referências externas;
+a licença foi preservada;
+a versão está claramente registrada;
+nenhum asset foi incluído globalmente por engano;
+o projeto continua funcionando sem NPM.
+
+Executar:
+
+python3 manage.py findstatic para os arquivos incorporados;
+python3 manage.py collectstatic --noinput em ambiente seguro ou validação equivalente;
+python3 manage.py check;
+python3 manage.py makemigrations --check --dry-run;
+verificação sintática do JavaScript;
+git diff --check.
+Critérios de aceite
+Air Datepicker 3.6.0 está incorporado localmente.
+Os arquivos vêm dos artefatos oficiais compilados.
+Nenhuma CDN é utilizada.
+Nenhuma instalação NPM é necessária.
+Não existe dependência externa em produção.
+A licença MIT está preservada.
+A origem e a versão estão documentadas.
+A localização em português está disponível localmente.
+Os assets são encontrados pelo Django.
+A biblioteca ainda não foi aplicada a nenhum formulário.
+Nenhuma funcionalidade existente foi alterada.
+Relatório final
+
+Informar:
+
+onde os arquivos foram armazenados;
+quais arquivos foram incorporados;
+de qual artefato oficial eles vieram;
+qual versão foi fixada;
+onde a licença foi registrada;
+como foi documentada a atualização futura;
+confirmação de que não há CDN ou NPM;
+resultados das validações executadas.

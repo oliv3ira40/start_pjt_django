@@ -1,0 +1,167 @@
+# Instalar base local do Driver.js para tours guiados em Django
+
+## Objetivo
+
+Instalar e preparar a biblioteca **Driver.js 1.4.0** para uso futuro em tours guiados no projeto Django, sem criar, configurar ou iniciar qualquer tour nesta etapa.
+
+A instalação deve usar assets locais versionados, sem CDN como dependência de produção, e funcionar com `collectstatic` e `DEBUG=False`.
+
+## Escopo fechado
+
+Antes de agir, leia integralmente o `AGENTS.md` do projeto de destino e siga suas regras. Se ele não existir, pare e solicite orientação.
+
+Esta tarefa cobre somente a instalação-base da biblioteca e sua disponibilização técnica. Não implemente passos, textos, seletores, persistência de conclusão, onboarding, endpoints, models, migrations ou chamadas automáticas após login.
+
+## Biblioteca aprovada
+
+Use exclusivamente:
+
+- Biblioteca: `driver.js` (Driver.js)
+- Versão fixa: `1.4.0`
+- Origem oficial: pacote `driver.js` no npm, resolução esperada em `https://registry.npmjs.org/driver.js/-/driver.js-1.4.0.tgz`
+- Repositório oficial: `https://github.com/kamranahmedse/driver.js`
+- Licença: MIT
+
+Instale a dependência com versão exata, sem `^`, `~`, `latest` ou referência flutuante:
+
+```bash
+npm install --save-exact driver.js@1.4.0
+```
+
+Preserve o arquivo de lock do gerenciador de pacotes utilizado pelo projeto.
+
+## Estrutura obrigatória dos assets
+
+Copie os assets distribuídos pelo pacote para esta estrutura estável:
+
+```text
+core/
+└── static/
+    ├── js/
+    │   └── onboarding_driver_base.js
+    └── vendor/
+        └── driverjs/
+            ├── driver.js
+            ├── driver.css
+            └── LICENSE
+```
+
+A origem dos arquivos deve ser:
+
+```text
+node_modules/driver.js/dist/driver.js.iife.js  → core/static/vendor/driverjs/driver.js
+node_modules/driver.js/dist/driver.css          → core/static/vendor/driverjs/driver.css
+node_modules/driver.js/license                  → core/static/vendor/driverjs/LICENSE
+```
+
+Não use CDN. Não copie arquivos de origem desconhecida. Preserve integralmente a licença MIT e quaisquer avisos obrigatórios.
+
+## Sincronização e verificação
+
+Crie scripts npm equivalentes aos abaixo, adaptados apenas à convenção já existente no projeto:
+
+```json
+{
+  "scripts": {
+    "sync:driverjs-assets": "node scripts/sync_driverjs_assets.js",
+    "verify:driverjs": "node scripts/verify_driverjs_install.js"
+  }
+}
+```
+
+O script de sincronização deve copiar somente os três arquivos definidos acima, criando o diretório de destino quando necessário.
+
+O script de verificação deve confirmar:
+
+- `node_modules/driver.js/package.json` existe;
+- a versão instalada é exatamente `1.4.0`;
+- `driver.js`, `driver.css` e `LICENSE` existem em `core/static/vendor/driverjs/`.
+
+Se o projeto já possuir fluxo seguro de pós-instalação de assets, inclua a sincronização nele sem remover comportamentos existentes. Não introduza ferramentas de build adicionais sem necessidade.
+
+## Disponibilização compartilhada
+
+Crie `core/static/js/onboarding_driver_base.js` como adaptador mínimo e neutro para carregamento sob demanda.
+
+Ele deve:
+
+- receber os caminhos dos assets por atributos `data-*` definidos no template;
+- inserir o CSS local somente quando solicitado;
+- inserir o JavaScript local somente quando solicitado;
+- expor uma API mínima em `window.onboardingDriverBase`;
+- disponibilizar funções equivalentes a:
+  - `hasDriverLoaded()`;
+  - `ensureDriverReady()`;
+  - `createDriverInstance(options)`;
+- resolver a fábrica global compatível com o build IIFE do Driver.js;
+- não criar instância de tour por conta própria;
+- não chamar `drive()`, `highlight()` ou qualquer método que exiba overlay;
+- não registrar listeners globais desnecessários.
+
+Use `{% load static %}` e `{% static %}` nos templates. O template que futuramente precisar da base deve carregar apenas o adaptador, por exemplo:
+
+```django
+<script
+  defer
+  src="{% static 'js/onboarding_driver_base.js' %}"
+  data-onboarding-driver-base="1"
+  data-driverjs-js-path="{% static 'vendor/driverjs/driver.js' %}"
+  data-driverjs-css-path="{% static 'vendor/driverjs/driver.css' %}"
+></script>
+```
+
+Não carregue a biblioteca globalmente em todas as páginas sem necessidade. Não use scripts inline para inicializar tours.
+
+## Compatibilidade e segurança
+
+- Não altere configurações estáticas que já estejam corretas.
+- Confirme que `core/static/` é localizado pelos staticfiles do Django.
+- Use somente caminhos gerados por `{% static %}`, respeitando `STATIC_URL` e eventuais prefixos.
+- Confirme que os assets são coletados para `STATIC_ROOT` por `collectstatic`.
+- Não afrouxe CSP, CORS ou outras políticas globais. Caso uma política real bloqueie os assets locais, avalie o ajuste mínimo necessário antes de alterá-la.
+- Não use `eval`, código remoto, dados privados ou informações de usuários nos assets.
+- A instalação não pode alterar visualmente páginas, bloquear interação, criar botões, overlays ou iniciar tours.
+
+## Documentação
+
+Atualize objetivamente o `AGENTS.md` do projeto com:
+
+- Driver.js `1.4.0` como biblioteca de tours aprovada;
+- localização `core/static/vendor/driverjs/`;
+- origem oficial via npm;
+- licença MIT preservada em `LICENSE`;
+- regra de assets locais, sem CDN como dependência principal;
+- disponibilidade apenas preparatória, sem tours configurados;
+- proibição de instalar uma segunda biblioteca de tours sem autorização explícita.
+
+Registre também, na documentação técnica apropriada do projeto, os comandos de sincronização e verificação.
+
+## Validação
+
+Execute e registre o resultado de:
+
+```bash
+npm install
+npm run sync:driverjs-assets
+npm run verify:driverjs
+python manage.py collectstatic --noinput
+```
+
+Valide também, em ambiente compatível com `DEBUG=False`, que:
+
+- os três assets são coletados e servidos sem 404;
+- CSS e JavaScript usam URLs corretas;
+- o adaptador consegue disponibilizar a fábrica do Driver.js após `ensureDriverReady()`;
+- não há erros no console;
+- nenhum tour, overlay ou alteração visual ocorre sem chamada explícita futura;
+- nenhuma funcionalidade existente foi alterada.
+
+## Critérios de aceite
+
+- Driver.js `1.4.0` instalada localmente e travada no lockfile.
+- Assets locais em `core/static/vendor/driverjs/`.
+- Licença MIT preservada.
+- Adaptador compartilhado disponível, sem inicialização automática.
+- Compatível com `{% static %}`, `collectstatic` e `DEBUG=False`.
+- Sem CDN, sem tour criado e sem interferência global.
+- `AGENTS.md` e documentação técnica atualizados.

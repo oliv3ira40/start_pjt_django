@@ -1,0 +1,20 @@
+{
+  "seed_name": "theme_identity",
+  "description": "Aplica a identidade visual oficial do projeto ao tema ativo do Django Admin.",
+  "theme_color_map": {
+    "env_color": "#0B2E59",
+    "logo_color": "#133E78",
+    "title_color": "#123E78",
+    "css_header_text_color": "#133E78",
+    "css_header_link_color": "#1EA7C8",
+    "css_header_link_hover_color": "#23B36B",
+    "css_module_background_color": "#123E78",
+    "css_module_background_selected_color": "#e1eaf5",
+    "css_module_link_color": "#ffffff",
+    "css_module_text_color": "#ffffff",
+    "css_generic_link_color": "#123E78",
+    "css_generic_link_hover_color": "#1EA7C8",
+    "css_generic_link_active_color": "#17965A",
+    "related_modal_background_color": "#F3FAF6"
+  }
+}

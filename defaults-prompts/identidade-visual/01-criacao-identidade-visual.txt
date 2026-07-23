@@ -1,0 +1,650 @@
+````text
+# PROMPT — criar do zero a logo e gerar o pacote completo de identidade visual do Colmeias Online
+
+## 1. Objetivo
+
+Criar do zero a nova **logo principal** do **Colmeias Online** e, na mesma execução, gerar o **pacote completo de identidade visual** baseado nessa logo.
+
+A entrega deve acontecer de ponta a ponta em uma única execução:
+
+1. criar a logo principal;
+2. definir o símbolo derivado da logo;
+3. consolidar a direção visual da marca;
+4. gerar as variações da logo;
+5. gerar ícones e imagens sociais;
+6. montar um guia de identidade visual;
+7. organizar tudo em uma estrutura de pastas;
+8. entregar o pacote completo em um arquivo `.zip`.
+
+Não dividir em duas etapas separadas.
+
+A mesma execução que cria a logo deve criar também a identidade visual completa, para preservar coerência entre a marca e os ativos gerados.
+
+---
+
+## 2. Contexto da marca
+
+O **Colmeias Online** é um sistema voltado para:
+
+- organização de meliponários;
+- controle de colmeias;
+- revisões e manejos;
+- histórico;
+- divisões;
+- observações;
+- produção;
+- plantas e floradas relacionadas ao manejo.
+
+O público principal é adulto, ligado à meliponicultura e à rotina prática de manejo.
+
+A marca precisa transmitir:
+
+- profissionalismo;
+- confiança;
+- organização;
+- modernidade;
+- proximidade com a natureza;
+- cuidado;
+- praticidade.
+
+A identidade não deve parecer infantil, caricata, agressiva ou genérica.
+
+---
+
+## 3. Direção obrigatória da nova logo
+
+A nova logo deve ser criada do zero.
+
+Ela deve ser:
+
+- moderna;
+- amigável;
+- arredondada;
+- limpa;
+- bonita;
+- profissional;
+- madura;
+- simples o suficiente para funcionar bem digitalmente.
+
+A marca deve remeter ao universo das **abelhas sem ferrão**, mas de forma elegante e inteligente.
+
+A referência à abelha não deve ser literal demais.
+
+A solução visual deve fugir de dois extremos:
+
+### Não pode parecer:
+- uma vespa;
+- uma abelha agressiva;
+- um inseto ameaçador;
+- uma marca infantil;
+- uma mascote;
+- um desenho fofo/cartoon.
+
+### Também não pode:
+- virar um símbolo abstrato demais e sem relação com o universo de colmeias, abelhas ou meliponicultura.
+
+A referência à abelha sem ferrão deve ser feita de forma:
+
+- parcial;
+- sugerida;
+- estilizada;
+- integrada;
+- sutil;
+- sofisticada.
+
+A sensação esperada é de uma forma que **lembra** uma abelha sem ferrão, sem desenhar uma abelha inteira de forma óbvia.
+
+---
+
+## 4. Direção criativa da logo
+
+A logo pode explorar uma solução gráfica mais sofisticada.
+
+Buscar uma linguagem visual que lembre:
+
+- traço;
+- desenho parcial;
+- silhueta incompleta;
+- forma sugerida;
+- composição limpa;
+- solução gráfica inteligente.
+
+Pode trabalhar com:
+
+- parte do corpo;
+- sugestão de asas;
+- sugestão de voo;
+- sugestão de movimento;
+- formas que lembrem colmeia;
+- formas que lembrem natureza;
+- integração entre símbolo e lettering.
+
+A marca deve parecer pensada como um todo.
+
+Não quero uma solução em que exista simplesmente um desenho solto de abelha de um lado e o nome do outro.
+
+O símbolo precisa estar realmente integrado à construção da marca.
+
+---
+
+## 5. O que a logo deve evitar
+
+Não usar:
+
+- silhueta completa de uma abelha;
+- ferrão aparente;
+- abdômen pontudo;
+- aparência de vespa;
+- rosto;
+- olhos;
+- sorriso;
+- expressão facial;
+- mascote;
+- personagem;
+- desenho cartoon;
+- desenho infantil;
+- clipart;
+- símbolo desconectado do nome;
+- símbolo genérico sem relação com o tema;
+- excesso de hexágonos;
+- excesso de favos;
+- estética agro genérica;
+- solução “fofinha” demais;
+- solução agressiva demais.
+
+A logo não deve parecer:
+
+- infantil;
+- promocional;
+- caricata;
+- amadora;
+- ameaçadora;
+- sem conexão com meliponicultura.
+
+---
+
+## 6. Construção do nome
+
+O nome oficial deve ser apresentado exatamente como:
+
+**Colmeias Online**
+
+A logo deve trabalhar com:
+
+- lettering + símbolo integrado;
+ou
+- lettering com integração gráfica sutil.
+
+A palavra **Colmeias** deve ter maior protagonismo.
+
+A palavra **Online** deve acompanhar bem, sem parecer um apêndice mal resolvido.
+
+A leitura precisa ser muito boa.
+
+---
+
+## 7. Estilo do lettering
+
+O lettering deve ser:
+
+- moderno;
+- limpo;
+- bem legível;
+- amigável;
+- elegante;
+- com cantos suaves ou formas levemente arredondadas;
+- robusto na medida certa.
+
+Não usar:
+
+- tipografia infantil;
+- tipografia manuscrita;
+- tipografia decorativa demais;
+- tipografia frágil demais;
+- tipografia com cara de desenho animado.
+
+---
+
+## 8. Cores da marca
+
+A identidade deve usar uma paleta coerente com o Colmeias Online.
+
+Usar como base:
+
+- amarelo/dourado;
+- verde natural;
+- verde escuro;
+- tons terrosos suaves;
+- fundo claro;
+- cor escura de apoio.
+
+A paleta deve transmitir:
+
+- natureza;
+- organização;
+- cuidado;
+- profissionalismo;
+- meliponicultura;
+- simplicidade.
+
+Evitar:
+
+- amarelo neon;
+- preto + amarelo com aparência de alerta/perigo;
+- degradês exagerados;
+- cores infantis;
+- excesso de cores competindo entre si.
+
+---
+
+## 9. Entrega da logo dentro do pacote
+
+A execução deve gerar a logo principal e, a partir dela, também gerar:
+
+- versão horizontal principal;
+- versão para fundo claro;
+- versão para fundo escuro;
+- versão compacta;
+- símbolo isolado;
+- versão monocromática clara;
+- versão monocromática escura.
+
+Essas versões devem ser usadas como base do restante da identidade visual.
+
+---
+
+## 10. Identidade visual completa
+
+Depois de criar a logo, usar essa própria marca como base para montar a identidade visual completa.
+
+A identidade deve incluir:
+
+- conceito visual da marca;
+- logo principal;
+- variações da logo;
+- símbolo isolado;
+- área de proteção;
+- tamanho mínimo;
+- paleta oficial;
+- tipografia;
+- favicon;
+- ícones da aplicação;
+- ícones para PWA;
+- ícones maskable;
+- imagem social horizontal;
+- imagem social quadrada;
+- aplicações visuais;
+- exemplos de uso incorreto;
+- textos institucionais básicos.
+
+---
+
+## 11. Estrutura obrigatória de entrega
+
+A entrega final deve ser organizada em uma pasta com esta estrutura:
+
+```text
+colmeias-online-identidade-visual/
+│
+├── guia-identidade-visual.html
+├── LEIA-ME.txt
+│
+└── assets/
+    ├── icones/
+    ├── logos/
+    └── social/
+````
+
+Ao final, entregar tudo compactado em:
+
+```text
+colmeias-online-identidade-visual.zip
+```
+
+Não entregar como uma única imagem gigante.
+
+Não entregar como um único canvas com todos os elementos.
+
+A entrega precisa ser realmente utilizável como pacote de arquivos.
+
+---
+
+## 12. Guia de identidade visual
+
+Criar o arquivo:
+
+```text
+guia-identidade-visual.html
+```
+
+Esse arquivo deve funcionar como um guia visual da marca e apresentar:
+
+* conceito da identidade;
+* logo principal;
+* versões alternativas;
+* símbolo isolado;
+* aplicação em fundo claro;
+* aplicação em fundo escuro;
+* versões monocromáticas;
+* área de proteção;
+* tamanho mínimo;
+* paleta de cores;
+* tipografia;
+* favicon;
+* ícones da aplicação;
+* imagens para compartilhamento;
+* aplicações visuais;
+* exemplos de uso incorreto.
+
+O HTML deve usar os arquivos reais da pasta `assets`.
+
+Não incorporar tudo em base64.
+
+Usar caminhos relativos para que o arquivo continue funcionando após descompactar.
+
+---
+
+## 13. Arquivo LEIA-ME
+
+Criar o arquivo:
+
+```text
+LEIA-ME.txt
+```
+
+Esse arquivo deve explicar, em português:
+
+* o conteúdo de cada pasta;
+* quando usar cada versão da logo;
+* qual versão usar em fundo claro;
+* qual versão usar em fundo escuro;
+* qual arquivo usar como favicon;
+* quais ícones usar para PWA;
+* qual imagem usar para compartilhamento;
+* quais são as cores oficiais;
+* qual é a tipografia principal;
+* cuidados básicos de uso da marca.
+
+---
+
+## 14. Pasta de logos
+
+Dentro de:
+
+```text
+assets/logos/
+```
+
+Gerar arquivos separados para as versões principais da marca.
+
+Incluir obrigatoriamente:
+
+```text
+logo-horizontal-principal.svg
+logo-horizontal-principal.png
+
+logo-horizontal-fundo-claro.svg
+logo-horizontal-fundo-claro.png
+
+logo-horizontal-fundo-escuro.svg
+logo-horizontal-fundo-escuro.png
+
+logo-compacta.svg
+logo-compacta.png
+
+simbolo-isolado.svg
+simbolo-isolado.png
+
+logo-monocromatica-clara.svg
+logo-monocromatica-clara.png
+
+logo-monocromatica-escura.svg
+logo-monocromatica-escura.png
+```
+
+Regras:
+
+* PNG com fundo transparente quando aplicável;
+* SVG vetorial;
+* cada versão em arquivo próprio;
+* nomes claros e consistentes;
+* não juntar várias versões em uma única imagem.
+
+---
+
+## 15. Pasta de ícones
+
+Dentro de:
+
+```text
+assets/icones/
+```
+
+Gerar:
+
+```text
+favicon-16x16.png
+favicon-32x32.png
+favicon-48x48.png
+favicon.ico
+
+icone-72x72.png
+icone-96x96.png
+icone-128x128.png
+icone-144x144.png
+icone-152x152.png
+icone-192x192.png
+icone-384x384.png
+icone-512x512.png
+
+icone-maskable-192x192.png
+icone-maskable-512x512.png
+```
+
+Regras:
+
+* usar o símbolo isolado;
+* não usar texto pequeno;
+* preservar área segura;
+* cada tamanho em arquivo próprio;
+* os ícones maskable devem ter margem adequada.
+
+---
+
+## 16. Pasta social
+
+Dentro de:
+
+```text
+assets/social/
+```
+
+Gerar separadamente:
+
+```text
+compartilhamento-1200x630.png
+compartilhamento-1200x630.webp
+
+social-quadrada-1080x1080.png
+social-quadrada-1080x1080.webp
+```
+
+### Imagem de compartilhamento 1200 × 630
+
+Texto principal obrigatório:
+
+**Organize seu meliponário com mais controle**
+
+Texto complementar obrigatório:
+
+**Registre colmeias, revisões, plantas e históricos em um só lugar.**
+
+### Imagem social quadrada 1080 × 1080
+
+Texto principal obrigatório:
+
+**Colmeias Online**
+
+Texto complementar obrigatório:
+
+**Controle de colmeias, revisões e plantas**
+
+Não colocar as duas dentro de uma mesma prancha.
+
+Cada uma deve ser um arquivo individual no tamanho correto.
+
+---
+
+## 17. Paleta e tipografia
+
+Documentar no `guia-identidade-visual.html` e no `LEIA-ME.txt`:
+
+### Paleta
+
+* nome da cor;
+* código hexadecimal;
+* uso recomendado.
+
+Incluir pelo menos:
+
+* cor principal;
+* cor secundária;
+* cor de apoio;
+* fundo claro;
+* fundo escuro;
+* texto principal;
+* texto secundário;
+* sucesso;
+* alerta;
+* erro.
+
+### Tipografia
+
+* fonte principal;
+* fonte de interface;
+* pesos;
+* títulos;
+* subtítulos;
+* corpo;
+* botões;
+* labels.
+
+Não incluir arquivos de fonte no pacote.
+
+---
+
+## 18. Aplicações e demonstrações
+
+No guia HTML, demonstrar pequenas aplicações da identidade em:
+
+* fundo claro;
+* fundo escuro;
+* preview de compartilhamento;
+* uso em navegador;
+* uso em mobile;
+* aplicação simples no contexto administrativo.
+
+Essas demonstrações servem apenas para apresentar a identidade.
+
+Elas não substituem os arquivos reais nas pastas.
+
+---
+
+## 19. Exemplos de uso incorreto
+
+Mostrar no guia HTML que não se deve:
+
+* distorcer a logo;
+* trocar as cores livremente;
+* aplicar sem contraste;
+* usar sombra pesada;
+* colocar contorno;
+* transformar o símbolo em mascote;
+* adicionar rosto;
+* adicionar ferrão;
+* deixar a marca com aparência de vespa;
+* usar excesso de favos;
+* usar o símbolo separado sem critério.
+
+---
+
+## 20. Textos institucionais
+
+Documentar no guia:
+
+### Nome oficial
+
+**Colmeias Online**
+
+### Organização
+
+**NODERA**
+
+### Descrição curta
+
+**Organize colmeias, revisões, plantas e históricos em um só lugar.**
+
+### Descrição institucional curta
+
+**O Colmeias Online ajuda meliponicultores a registrar colmeias, acompanhar revisões, organizar plantas e manter o histórico do meliponário sempre acessível.**
+
+### Descrição institucional completa
+
+**O Colmeias Online é uma aplicação web para organização de meliponários, permitindo registrar colmeias, revisões, manejos, observações, anexos, plantas e históricos. A proposta é facilitar o acompanhamento da rotina de manejo e manter as informações importantes reunidas em um só lugar.**
+
+---
+
+## 21. Limites da tarefa
+
+Nesta etapa, não implementar:
+
+* código Django;
+* backend;
+* banco de dados;
+* migrations;
+* SEO técnico;
+* Open Graph real no projeto;
+* sitemap;
+* robots.txt;
+* deploy;
+* páginas reais integradas;
+* novas funcionalidades;
+* marketplace;
+* vendas;
+* anúncios;
+* reivindicações.
+
+O trabalho é exclusivamente de criação visual e organização dos arquivos da identidade.
+
+---
+
+## 22. Critérios de aceite
+
+* A logo é criada do zero e já serve de base para toda a identidade visual.
+* A marca remete ao universo das abelhas sem ferrão de forma elegante.
+* A logo não parece vespa.
+* A logo não parece infantil.
+* A logo não parece mascote.
+* A logo não tem rosto ou carinha.
+* A logo não tem ferrão aparente.
+* A logo tem aparência moderna, amigável, arredondada e profissional.
+* O nome Colmeias Online tem boa leitura.
+* O símbolo isolado funciona bem.
+* Existem versões para fundo claro e escuro.
+* Existem versões monocromáticas.
+* Existe favicon.
+* Existem ícones da aplicação e PWA.
+* Existem ícones maskable.
+* Existe imagem social 1200 × 630.
+* Existe imagem social 1080 × 1080.
+* Existe guia de identidade visual em HTML.
+* Existe arquivo `LEIA-ME.txt`.
+* Existe estrutura de pastas organizada.
+* Existe pasta `assets/logos`.
+* Existe pasta `assets/icones`.
+* Existe pasta `assets/social`.
+* Existe arquivo final `.zip`.
+* A entrega não é uma única imagem gigante.
+* O pacote pode ser baixado e usado posteriormente.
+
+```

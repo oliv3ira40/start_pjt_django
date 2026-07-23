@@ -1,0 +1,165 @@
+# Instalar Sentry com segurança em projeto Django
+
+## Objetivo
+
+Instalar e configurar o Sentry para captura de erros em uma aplicação Django, com ativação explícita por ambiente, proteção de dados sensíveis e sem depender da disponibilidade do serviço externo.
+
+A instalação-base deve preparar captura de exceções não tratadas, erros 500 e logs relevantes. Não criar página de teste, botões para provocar erros, alertas, integrações externas, painel interno ou recursos avançados nesta etapa.
+
+## Escopo e regras
+
+Antes de iniciar, leia integralmente o `AGENTS.md` do projeto e siga suas regras.
+
+Use o SDK oficial Python:
+
+```text
+sentry-sdk==2.15.0
+```
+
+- Origem: pacote oficial `sentry-sdk` no PyPI, mantido pelo projeto Sentry.
+- Repositório oficial: `https://github.com/getsentry/sentry-python`
+- Licença: MIT.
+- Use versão fixa no gerenciador de dependências já adotado pelo projeto. Não use `latest`, faixas flutuantes ou instalação sem lock/controle.
+- Antes de propor atualização futura, valide compatibilidade com as versões reais de Python e Django do projeto, usando documentação oficial.
+
+Não altere `.env` real, não registre DSN, tokens, segredos ou credenciais.
+
+## Configuração de ambiente
+
+Adote estas variáveis, respeitando a convenção já existente no projeto:
+
+```dotenv
+SENTRY_ENABLED=false
+SENTRY_DSN=
+SENTRY_ENVIRONMENT=development
+SENTRY_RELEASE=
+SENTRY_TRACES_SAMPLE_RATE=0
+SENTRY_PROFILES_SAMPLE_RATE=0
+```
+
+Regras:
+
+- `SENTRY_ENABLED` é a fonte de verdade e deve ter padrão `false`.
+- Sem DSN, não inicialize.
+- Com `SENTRY_ENABLED=false`, não inicialize, mesmo que exista DSN.
+- Valores ausentes, vazios ou numéricos inválidos não podem impedir a inicialização do Django.
+- `SENTRY_ENVIRONMENT` deve ser explícito, como `development`, `staging` ou `production`; não derive apenas de `DEBUG`.
+- `SENTRY_RELEASE` é opcional e deve vir do deploy, tag ou variável de ambiente. Não execute Git em requisições.
+- Tracing e profiling começam em `0`. Profiling não deve ser habilitado sem decisão explícita.
+
+Atualize o arquivo de exemplo de ambiente, se existir, apenas com placeholders.
+
+## Inicialização única
+
+Carregue o `.env` antes de ler variáveis do Sentry.
+
+Centralize toda a configuração em um único ponto dos settings, após as funções seguras de leitura de ambiente. Não inicialize o SDK em `wsgi.py`, `asgi.py`, `manage.py`, views, middlewares ou tarefas.
+
+Implemente helpers seguros para booleanos e números decimais. Taxas inválidas devem usar o valor padrão seguro `0.0`, com limites entre `0.0` e `1.0`.
+
+Inicialize somente quando a configuração estiver completa:
+
+```python
+if SENTRY_ENABLED and SENTRY_DSN:
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        environment=SENTRY_ENVIRONMENT,
+        release=SENTRY_RELEASE or None,
+        send_default_pii=False,
+        traces_sample_rate=SENTRY_TRACES_SAMPLE_RATE,
+        profiles_sample_rate=SENTRY_PROFILES_SAMPLE_RATE,
+    )
+```
+
+Use a integração automática oficial do SDK para Django; não adicione integrações manuais redundantes. Inclua Celery, Redis, ASGI ou outras integrações apenas se essas tecnologias existirem de fato no projeto.
+
+## Privacidade e segurança
+
+- Mantenha `send_default_pii=False`.
+- Não envie senhas, cookies, cabeçalhos `Authorization`, tokens, formulários completos, dados financeiros, dados pessoais desnecessários ou segredos de ambiente.
+- Não use `before_send` sem necessidade comprovada. Se for preciso filtrar evento conhecido, faça-o de forma objetiva, documentada e testável.
+- Não afrouxe CSP, CORS ou outras políticas de segurança para integrar o Sentry.
+- Em fluxos de captura manual, envie somente tags e contexto mínimo, sem payloads completos.
+- Não exponha DSN ou informações internas em templates, respostas HTTP ou JavaScript.
+
+## Logging e captura manual
+
+Revise o logging atual antes de adicionar handlers.
+
+- Permita que o SDK capture exceções não tratadas, erros 500 e falhas em views automaticamente.
+- Preserve logs normais do Django e da aplicação.
+- Evite duplicidade: não combine `logger.exception`, `capture_exception` e captura automática para o mesmo erro sem justificativa.
+- Não transforme erros esperados de validação em eventos críticos.
+- Capturas manuais devem ser excepcionais e ter contexto sanitizado.
+
+Se existir um mecanismo próprio de encaminhamento de erros JavaScript ao backend, preserve-o apenas se ele sanitizar mensagens, URLs, tokens e contexto antes de chamar o SDK. Não adicione SDK de navegador ou CDN nesta instalação-base sem uma tarefa específica.
+
+## Falha segura
+
+A indisponibilidade do Sentry, falha de rede, DSN inválido ou timeout não pode impedir o processo Django de iniciar ou atender requisições.
+
+A integração deve ser observável, mas nunca crítica para o funcionamento da aplicação.
+
+## Testes mínimos
+
+Crie ou ajuste testes automatizados com mocks para comprovar:
+
+- Sentry não inicializa com `SENTRY_ENABLED=false`;
+- Sentry não inicializa sem DSN;
+- Sentry inicializa quando flag e DSN estão configurados;
+- ambiente e release são repassados corretamente;
+- release vazia é aceita;
+- taxas inválidas usam valor seguro e não derrubam os settings;
+- `send_default_pii` permanece desabilitado;
+- nenhuma chamada externa real é feita durante os testes;
+- a aplicação continua iniciando com `DEBUG=True` e `DEBUG=False`;
+- logs e capturas manuais não duplicam eventos conhecidos.
+
+## Validação
+
+Valide:
+
+```bash
+python manage.py check
+python manage.py test
+```
+
+Confirme também, sem gerar evento real:
+
+- inicialização única;
+- comportamento com flag desabilitada;
+- comportamento com DSN ausente;
+- carregamento em ambiente de produção com `DEBUG=False`;
+- logs do processo sem falha de configuração;
+- ambiente e release distintos por deploy.
+
+A validação de envio real deve ocorrer posteriormente, de forma controlada e autorizada, no painel do Sentry.
+
+## Documentação
+
+Atualize objetivamente o `AGENTS.md` com:
+
+- `sentry-sdk==2.15.0`;
+- ponto único de configuração nos settings;
+- variáveis de ambiente;
+- regra de ativação explícita por `SENTRY_ENABLED`;
+- ambientes e release;
+- `send_default_pii=False`;
+- tracing/profiling inicialmente desabilitados ou configuráveis;
+- proibição de versionar DSN e tokens;
+- necessidade de evitar duplicidade entre SDK, logging e capturas manuais;
+- exigência de testes por ambiente.
+
+## Critérios de aceite
+
+- SDK oficial instalado com versão controlada.
+- Inicialização única e explícita.
+- Sentry desabilitado por padrão.
+- Sem DSN ou flag ativa, aplicação funciona sem inicializar o SDK.
+- Ambientes e release configuráveis.
+- Dados sensíveis protegidos.
+- Tracing e profiling com padrão conservador.
+- Sem dependência crítica de rede ou serviço externo.
+- Testes usam mocks e não enviam eventos reais.
+- Documentação e arquivo de ambiente de exemplo atualizados.
+- Nenhuma página ou ação de teste foi criada.

@@ -1,39 +1,20 @@
-### Padrões de desenvolvimento
+# Padrões de desenvolvimento
 
-- Git Flow
-    - [Indicadores](docs/flow-indicators.png)
+## Versionamento
 
-    - [Flow](docs/flow.png)
+- Use branches em inglês, com prefixos que expressem a intenção: `feature/`, `fix/`, `refactor/` e `chore/`.
+- Mantenha commits em inglês e no formato [Conventional Commits](https://www.conventionalcommits.org/pt-br/v1.0.0/).
+- Escreva título e descrição de merge request em português, com resumo claro do impacto.
+- Adote [Semantic Versioning 2.0.0](https://semver.org/lang/pt-BR/) quando o projeto publicar versões.
 
-    - Padrão de versionamento: [Semantic Versioning 2.0.0](https://semver.org/lang/pt-BR/)
+Exemplos:
 
+```bash
+git switch -c feature/nome-da-mudanca
+git commit -m "feat: add validated profile update"
+git commit -m "fix: prevent cross-tenant object access"
+```
 
-- Padrões de branchs, escritas em inglês
-    ```bash
-    # Exemplos de branchs:
-    $ git checkout -b feature/branch-test
-    $ git checkout -b refactor/branch-test
-    $ git checkout -b chore/branch-test
-    $ git checkout -b bugfix/branch-test
-    $ git checkout -b fix/branch-test
-    ```
+## Revisão
 
-- Padrões de commits, escritos em inglês e seguindo a doc: [Conventional Commits](https://www.conventionalcommits.org/pt-br/v1.0.0/)
-    ```bash
-    # Exemplos de commits:
-    $ git commit -q -m "feat: commit description"
-    $ git commit -q -m "refactor: commit description"
-    $ git commit -q -m "chore: commit description"
-    $ git commit -q -m "bugfix: commit description"
-    $ git commit -q -m "fix: commit description"
-    ```
-
-- Padrões de Merge requests, escritos em português (prefixo + breve descrição do mr)
-    ```bash
-    # Exemplos de merge requests:
-    Adicionada a função "custom_get_posts"
-    Refatorada a função "custom_get_posts"
-    Alterada a função "custom_get_posts"
-    Removida a função "custom_get_posts"
-    Corrigida a função "custom_get_posts"
-    ```
+Uma mudança deve ser pequena, coerente, testada e documentada quando alterar um contrato estável. Evite misturar refatorações não relacionadas, alterações de formatação extensas e mudanças de comportamento na mesma entrega sem necessidade.

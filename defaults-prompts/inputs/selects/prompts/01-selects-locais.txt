@@ -1,0 +1,80 @@
+# PROMPT 1 — Criar selects locais sem AJAX e sem Select2
+
+## Objetivo
+
+Criar dois componentes reutilizáveis, próprios e compatíveis com Django:
+
+1. select único local, sem busca e sem AJAX;
+2. select múltiplo local, sem busca e sem AJAX.
+
+Usar somente quando houver poucas opções já disponíveis e autorizadas pelo
+backend. Não instalar Select2, `django-select2`, NPM ou usar CDN.
+
+## Auditoria antes de alterar
+
+Ler integralmente o `AGENTS.md` do projeto de destino. Auditar formulários,
+widgets, templates, CSS, JavaScript, Media e testes que usam selects.
+
+Mapear cada campo: único/múltiplo, choices ou queryset, valor inicial,
+obrigatoriedade, disabled, opções desabilitadas, ajuda, erros e retorno após
+POST inválido. Confirmar que querysets já chegam filtrados por ownership e
+permissões. Para relações grandes, busca remota ou paginação, aplicar o prompt
+de selects AJAX, não este.
+
+## Base e integração Django
+
+Criar uma base idempotente, por atributos `data-*`, sem IDs hardcoded ou texto
+do label como referência. Compartilhar abertura, fechamento, foco,
+sincronização, estados disabled/erro e acessibilidade.
+
+O controle Django real é a fonte de submissão e validação:
+
+* único mantém `<select>`; múltiplo mantém `<select multiple>`;
+* preservar `name`, `id`, choices, valores iniciais, `required`, `disabled`,
+  opções desabilitadas, `help_text`, erros e submissão tradicional;
+* ao alterar a seleção, sincronizar o select real e disparar `input` e
+  `change` com `bubbles: true`;
+* após POST inválido, conservar valores enviados e reinicializar sem duplicar
+  markup ou listeners;
+* validar IDs, obrigatoriedade, negócio, ownership e permissões no backend.
+
+O select real pode ser ocultado visualmente somente após a inicialização, com
+fallback funcional sem JavaScript e alternativa acessível equivalente.
+
+## Componentes
+
+O único abre um dropdown sem busca e sem rede, mostra valor inicial, permite
+clique/teclado e fecha após selecionar. Limpeza só é permitida em campo não
+obrigatório com opção vazia compatível. Opções desabilitadas podem aparecer,
+mas não podem ser escolhidas; a ordem vinda do backend é preservada.
+
+O múltiplo abre dropdown sem busca e sem rede, permite selecionar e desmarcar
+várias opções e apresenta as escolhas claramente (chips ou contador, por
+exemplo), sem valores concorrentes no POST. A lista fica aberta durante
+seleções sucessivas e fornece ação clara para concluir/fechar. Limites, se
+existirem, são configurados por instância e validados no backend.
+
+## Acessibilidade, visual e mobile
+
+Garantir label associado, foco visível, área de toque adequada,
+`role="combobox"`/`role="listbox"`, `aria-expanded`, `aria-controls`, estado
+selecionado, `aria-multiselectable` no múltiplo, `aria-describedby` e
+`aria-invalid`.
+
+Tab alcança o controle; Enter/Espaço e setas operam; Escape e clique fora
+fecham; abrir uma instância fecha outra. No mobile, evitar picker nativo,
+rolagem horizontal e dropdown fora da viewport; garantir toque e rolagem
+interna adequados. Preservar identidade visual e carregar CSS/JS somente nas
+páginas consumidoras, por `Media` ou bloco de assets já adotado.
+
+## Testes e relatório
+
+Cobrir único e múltiplo: valor inicial, vazio, obrigatório, disabled, opções
+desabilitadas, submissão, POST inválido, clique, teclado, Escape, clique fora,
+múltiplas instâncias e idempotência. Confirmar ausência de busca, `fetch`,
+endpoint e paginação. Cobrir ownership e permissões dos querysets.
+
+Executar testes afetados, `python3 manage.py check`,
+`python3 manage.py makemigrations --check --dry-run`, checagem sintática do
+JavaScript e `git diff --check`. Relatar consumidores migrados, assets sob
+demanda e testes executados.

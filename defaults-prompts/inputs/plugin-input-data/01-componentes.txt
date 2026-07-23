@@ -1,0 +1,479 @@
+PROMPT 2 — Criar os componentes compartilhados de data e hora e aplicá-los inicialmente em Colmeias
+Objetivo
+
+Criar uma implementação compartilhada de campos baseados no Air Datepicker incorporado localmente no projeto.
+
+A solução deve oferecer três variações reutilizáveis:
+
+campo somente de data;
+campo somente de hora;
+campo de data e hora.
+
+Não criar três implementações independentes e duplicadas.
+
+Criar uma base compartilhada com configurações específicas para cada modo.
+
+Nesta primeira aplicação, utilizar somente o componente de data nos quatro campos correspondentes da adição e edição de Colmeias.
+
+Escopo inicial de aplicação
+
+Aplicar o componente somente aos seguintes campos de Colmeias:
+
+Data de aquisição;
+Data de captura;
+Data de transferência;
+Data da próxima divisão.
+
+Aplicar tanto na adição quanto na edição.
+
+Não aplicar ainda em:
+
+Revisões;
+Revisão em sequência;
+Manejos externos;
+filtros;
+relatórios;
+demais models;
+páginas públicas;
+outros projetos.
+
+Os componentes de hora e data com hora devem ser criados e testados, mas ainda não precisam ser conectados a formulários reais do Colmeias Online.
+
+Auditoria inicial
+
+Antes de modificar:
+
+ler integralmente o AGENTS.md;
+confirmar a instalação local realizada no primeiro prompt;
+localizar os formulários de adição e edição de Colmeias;
+identificar os quatro campos reais e seus nomes técnicos;
+verificar quais são obrigatórios ou opcionais;
+verificar formatos, valores iniciais e validações atuais;
+verificar como erros são renderizados;
+verificar como assets específicos são carregados somente nas páginas necessárias;
+auditar componentes reutilizáveis já existentes no projeto;
+verificar se o projeto já possui uma base para widgets Django customizados.
+
+Não alterar models ou migrations para resolver apresentação de formulário.
+
+Arquitetura compartilhada
+
+Criar uma única base reutilizável para Air Datepicker, expondo três modos funcionais:
+
+Data
+
+Para DateField.
+
+Configuração visual:
+
+formato apresentado: dd/MM/yyyy;
+calendário em português brasileiro;
+primeiro dia da semana na segunda-feira;
+seleção somente de data;
+sem horário;
+fechamento após seleção quando apropriado.
+Hora
+
+Para TimeField.
+
+Configuração visual:
+
+formato de 24 horas;
+formato apresentado: HH:mm;
+sem seleção de data;
+seletor visual de hora e minuto;
+minutos conforme a precisão atual do sistema.
+Data e hora
+
+Para DateTimeField.
+
+Configuração visual:
+
+data em dd/MM/yyyy;
+hora em HH:mm;
+formato de 24 horas;
+seleção de data e horário no mesmo componente.
+
+Não implementar modo de intervalo ou range.
+
+Widget visível
+
+Os três modos devem utilizar um campo visual de texto controlado pelo Air Datepicker.
+
+Não utilizar visualmente:
+
+input[type="date"];
+input[type="time"];
+input[type="datetime-local"].
+
+O objetivo é impedir que o iOS substitua o layout pelo controle nativo problemático.
+
+O campo deve continuar sendo um controle real do formulário e possuir:
+
+name;
+id;
+label;
+estado obrigatório;
+estado desabilitado;
+valor inicial;
+mensagens de erro;
+atributos de acessibilidade.
+
+Não criar dois valores concorrentes sendo submetidos com o mesmo nome.
+
+Integração com o Django
+
+A validação backend continua sendo a fonte de verdade.
+
+Os campos do formulário devem aceitar exatamente os formatos exibidos pelos componentes:
+
+data: dd/MM/yyyy;
+hora: HH:mm;
+data e hora: formato brasileiro definido pelo componente.
+
+O Django deve converter esses valores normalmente para:
+
+date;
+time;
+datetime.
+
+Não alterar a forma de armazenamento no banco.
+
+Não confiar no JavaScript para validar:
+
+data inexistente;
+valor obrigatório;
+limites;
+regras de negócio;
+permissões.
+
+Em caso de valor inválido, o formulário deve:
+
+apresentar erro;
+preservar o valor digitado;
+manter o componente funcional após a nova renderização;
+associar o erro ao campo correto.
+Valores iniciais e edição
+
+Ao abrir um registro existente:
+
+preencher o componente com o valor real do banco;
+formatar o valor para apresentação;
+não alterar a data por causa de timezone;
+não deslocar o dia;
+não perder campos opcionais vazios;
+não usar a data atual quando já existe valor salvo.
+
+Campos vazios devem continuar vazios.
+
+O botão de limpar deve aparecer somente quando compatível com a regra do campo.
+
+Não permitir limpar visualmente um campo obrigatório sem que a validação backend seja acionada no envio.
+
+JavaScript compartilhado
+
+Criar um adaptador próprio do projeto para inicializar o Air Datepicker.
+
+O adaptador deve:
+
+localizar componentes por atributos data-*;
+identificar o modo: data, hora ou data e hora;
+inicializar cada campo apenas uma vez;
+funcionar com mais de um campo na mesma página;
+não depender de IDs hardcoded;
+não depender do nome visível do campo;
+disparar eventos input e change compatíveis com o sistema;
+funcionar após retorno de erro do formulário;
+preservar valores iniciais;
+evitar variáveis globais desnecessárias.
+
+A inicialização precisa ser idempotente.
+
+Não colocar configurações duplicadas em cada template.
+
+Carregamento dos assets
+
+Carregar os assets do Air Datepicker somente quando ao menos um dos widgets estiver presente.
+
+Utilizar a infraestrutura adequada do Django, como mídia do widget/formulário ou bloco de assets específico já adotado pelo projeto.
+
+Não carregar globalmente no Admin inteiro.
+
+Carregar:
+
+CSS oficial local;
+JavaScript oficial local;
+localização local em português;
+CSS de integração do Colmeias Online;
+adaptador JavaScript próprio.
+
+Não usar CDN.
+
+Visual
+
+Preservar o layout visual original do Air Datepicker, que foi aprovado como referência.
+
+Não redesenhar completamente o calendário.
+
+Fazer somente as adaptações necessárias para integração:
+
+fonte do sistema;
+cores da identidade;
+contraste;
+bordas;
+z-index;
+largura;
+comportamento mobile;
+foco;
+compatibilidade com o tema.
+
+Não modificar diretamente o CSS do arquivo vendor.
+
+Criar um CSS próprio de integração.
+
+Dimensões dos inputs
+
+Os campos fechados devem seguir o mesmo padrão visual dos demais controles do sistema:
+
+mesma altura;
+mesma largura;
+mesmo padding;
+mesmo raio;
+mesma tipografia;
+mesma espessura de borda;
+foco discreto;
+sem rolagem horizontal.
+
+O texto da data não pode ultrapassar o campo.
+
+O componente deve funcionar corretamente mesmo com quatro campos de data no mesmo formulário.
+
+Comportamento mobile
+
+No mobile, utilizar o modo mobile oferecido pelo Air Datepicker.
+
+Garantir:
+
+modal ou overlay dentro da viewport real;
+uso adequado de 100dvh;
+margens laterais;
+respeito às safe areas do iPhone;
+calendário totalmente visível;
+ações acessíveis;
+scroll da página bloqueado quando necessário;
+restauração do scroll ao fechar;
+ausência de rolagem horizontal;
+botão de fechar ou cancelamento acessível;
+campos sem interferência do seletor nativo do iOS.
+
+Validar em Safari e Chrome no iPhone, lembrando que ambos utilizam WebKit.
+
+Acessibilidade
+
+Garantir:
+
+label associada;
+foco visível;
+navegação por teclado no desktop;
+Escape para fechar;
+retorno adequado do foco;
+aria-describedby para ajuda e erros;
+aria-invalid em erro;
+leitura adequada por tecnologia assistiva;
+campo digitável como fallback quando o JavaScript não inicializar.
+
+Não tornar o campo inacessível usando somente readonly sem uma justificativa funcional e acessível.
+
+Componente somente de hora
+
+O modo de hora deve estar pronto para uso futuro.
+
+Validar que:
+
+não exibe calendário;
+utiliza 24 horas;
+seleciona hora e minuto;
+aceita valor inicial;
+aceita valor vazio quando opcional;
+envia formato compreendido pelo Django;
+funciona no mobile.
+
+Não aplicar ainda em Revisões ou Manejos externos.
+
+Componente de data e hora
+
+O modo de data e hora deve estar pronto para uso futuro.
+
+Validar que:
+
+permite selecionar data;
+permite selecionar horário;
+apresenta ambos no campo;
+preserva os dois no POST;
+não altera timezone;
+aceita valor inicial;
+funciona no mobile.
+
+Não implementar range.
+
+Aplicação em Colmeias
+
+Substituir os widgets visuais atuais dos quatro campos definidos.
+
+Preservar integralmente:
+
+nomes técnicos;
+labels;
+ajuda;
+obrigatoriedade;
+valores iniciais;
+validações;
+salvamento;
+edição;
+ownership;
+permissões;
+organização atual do formulário.
+
+Não alterar a posição dos campos.
+
+Não adicionar novos campos.
+
+Não aplicar o componente a campos não autorizados.
+
+Select2 e selects
+
+Não alterar nesta etapa:
+
+Select2;
+select de Meliponário/Apiário;
+componente de select único;
+componente de select múltiplo;
+dropdowns;
+remoção futura do Select2.
+
+A substituição dos selects será tratada em etapa separada.
+
+Testes automatizados
+
+Criar testes para os três modos do componente.
+
+Data
+
+Validar:
+
+renderização como texto, e não type="date";
+atributos do modo de data;
+formato de apresentação;
+valor inicial;
+campo vazio;
+valor válido;
+valor inválido;
+erro obrigatório;
+conversão correta para date.
+Hora
+
+Validar:
+
+renderização como texto, e não type="time";
+atributos do modo de hora;
+formato de 24 horas;
+valor válido;
+valor inválido;
+conversão correta para time.
+Data e hora
+
+Validar:
+
+renderização como texto;
+atributos do modo combinado;
+valor inicial;
+valor válido;
+valor inválido;
+conversão correta para datetime;
+ausência de alteração indevida de timezone.
+Colmeias
+
+Validar que os quatro campos:
+
+utilizam o componente de data;
+continuam com os nomes originais;
+mantêm obrigatoriedade e validações;
+salvam corretamente;
+aparecem corretamente na edição;
+permanecem vazios quando não preenchidos;
+não utilizam mais o input nativo de data.
+
+Validar que páginas fora do escopo não foram alteradas.
+
+Teste manual
+
+Testar a adição e edição de Colmeias em:
+
+desktop;
+emulação mobile;
+Safari em iPhone real;
+Chrome em iPhone real.
+
+Nos quatro campos:
+
+abrir o calendário;
+selecionar data;
+limpar um campo opcional;
+editar uma data existente;
+enviar o formulário;
+abrir novamente o registro;
+confirmar persistência;
+provocar erro em outro campo;
+confirmar que as datas permanecem;
+confirmar que nenhum input ultrapassa a largura.
+
+Não declarar validação em iPhone real caso tenha sido utilizada somente emulação.
+
+Preservação obrigatória
+
+Não alterar:
+
+models;
+migrations;
+timezone;
+banco;
+regras de negócio;
+Select2;
+selects;
+Revisões;
+Manejos externos;
+menu lateral;
+tema;
+uploads;
+outros sistemas;
+PWA.
+Critérios de aceite
+Existe uma base compartilhada para Air Datepicker.
+Existem os modos data, hora e data com hora.
+Não há três implementações duplicadas.
+Range não foi implementado.
+Os widgets visíveis não usam tipos nativos de data ou hora.
+A validação Django continua sendo obrigatória.
+Os assets são carregados somente quando necessários.
+Nenhuma CDN ou dependência NPM foi adicionada.
+O visual original do Air Datepicker foi preservado.
+Os quatro campos de Colmeias utilizam o componente de data.
+Os quatro campos funcionam em adição e edição.
+Os inputs não extrapolam a largura no iPhone.
+Revisões, Manejos externos e demais páginas continuam inalterados.
+Select2 não foi modificado.
+O componente está preparado para expansão futura.
+Relatório final
+
+Informar:
+
+como a base compartilhada foi estruturada;
+quais são os três modos disponíveis;
+como o Django interpreta os valores;
+quais formatos foram adotados;
+como os assets são carregados sob demanda;
+como o modo mobile foi configurado;
+quais quatro campos de Colmeias foram migrados;
+confirmação de que outras páginas não foram alteradas;
+resultados dos testes automatizados;
+dispositivos e navegadores realmente utilizados na validação manual.

@@ -1,0 +1,628 @@
+# PROMPT — Funcionalizar e componentizar a listagem de registros, iniciando por Revisões
+
+## Objetivo
+
+Tornar completamente funcional a nova listagem de Revisões implementada a partir de:
+
+`n-colmeias-online-listagem-registros.html`
+
+Página inicial:
+
+`/admin/apiary/revision/`
+
+Além de funcionalizar todos os controles do layout, transformar essa estrutura em um **componente reutilizável e configurável de listagem administrativa**, preparado para ser aplicado futuramente em outros models, como:
+
+* Colmeias;
+* Meliponários;
+* Manejos externos;
+* outros registros administrativos.
+
+Nesta etapa, apenas a listagem de Revisões deve utilizar o novo componente.
+
+Não migrar ainda os demais changelists.
+
+## Decisão de arquitetura
+
+Criar uma única base reutilizável para listagens administrativas.
+
+Não duplicar o template completo para cada model.
+
+A solução deve reutilizar a infraestrutura real do Django Admin, especialmente:
+
+* `ChangeList`;
+* queryset do `ModelAdmin`;
+* `list_display`;
+* `list_filter`;
+* `search_fields`;
+* ordenação;
+* paginação;
+* ações;
+* permissões;
+* links de inclusão e edição.
+
+Não criar uma view paralela, API própria ou segundo mecanismo de listagem apenas para reproduzir o layout.
+
+O componente deve mudar a apresentação e organizar a configuração, mas continuar usando o backend seguro do Django Admin.
+
+## Auditoria inicial
+
+Antes de modificar:
+
+* ler integralmente o `AGENTS.md`;
+* revisar a integração visual já realizada;
+* analisar novamente `n-colmeias-online-listagem-registros.html`;
+* auditar o `RevisionAdmin`;
+* identificar as colunas, filtros, busca, ações, ordenação e paginação atuais;
+* localizar os templates, partials, CSS e JavaScript adicionados na etapa anterior;
+* verificar quais controles do protótipo ainda estão apenas visuais;
+* verificar como os parâmetros GET do changelist são preservados;
+* identificar a melhor estrutura para transformar a listagem em componente sem alterar outros changelists.
+
+Preservar o layout aprovado. Não redesenhar a página.
+
+## Estrutura reutilizável
+
+Criar uma base compartilhada composta por partes reutilizáveis, como:
+
+* cabeçalho da listagem;
+* busca;
+* modal ou painel de filtros;
+* chips de filtros ativos;
+* seletor de colunas;
+* controle de ordenação;
+* ações em massa;
+* tabela ou estrutura desktop;
+* apresentação mobile;
+* controle de quantidade por página;
+* paginação;
+* contador;
+* estados vazio e sem resultado.
+
+A implementação pode utilizar templates base, includes, tags, mixins ou classes compartilhadas, conforme a arquitetura atual.
+
+Evitar um único template monolítico cheio de condicionais específicas de Revisões.
+
+## Configuração por model
+
+Cada `ModelAdmin` que utilizar futuramente o componente deve conseguir configurar, sem copiar a implementação:
+
+* título da listagem;
+* nome singular e plural;
+* texto da busca;
+* botão de adicionar;
+* colunas disponíveis;
+* colunas visíveis por padrão;
+* colunas obrigatórias;
+* colunas ordenáveis;
+* informação principal no mobile;
+* informações secundárias no mobile;
+* filtros disponíveis;
+* ações em massa permitidas;
+* quantidade padrão por página;
+* opções de quantidade por página;
+* link de edição do registro;
+* estado vazio;
+* textos auxiliares necessários.
+
+Não hardcodar no componente nomes como “Revisão”, “Colmeia”, “Rainha” ou “Temperamento”.
+
+Esses dados pertencem à configuração do consumidor.
+
+## Fonte de verdade
+
+Sempre que possível, derivar a configuração da infraestrutura já existente:
+
+* colunas a partir de `list_display`;
+* busca a partir de `search_fields`;
+* filtros a partir de `list_filter`;
+* ações a partir de `actions`;
+* ordenação a partir das regras do Admin;
+* permissões a partir dos métodos do `ModelAdmin`.
+
+Criar configuração adicional apenas para informações visuais que o Django Admin não consegue fornecer sozinho, como:
+
+* prioridade de campos no mobile;
+* coluna obrigatória;
+* label visual personalizada;
+* estado vazio;
+* ícone;
+* possibilidade de ocultar uma coluna.
+
+Não criar duas configurações independentes e divergentes para a mesma regra.
+
+## Revisões como primeiro consumidor
+
+Configurar a listagem de Revisões usando os dados reais já existentes.
+
+Preservar:
+
+* colunas atuais relevantes;
+* filtros atuais;
+* busca atual;
+* ordenação;
+* ações;
+* ownership;
+* permissões;
+* rotas de inclusão e edição;
+* escopo de usuário comum e superusuário.
+
+Não adicionar filtros ou colunas novas apenas porque apareciam como demonstração no DevFront.
+
+## Busca
+
+Tornar a busca funcional usando a consulta real do Django Admin.
+
+Garantir:
+
+* submissão por GET;
+* busca nos campos já configurados;
+* preservação dos filtros;
+* preservação da ordenação;
+* preservação da quantidade por página;
+* botão de limpar;
+* valor pesquisado mantido após a resposta;
+* página reiniciada ao alterar a busca.
+
+Não realizar busca apenas no conjunto já renderizado pelo JavaScript.
+
+Não carregar todos os registros para filtrar no navegador.
+
+## Modal de filtros
+
+Funcionalizar completamente o modal de filtros.
+
+Ele deve renderizar os filtros reais configurados para Revisões.
+
+Garantir suporte aos tipos de filtro já utilizados, incluindo quando aplicável:
+
+* escolha única;
+* opções booleanas;
+* relacionamentos;
+* datas e períodos;
+* filtros customizados do Admin.
+
+O modal deve:
+
+* abrir e fechar corretamente;
+* mostrar os valores atuais;
+* permitir alterar mais de um filtro antes de aplicar;
+* aplicar os filtros por GET;
+* preservar busca, ordenação, quantidade e colunas;
+* reiniciar a paginação ao aplicar;
+* possuir ação `Aplicar filtros`;
+* possuir ação `Limpar filtros`;
+* informar quantos filtros estão ativos;
+* fechar por botão, backdrop e Escape;
+* restaurar o foco ao botão que o abriu;
+* bloquear o scroll da página no mobile.
+
+Não hardcodar as opções de filtros no JavaScript.
+
+## Filtros ativos
+
+Exibir chips reais para os filtros aplicados.
+
+Cada chip deve:
+
+* apresentar label e valor compreensíveis;
+* permitir remover somente aquele filtro;
+* preservar os demais filtros;
+* preservar busca, ordenação, quantidade por página e colunas;
+* reiniciar a paginação quando removido.
+
+A ação `Limpar filtros` deve remover somente os filtros.
+
+Não apagar a busca, ordenação ou preferência de colunas, salvo quando houver uma ação explícita para limpar tudo.
+
+## Quantidade por página
+
+Funcionalizar o seletor com as opções:
+
+* 10;
+* 20;
+* 50;
+* 100.
+
+A quantidade deve ser processada no backend.
+
+Não implementar apenas ocultando linhas no navegador.
+
+Regras:
+
+* aceitar somente os quatro valores permitidos;
+* rejeitar ou ignorar valores manipulados;
+* preservar busca, filtros, ordenação e colunas;
+* reiniciar na primeira página quando a quantidade mudar;
+* manter o valor selecionado nos links seguintes;
+* utilizar o valor padrão configurado pelo consumidor;
+* se Revisões ainda não possuírem um padrão específico válido, usar 20.
+
+Não criar migration para essa preferência.
+
+Nesta etapa, a escolha pode permanecer na query string. Não criar persistência em banco ou `localStorage` sem necessidade.
+
+## Paginação
+
+Funcionalizar a paginação real do Django.
+
+No desktop:
+
+* anterior;
+* números de páginas;
+* próxima;
+* indicação clara da página atual;
+* redução adequada quando houver muitas páginas.
+
+No mobile:
+
+* Anterior;
+* página atual;
+* Próxima;
+* controles com boa área de toque;
+* sem sequência extensa de números.
+
+Todos os links devem preservar:
+
+* busca;
+* filtros;
+* ordenação;
+* quantidade por página;
+* seleção de colunas.
+
+Não preservar seleções de registros entre páginas.
+
+## Contador
+
+Utilizar os dados reais do `ChangeList`.
+
+Exibir corretamente situações como:
+
+* `Exibindo 1–20 de 41 revisões`;
+* `Exibindo 21–40 de 41 revisões`;
+* `Exibindo 8 de 41 revisões`, quando houver filtros ou busca.
+
+Diferenciar, quando necessário:
+
+* quantidade encontrada;
+* quantidade total disponível ao usuário.
+
+Não hardcodar contagens.
+
+## Ordenação
+
+Preservar e funcionalizar a ordenação real.
+
+No desktop:
+
+* cabeçalhos ordenáveis clicáveis;
+* direção crescente ou decrescente;
+* `aria-sort`;
+* indicador visual estável;
+* preservação dos demais parâmetros.
+
+No mobile:
+
+* controle compacto `Ordenar por`;
+* escolha apenas entre colunas realmente ordenáveis;
+* controle de direção;
+* mesma ordenação aplicada no backend.
+
+Não ordenar somente os registros da página atual no JavaScript.
+
+## Seletor de colunas
+
+Funcionalizar o controle `Colunas`.
+
+A configuração do model deve informar:
+
+* colunas disponíveis;
+* colunas visíveis por padrão;
+* colunas obrigatórias;
+* labels;
+* ordem.
+
+O usuário deve poder ocultar ou mostrar colunas opcionais.
+
+Não permitir ocultar:
+
+* controle de seleção;
+* informação principal do registro;
+* coluna ou ação mínima necessária para acessar o registro.
+
+A escolha deve ser aplicada de forma consistente em:
+
+* tabela desktop;
+* apresentação mobile;
+* cabeçalhos;
+* ordenação;
+* exportação futura, caso um dia exista, sem implementar agora.
+
+Nesta etapa, armazenar a escolha na query string ou mantê-la durante a navegação atual. Não criar banco, migration, cookie ou preferência permanente sem solicitação.
+
+Validar no backend somente identificadores de colunas permitidos. Não confiar em nomes enviados livremente pela URL.
+
+## Tabela desktop
+
+A tabela deve utilizar os dados reais e o layout aprovado.
+
+Garantir:
+
+* linhas alinhadas;
+* colunas configuradas;
+* checkbox por registro;
+* acesso à edição;
+* links seguros;
+* valores formatados pelos métodos reais do Admin;
+* ordenação correta;
+* estado ativo de seleção;
+* ausência da aparência crua do Django Admin.
+
+Não executar métodos de coluna novamente em consultas duplicadas quando o `ChangeList` já disponibilizar seus resultados.
+
+## Apresentação mobile
+
+A versão mobile deve continuar mobile-first.
+
+Não usar tabela horizontal.
+
+Cada registro deve apresentar:
+
+* campo principal configurado;
+* data ou informação secundária configurada;
+* tipo ou status relevante;
+* checkbox;
+* acesso ao registro;
+* detalhes adicionais quando definidos.
+
+A estrutura mobile e desktop deve usar o mesmo conjunto real de registros.
+
+Não criar dois formulários independentes com checkboxes duplicados e IDs repetidos.
+
+Preferir uma única fonte semântica de seleção ou sincronização explícita e testada.
+
+Garantir:
+
+* ausência de rolagem horizontal;
+* boa área de toque;
+* funcionamento em iPhone SE;
+* nenhum conteúdo oculto atrás das barras do navegador;
+* respeito às safe areas;
+* campos longos com quebra ou truncamento adequado.
+
+## Ações em massa
+
+Conectar a barra de ações em massa às ações reais permitidas pelo `RevisionAdmin`.
+
+Para Revisões, preservar a ação destrutiva atualmente permitida.
+
+Garantir:
+
+* checkbox geral;
+* estado intermediário;
+* quantidade selecionada;
+* envio POST real;
+* CSRF;
+* confirmação real do Django;
+* permissões;
+* nenhum registro de outro usuário selecionável;
+* nenhuma exclusão simulada por JavaScript.
+
+O componente compartilhado deve aceitar futuramente outras ações fornecidas pelo `ModelAdmin`, sem hardcodar exclusão como única ação global.
+
+Não manter seleção após mudança de página, filtro, busca ou quantidade por página.
+
+## Botão de novo registro
+
+Preservar o botão já integrado.
+
+Ele deve:
+
+* usar a rota nomeada real do Admin;
+* respeitar permissão de inclusão;
+* não aparecer para quem não possui permissão;
+* manter o texto configurável por model.
+
+## Estados
+
+Funcionalizar os estados com dados reais:
+
+### Lista vazia
+
+Quando não existir nenhum registro acessível ao usuário.
+
+### Nenhum resultado
+
+Quando houver busca ou filtro sem correspondência.
+
+### Erro
+
+Somente para erros reais que possam ser tratados nessa interface.
+
+Não criar loading artificial para uma página renderizada pelo servidor.
+
+Não simular exclusão, paginação ou sucesso no frontend.
+
+## Isolamento de CSS e JavaScript
+
+Manter o CSS rigorosamente isolado ao componente.
+
+Não alterar:
+
+* outras tabelas;
+* outros changelists;
+* formulários;
+* cabeçalho;
+* menu lateral;
+* modais não relacionados.
+
+O JavaScript deve:
+
+* ser reutilizável;
+* ser idempotente;
+* funcionar com várias instâncias futuras;
+* não depender de IDs específicos de Revisão;
+* não conter registros fictícios;
+* não duplicar listeners;
+* não decidir permissões;
+* não reproduzir filtros ou ordenação no navegador.
+
+Não adicionar biblioteca externa.
+
+## Segurança e multi-tenant
+
+Preservar integralmente:
+
+* queryset filtrado por usuário;
+* ownership;
+* permissões do Django Admin;
+* ações permitidas;
+* endpoints;
+* `ScreenAccessMiddleware`;
+* comportamento de superusuário.
+
+Parâmetros de:
+
+* ordenação;
+* quantidade;
+* colunas;
+* filtros;
+* paginação;
+
+devem ser validados contra configurações permitidas.
+
+Não permitir que um parâmetro manipulado exponha:
+
+* coluna proibida;
+* relação sensível;
+* registro de outro usuário;
+* ação não autorizada.
+
+## Não migrar outras listagens
+
+Ao final desta tarefa:
+
+* Revisões deve utilizar o componente;
+* o componente deve estar pronto para novos consumidores;
+* Manejos externos, Colmeias e Meliponários devem continuar como estão.
+
+Não aplicar automaticamente o componente a todos os `ModelAdmin`.
+
+A próxima migração será solicitada separadamente.
+
+## Testes obrigatórios
+
+### Componente compartilhado
+
+Testar:
+
+* configuração de título;
+* colunas;
+* filtros;
+* busca;
+* ordenação;
+* quantidade por página;
+* paginação;
+* ações;
+* estado vazio;
+* mobile;
+* valores inválidos de configuração e query string.
+
+### Revisões
+
+Testar:
+
+* dados reais renderizados;
+* usuário comum visualiza somente seus registros;
+* superusuário mantém seu escopo;
+* busca;
+* cada filtro real;
+* combinação de filtros;
+* chips;
+* remoção individual de filtro;
+* limpeza de filtros;
+* ordenação crescente e decrescente;
+* 10, 20, 50 e 100 registros por página;
+* paginação preservando parâmetros;
+* seletor de colunas;
+* coluna obrigatória não ocultável;
+* inclusão;
+* acesso à edição;
+* ação em massa;
+* confirmação de exclusão;
+* lista vazia;
+* nenhum resultado.
+
+### Parâmetros inválidos
+
+Testar:
+
+* quantidade diferente das opções permitidas;
+* coluna inexistente;
+* coluna não autorizada;
+* ordenação inválida;
+* página inexistente;
+* filtro manipulado.
+
+A resposta deve permanecer segura e funcional.
+
+### Regressão
+
+Garantir que:
+
+* outros changelists continuam inalterados;
+* formulário de Revisão continua funcionando;
+* Revisão em sequência não foi alterada;
+* shell administrativo permanece estável;
+* menu e header não sofreram regressão.
+
+Executar também:
+
+* testes do `RevisionAdmin`;
+* testes de ownership;
+* testes do Admin;
+* testes do shell;
+* `python3 manage.py check`;
+* `python3 manage.py makemigrations --check --dry-run`;
+* verificação sintática do JavaScript;
+* `git diff --check`.
+
+## Critérios de aceite
+
+* A busca funciona no backend.
+* O modal utiliza os filtros reais.
+* Chips representam filtros reais e podem ser removidos.
+* Quantidades 10, 20, 50 e 100 funcionam.
+* A paginação real está disponível.
+* Parâmetros são preservados entre as páginas.
+* Ordenação funciona no desktop e no mobile.
+* O seletor de colunas funciona e respeita as colunas permitidas.
+* Ações em massa usam POST, CSRF e permissões reais.
+* O botão de inclusão respeita a permissão.
+* O contador utiliza valores reais.
+* Desktop e mobile utilizam os mesmos registros.
+* Não existe filtragem, paginação ou exclusão simulada.
+* A listagem foi transformada em componente reutilizável.
+* Revisões é o único consumidor nesta etapa.
+* Outros models podem adotar o componente por configuração, sem copiar o template.
+* Ownership e segurança permanecem protegidos.
+* Não existe vazamento de CSS ou JavaScript.
+
+## Relatório final
+
+Informar:
+
+* como o componente reutilizável foi estruturado;
+* quais configurações um novo `ModelAdmin` precisa fornecer;
+* como o `ChangeList` continua sendo utilizado;
+* como filtros e chips foram implementados;
+* como funciona a quantidade por página;
+* como os parâmetros são preservados;
+* como o seletor de colunas foi validado;
+
+> Continuação obrigatória: aplicar também o arquivo
+> `03-validacao-correcoes-finalizacao.txt`. Ele consolida as correções que só
+> se tornaram visíveis durante o uso real e prevalece em caso de conflito.
+* como desktop e mobile compartilham os registros;
+* como as ações em massa foram conectadas;
+* quais testes foram executados;
+* confirmação de que somente Revisões utiliza o componente nesta etapa.

@@ -1,0 +1,102 @@
+```text
+Implemente o fluxo completo de recuperação de senha (“Esqueci minha senha”) em Django, usando SMTP da Brevo.
+
+Antes de qualquer alteração, leia integralmente o `AGENTS.md` do projeto e inspecione a implementação atual de autenticação, URLs, templates, settings, variáveis de ambiente, documentação e testes. Reaproveite o que já existir; não duplique rotas, views ou configurações.
+
+Objetivo:
+- Disponibilizar um link “Esqueci minha senha” na tela de login.
+- Permitir que o usuário solicite a redefinição por e-mail.
+- Enviar um link seguro de redefinição por SMTP da Brevo.
+- Permitir definir uma nova senha com os mecanismos nativos e seguros do Django.
+- Exibir telas claras para solicitação, confirmação de envio, nova senha e conclusão.
+
+Requisitos técnicos:
+
+1. Use os componentes nativos do Django:
+   - `PasswordResetView`
+   - `PasswordResetConfirmView`
+   - token generator padrão do Django
+   - URLs com `uidb64` e token
+   - não crie tokens próprios, permanentes ou previsíveis.
+
+2. Configure o envio exclusivamente via SMTP, sem integrar API HTTP da Brevo e sem adicionar dependência externa desnecessária.
+   - Use `django.core.mail.backends.smtp.EmailBackend`.
+   - Configure por variáveis de ambiente, sem credenciais no código ou em arquivos versionados.
+   - Utilize como referência:
+     - `EMAIL_HOST=smtp-relay.brevo.com`
+     - `EMAIL_PORT=587`
+     - `EMAIL_USE_TLS=True`
+     - `EMAIL_USE_SSL=False`
+     - `EMAIL_HOST_USER=<login SMTP da Brevo>`
+     - `EMAIL_HOST_PASSWORD=<chave SMTP da Brevo>`
+     - `DEFAULT_FROM_EMAIL=<remetente validado>`
+     - `SERVER_EMAIL=<remetente técnico>`
+   - A senha deve ser uma chave SMTP da Brevo, nunca chave de API, senha pessoal ou segredo embutido.
+   - Preserve compatibilidade com nomes alternativos de variáveis SMTP já adotados pelo projeto, se existirem.
+   - Documente as variáveis em `.env.example` sem preencher segredos.
+
+3. Gere links absolutos corretos no e-mail:
+   - respeite domínio e HTTPS configurados por ambiente;
+   - não dependa de host local em produção;
+   - use a URL reversa nomeada do Django;
+   - não exponha token fora da URL de redefinição.
+
+4. Formulário de solicitação:
+   - aceite e normalize e-mail com `strip()` e comparação case-insensitive;
+   - siga a política já existente do projeto para e-mail inexistente; se não houver uma política definida, use mensagem explícita e amigável informando que não foi encontrada conta para o e-mail;
+   - trate e-mails ambíguos/duplicados de forma segura, sem escolher uma conta arbitrariamente;
+   - mantenha uma limitação de tentativas por IP e/ou e-mail usando cache, com janela e limite configuráveis por settings;
+   - valide CSRF e nunca aceite alteração de estado por GET.
+
+5. Templates e UX:
+   - mantenha a identidade visual e o padrão de templates de autenticação já existente;
+   - crie ou ajuste templates para:
+     - formulário de solicitação;
+     - confirmação de solicitação;
+     - e-mail em texto;
+     - e-mail em HTML;
+     - confirmação de nova senha;
+     - conclusão.
+   - O e-mail deve ter assunto objetivo, texto alternativo e HTML simples compatível com clientes de e-mail.
+   - Informe claramente que o e-mail pode levar alguns minutos e que o usuário deve verificar spam/lixo eletrônico.
+   - Não revele credenciais, dados internos, stack traces ou detalhes técnicos ao usuário.
+   - Marque páginas de autenticação e redefinição como `noindex` se este for o padrão do projeto.
+
+6. Segurança e operação:
+   - não registre token, senha, chave SMTP, conteúdo completo do e-mail ou dados sensíveis em logs;
+   - trate falhas de SMTP com logs técnicos seguros e feedback genérico ao usuário;
+   - mantenha a redefinição manual de senha de superusuário pelo fluxo nativo e seguro do Django Admin;
+   - não altere internals do `django.contrib.auth`;
+   - preserve comportamento de login, cadastro e normalização de username existentes.
+
+7. Testes automatizados:
+   - use backend de e-mail em memória nos testes;
+   - cubra, no mínimo:
+     - link visível na tela de login;
+     - formulário e telas do fluxo;
+     - envio para e-mail válido;
+     - link com rota, `uidb64` e token válidos;
+     - redefinição efetiva e login com a nova senha;
+     - normalização de e-mail;
+     - e-mail inexistente;
+     - e-mail ambíguo, se aplicável;
+     - rate limit;
+     - URLs absolutas com HTTPS;
+     - remetente padrão;
+     - manutenção do fluxo administrativo nativo de senha;
+     - proteção `noindex`, se adotada.
+   - Execute os testes relevantes e corrija falhas introduzidas pela implementação.
+
+8. Documentação:
+   - atualize a documentação operacional/contextual exigida pelo `AGENTS.md`;
+   - explique, sem segredos, quais variáveis precisam ser configuradas na Brevo, como obter uma chave SMTP e como validar o envio em ambiente seguro.
+
+Critérios de aceite:
+- O usuário consegue solicitar a recuperação a partir do login.
+- O e-mail é enviado via SMTP da Brevo com remetente configurável.
+- O link é seguro, temporário e funciona em ambiente HTTPS.
+- A nova senha permite login normalmente.
+- Não há credenciais versionadas nem vazamento de dados sensíveis.
+- Há cobertura automatizada para segurança, erros e fluxo principal.
+- Não haja alterações fora do escopo de autenticação, e-mail, documentação e testes necessários.
+```

@@ -1,0 +1,506 @@
+# PROMPT — Criar página de listagem reutilizável para registros do Colmeias Online
+
+## 1. Objetivo
+
+Criar uma nova referência visual front-end para as páginas de **listagem de registros** do Colmeias Online.
+
+A primeira demonstração deve utilizar como contexto a listagem de Revisões, atualmente acessada em:
+
+`/admin/apiary/revision/`
+
+O objetivo futuro é transformar esse layout em um componente reutilizável pelo Codex em diferentes listagens, como:
+
+* Revisões;
+* Colmeias;
+* Meliponários;
+* Manejos externos;
+* outros registros do sistema.
+
+Por isso, o layout não pode depender visualmente de uma característica exclusiva de Revisões.
+
+Esta etapa é exclusivamente de front-end estático.
+
+## 2. Entrega
+
+Entregar um único arquivo HTML autocontido contendo:
+
+* HTML;
+* CSS;
+* JavaScript demonstrativo.
+
+O arquivo deve apresentar uma página completa de listagem, com dados fictícios realistas de Revisões.
+
+Não criar ZIP.
+
+Não implementar:
+
+* Django;
+* backend;
+* models;
+* banco;
+* API;
+* permissões;
+* exclusão real;
+* paginação real;
+* persistência real.
+
+## 3. Preservação do shell administrativo
+
+A página será usada dentro do novo cabeçalho e menu lateral do Colmeias Online.
+
+Não redesenhar novamente:
+
+* cabeçalho;
+* logo;
+* menu lateral;
+* drawer mobile;
+* área do usuário.
+
+Utilizar o shell visual mais recente já aprovado apenas como contexto da página.
+
+O foco desta entrega deve ser exclusivamente a área principal da listagem.
+
+## 4. Direção visual
+
+Preservar a identidade atual do Colmeias Online:
+
+* verde escuro e oliva;
+* dourado discreto;
+* superfícies claras;
+* bordas suaves;
+* cantos arredondados;
+* sombras discretas;
+* aparência madura, organizada e amigável.
+
+Evitar:
+
+* aparência crua do Django Admin;
+* tabela visualmente pesada;
+* excesso de cards;
+* grandes espaços vazios;
+* muitos fundos coloridos;
+* ícones grandes;
+* aparência genérica de painel SaaS;
+* excesso de favos ou elementos decorativos.
+
+A lista deve priorizar legibilidade e produtividade.
+
+## 5. Estrutura superior
+
+No início da página, apresentar uma área compacta com:
+
+* título `Revisões`;
+* texto curto ou contador, como `41 revisões registradas`;
+* botão principal `Nova revisão`.
+
+O botão principal deve:
+
+* ficar facilmente acessível;
+* possuir boa área de toque;
+* não ocupar largura excessiva no desktop;
+* ocupar largura adequada no mobile;
+* permanecer visualmente destacado sem exagero.
+
+Não deixar o título e o botão soltos em regiões muito distantes.
+
+## 6. Busca, filtros e personalização
+
+Criar uma barra de ferramentas organizada contendo:
+
+* campo de busca;
+* botão `Filtros`;
+* botão `Colunas`;
+* controle de quantidade por página.
+
+### Busca
+
+A busca deve possuir:
+
+* placeholder como `Buscar revisões...`;
+* ícone de busca;
+* botão para limpar;
+* estado de foco discreto;
+* resultado simulado durante a digitação.
+
+Não usar outline amarelo agressivo.
+
+### Filtros
+
+A página precisa comportar diferentes quantidades de filtros conforme o model listado.
+
+Na demonstração de Revisões, incluir filtros realistas, como:
+
+* Tipo de registro;
+* Colmeia;
+* Rainha visualizada;
+* Temperamento;
+* Situação da cria;
+* Período.
+
+O botão `Filtros` deve abrir uma área adequada para seleção dos critérios.
+
+No desktop, pode utilizar painel expansível, popover amplo ou drawer lateral.
+
+No mobile, utilizar drawer, painel inferior ou modal compacto, sem ocupar a tela de forma descontrolada.
+
+A área de filtros deve conter:
+
+* opções organizadas;
+* botão `Aplicar filtros`;
+* ação `Limpar filtros`;
+* quantidade de filtros ativos.
+
+Quando filtros estiverem ativos, exibir chips compactos acima da lista, permitindo remover filtros individualmente.
+
+### Colunas
+
+Criar uma ação `Colunas` para o usuário selecionar quais informações deseja visualizar.
+
+Na demonstração, permitir ativar ou ocultar colunas como:
+
+* Data;
+* Colmeia;
+* Tipo;
+* Rainha;
+* Temperamento;
+* Cria;
+* Responsável.
+
+O usuário não deve conseguir ocultar todas as informações essenciais.
+
+A interação é apenas demonstrativa em JavaScript.
+
+### Quantidade por página
+
+Apresentar opções como:
+
+* 10;
+* 20;
+* 50.
+
+O controle deve indicar claramente que representa a quantidade de registros exibidos por página.
+
+## 7. Lista no desktop
+
+No desktop, utilizar uma tabela moderna e legível.
+
+A tabela deve incluir:
+
+* checkbox para selecionar todos os registros visíveis;
+* checkbox em cada linha;
+* colunas configuráveis;
+* cabeçalhos clicáveis para ordenação;
+* indicação visual da coluna ordenada;
+* direção crescente ou decrescente;
+* ação por registro, quando necessária.
+
+Utilizar dados fictícios realistas, como:
+
+* data da revisão;
+* código da colmeia;
+* espécie;
+* tipo de registro;
+* estado da rainha;
+* temperamento;
+* situação da cria.
+
+Não exibir todas as informações possíveis simultaneamente. Manter densidade equilibrada.
+
+### Ordenação
+
+Ao clicar em um cabeçalho:
+
+* ordenar os dados demonstrativos;
+* alternar entre crescente e decrescente;
+* mostrar seta indicativa;
+* manter o cabeçalho visualmente estável.
+
+Colunas não ordenáveis não devem parecer clicáveis.
+
+### Linhas
+
+As linhas devem:
+
+* possuir altura confortável;
+* ter hover discreto;
+* deixar clara a possibilidade de abrir o registro;
+* manter checkbox separado da ação principal;
+* não parecer uma planilha crua.
+
+Não utilizar links em todas as células indiscriminadamente.
+
+## 8. Seleção e ações em massa
+
+Ao selecionar um ou mais registros, exibir uma barra de ações em massa.
+
+Essa barra deve informar algo como:
+
+`3 registros selecionados`
+
+Disponibilizar somente a ação demonstrativa:
+
+`Excluir selecionados`
+
+A ação de exclusão deve:
+
+* possuir tratamento visual de ação destrutiva;
+* não competir com o botão de nova Revisão;
+* abrir confirmação antes de executar a simulação;
+* não excluir imediatamente ao primeiro clique.
+
+Quando todos os registros visíveis forem selecionados:
+
+* o checkbox principal deve refletir esse estado;
+* deve ser possível desmarcar todos.
+
+Também demonstrar o estado intermediário do checkbox quando apenas parte da lista estiver selecionada.
+
+## 9. Mobile-first
+
+A versão mobile é prioridade desta entrega.
+
+Não adaptar simplesmente a tabela desktop reduzindo sua largura.
+
+No celular, transformar cada registro em uma linha ou card compacto otimizado para toque.
+
+Cada registro mobile deve mostrar inicialmente as informações mais importantes, por exemplo:
+
+* Colmeia;
+* Data;
+* Tipo;
+* uma ou duas informações secundárias;
+* checkbox;
+* indicação de acesso aos detalhes.
+
+Informações adicionais podem aparecer em uma área expansível dentro do registro.
+
+Evitar:
+
+* tabela horizontal;
+* rolagem horizontal da página;
+* textos excessivamente pequenos;
+* cards muito altos;
+* uma grande quantidade de botões por item;
+* repetição exagerada de labels.
+
+### Ordenação no mobile
+
+Como não haverá cabeçalhos de tabela clicáveis, criar um controle compacto de ordenação, por exemplo:
+
+* `Ordenar por: Data`;
+* direção crescente ou decrescente.
+
+As mesmas opções ordenáveis do desktop devem estar disponíveis.
+
+### Seleção no mobile
+
+Os checkboxes precisam possuir boa área de toque.
+
+Quando houver registros selecionados, a barra de ação deve:
+
+* permanecer acessível;
+* não cobrir conteúdo importante;
+* não ficar escondida abaixo das barras do navegador;
+* respeitar as áreas seguras do iPhone.
+
+### Busca e controles no mobile
+
+Organizar os controles sem amontoamento.
+
+Sugestão:
+
+* busca em uma linha completa;
+* Filtros e Colunas lado a lado;
+* quantidade e ordenação em uma linha secundária compacta.
+
+Não gerar rolagem horizontal.
+
+## 10. Paginação e contador
+
+No final da listagem, incluir:
+
+* informação como `Exibindo 1–10 de 41 revisões`;
+* navegação entre páginas;
+* página atual;
+* próxima;
+* anterior.
+
+No desktop, usar paginação compacta com números.
+
+No mobile:
+
+* priorizar Anterior e Próxima;
+* mostrar a página atual;
+* evitar uma sequência longa de números;
+* manter alvos de toque adequados.
+
+O contador total deve continuar visível mesmo quando a lista estiver filtrada.
+
+Quando houver filtros, demonstrar algo como:
+
+`Exibindo 8 de 41 revisões`
+
+## 11. Estados da página
+
+Implementar visualmente os seguintes estados:
+
+### Carregamento
+
+* skeletons ou linhas simuladas;
+* sem spinner gigante;
+* preservar a estrutura da página.
+
+### Lista vazia
+
+Exemplo:
+
+`Nenhuma revisão registrada ainda.`
+
+Com ação:
+
+`Nova revisão`
+
+### Nenhum resultado
+
+Exemplo:
+
+`Nenhuma revisão corresponde à busca ou aos filtros aplicados.`
+
+Com ações:
+
+* limpar busca;
+* limpar filtros.
+
+### Erro
+
+Mensagem clara, com botão:
+
+`Tentar novamente`
+
+### Sucesso após ação
+
+Mensagem discreta e temporária, por exemplo após uma exclusão simulada.
+
+## 12. Interações demonstrativas
+
+O JavaScript deve permitir testar:
+
+* busca local;
+* limpar busca;
+* abrir e fechar filtros;
+* aplicar e limpar filtros;
+* remover chips;
+* escolher colunas visíveis;
+* ordenar colunas;
+* alterar direção;
+* selecionar uma linha;
+* selecionar todas;
+* estado intermediário do checkbox;
+* ação de exclusão com confirmação;
+* alteração da quantidade por página;
+* paginação simulada;
+* expansão de informações no mobile;
+* estados vazio, erro e carregamento.
+
+Não implementar dados externos ou chamadas de rede.
+
+## 13. Componentização visual
+
+Mesmo sendo um único arquivo HTML, organizar a estrutura para demonstrar que a página poderá ser transformada em um componente reutilizável.
+
+Separar visualmente e por classes:
+
+* cabeçalho da listagem;
+* barra de busca;
+* filtros;
+* seletor de colunas;
+* ações em massa;
+* tabela desktop;
+* lista mobile;
+* paginação;
+* estados de feedback.
+
+Não usar classes com nomes exclusivos de Revisões em toda a estrutura.
+
+Utilizar nomes genéricos para o componente e nomes específicos apenas nos dados demonstrativos.
+
+## 14. Acessibilidade
+
+Garantir:
+
+* labels acessíveis;
+* foco visível;
+* checkboxes reais;
+* botões reais;
+* cabeçalhos de tabela semânticos;
+* `aria-sort` nas colunas;
+* estado intermediário do checkbox principal;
+* filtros acessíveis por teclado;
+* modais ou drawers com Escape;
+* retorno de foco;
+* mensagens em região `aria-live`;
+* contraste adequado;
+* alvos de toque confortáveis.
+
+Não depender apenas de cor para indicar:
+
+* ordenação;
+* seleção;
+* filtro ativo;
+* erro;
+* estado atual da página.
+
+## 15. Isolamento
+
+Isolar todo o CSS dentro de um contêiner raiz específico.
+
+Não criar regras globais para:
+
+* todas as tabelas;
+* todos os inputs;
+* todos os botões;
+* todos os checkboxes;
+* todos os modais;
+* todo o `body`.
+
+Não interferir no cabeçalho, menu lateral ou demais páginas do sistema.
+
+## 16. Limites
+
+Não:
+
+* implementar backend;
+* criar API;
+* criar rotas;
+* criar permissões;
+* criar modelos;
+* criar migrations;
+* alterar o menu;
+* criar dashboards;
+* criar exportação;
+* criar edição inline;
+* criar ações em massa além da exclusão;
+* criar agrupamentos avançados;
+* adicionar gráficos;
+* adicionar funcionalidades não solicitadas.
+
+## 17. Critérios de aceite
+
+* A página possui busca.
+* Existe uma área completa de filtros.
+* Filtros ativos aparecem como chips removíveis.
+* O usuário pode escolher quais colunas visualizar.
+* As colunas podem ser ordenadas.
+* Existem checkboxes por registro e seleção de todos.
+* Existe ação em massa para excluir selecionados.
+* Existe botão para adicionar novo registro.
+* Existe controle de quantidade por página.
+* Existe contador total.
+* Existe paginação.
+* A tabela desktop é organizada e legível.
+* A versão mobile não utiliza tabela horizontal.
+* A lista mobile funciona bem em iPhone SE.
+* Não existe rolagem horizontal.
+* Estados de carregamento, vazio, sem resultado e erro estão presentes.
+* A estrutura visual está preparada para reutilização em diferentes models.
+* O arquivo é autocontido e funciona sem backend.

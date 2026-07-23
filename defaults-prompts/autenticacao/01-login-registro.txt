@@ -1,0 +1,791 @@
+Codex
+    Arquivos do devfront estão em /layouts-paginas/autenticacao
+    1. **Integrar exatamente os layouts criados pelo DevFront**, sem alterar os fluxos atuais.
+    2. **Conectar todos os formulários e comportamentos ao backend**, mantendo tudo como já funciona e adicionando somente o login automático após o cadastro.
+
+    ---
+
+    # Prompt 1
+        # Prompt 1 — Finances Hub: integrar os novos layouts de autenticação
+
+        ## Objetivo
+
+        Integrar ao projeto Django os novos layouts criados pelo DevFront para as páginas de autenticação do Finances Hub.
+
+        Nesta etapa, realizar somente a implementação visual dos layouts entregues.
+
+        Não alterar regras de autenticação, validações, envio de e-mails ou demais comportamentos do backend.
+
+        Antes de iniciar, ler integralmente o `AGENTS.md`.
+
+        ## Páginas envolvidas
+
+        Aplicar os layouts do DevFront às páginas correspondentes a:
+
+        * `/admin/login/`
+        * `/admin/logout/`
+        * `/admin/password_reset/`
+        * `/admin/password_reset/done/`
+        * `/accounts/registrar/`
+
+        Localizar os arquivos HTML, CSS, JavaScript e assets entregues pelo DevFront e utilizá-los como referência visual obrigatória.
+
+        ## Regra principal
+
+        O layout deve ser implementado **do jeito que foi entregue pelo DevFront**.
+
+        Preservar:
+
+        * estrutura;
+        * proporções;
+        * espaçamentos;
+        * cores;
+        * tipografia;
+        * campos;
+        * botões;
+        * ícones;
+        * mensagens;
+        * posicionamento da logo;
+        * responsividade;
+        * comportamento mobile;
+        * estados visuais.
+
+        Não reinterpretar o layout.
+
+        Não retornar à aparência padrão do Django Admin.
+
+        ## 1. Levantamento dos arquivos entregues
+
+        Antes da implementação, identificar:
+
+        * HTML de login;
+        * HTML de cadastro;
+        * HTML de recuperação de senha;
+        * HTML de confirmação do envio;
+        * HTML de logout;
+        * CSS compartilhado;
+        * JavaScript compartilhado;
+        * assets utilizados;
+        * logo oficial;
+        * ícones;
+        * imagens decorativas.
+
+        Confirmar quais elementos são:
+
+        * estruturais;
+        * apenas demonstrativos;
+        * estados de erro;
+        * estados de sucesso;
+        * estados de carregamento.
+
+        Não copiar dados fictícios ou mensagens demonstrativas como conteúdo permanente.
+
+        ## 2. Templates Django
+
+        Converter os HTMLs entregues para templates Django, preservando o layout.
+
+        Criar ou ajustar os templates usados pelas rotas reais.
+
+        Reutilizar uma base compartilhada para as telas de autenticação, contendo elementos comuns como:
+
+        * `<head>`;
+        * favicon;
+        * logo;
+        * fundo;
+        * card principal;
+        * estrutura de mensagens;
+        * rodapé;
+        * carregamento dos arquivos estáticos.
+
+        Evitar duplicar toda a estrutura em cada template.
+
+        Cada página deve manter somente o conteúdo específico do seu fluxo.
+
+        ## 3. Isolamento obrigatório dos estilos
+
+        Os estilos dessas páginas devem ser completamente isolados.
+
+        Não aplicar regras globais genéricas que possam interferir em:
+
+        * Django Admin;
+        * Dashboard;
+        * páginas públicas;
+        * formulários internos;
+        * modais;
+        * outros projetos ou apps.
+
+        Evitar seletores globais como:
+
+        * `body`;
+        * `form`;
+        * `input`;
+        * `button`;
+        * `.card`;
+        * `.container`;
+        * `.alert`;
+
+        sem escopo específico.
+
+        Utilizar um contêiner raiz próprio das páginas de autenticação e prefixar as classes conforme o padrão do projeto.
+
+        Exemplo conceitual:
+
+        * `.finances-auth-page`;
+        * `.finances-auth-card`;
+        * `.finances-auth-field`;
+        * `.finances-auth-button`.
+
+        Não é obrigatório usar esses nomes exatos caso o DevFront já tenha criado um namespace adequado.
+
+        ## 4. Carregamento restrito dos assets
+
+        Carregar o CSS e o JavaScript das telas de autenticação somente nessas páginas.
+
+        Não adicionar o arquivo ao template-base global do Admin se ele não for necessário fora desses fluxos.
+
+        Garantir que:
+
+        * o CSS não seja carregado no Dashboard;
+        * o JavaScript não registre listeners em outras páginas;
+        * os seletores não encontrem elementos externos;
+        * não existam variáveis globais desnecessárias.
+
+        ## 5. Identidade visual
+
+        Usar os assets oficiais já integrados ao projeto.
+
+        A logo deve aparecer conforme a versão utilizada pelo layout do DevFront.
+
+        Não usar:
+
+        * logo antiga;
+        * caminho absoluto local;
+        * imagem em base64;
+        * arquivo demonstrativo de baixa qualidade.
+
+        Utilizar `{% static %}` ou o mecanismo real adotado pelo projeto.
+
+        Preservar:
+
+        * proporção;
+        * largura máxima;
+        * contraste;
+        * aplicação em fundo claro ou escuro.
+
+        ## 6. Login
+
+        Aplicar o novo layout à tela real de login.
+
+        Preservar visualmente:
+
+        * título;
+        * texto auxiliar;
+        * campo de usuário ou e-mail;
+        * campo de senha;
+        * ação de mostrar ou ocultar senha;
+        * botão Entrar;
+        * link de recuperação;
+        * link de cadastro;
+        * área de mensagens.
+
+        Nesta etapa, não alterar o funcionamento atual do login.
+
+        Manter compatibilidade com:
+
+        * CSRF;
+        * parâmetro `next`;
+        * mensagens do Django;
+        * erros gerais;
+        * preenchimento por gerenciadores de senha.
+
+        ## 7. Cadastro
+
+        Aplicar o layout entregue à página:
+
+        `/accounts/registrar/`
+
+        Preservar os campos reais já existentes no formulário.
+
+        Não inventar, remover ou renomear campos de backend nesta etapa.
+
+        O layout deve prever:
+
+        * erros por campo;
+        * erros gerais;
+        * ajuda de senha;
+        * botão principal;
+        * link para login;
+        * estado de carregamento.
+
+        O login automático após o cadastro será tratado no segundo prompt.
+
+        ## 8. Recuperação de senha
+
+        Aplicar o layout à página:
+
+        `/admin/password_reset/`
+
+        Preservar:
+
+        * campo de e-mail;
+        * botão de envio;
+        * link para voltar ao login;
+        * erros reais;
+        * mensagens do backend.
+
+        Não alterar nesta etapa a regra de busca do e-mail ou envio da mensagem.
+
+        ## 9. Confirmação do envio
+
+        Aplicar o layout entregue à página:
+
+        `/admin/password_reset/done/`
+
+        Substituir a apresentação padrão do Django pela página visual criada pelo DevFront.
+
+        Manter somente dados e mensagens compatíveis com o fluxo real.
+
+        Não exibir informações pessoais desnecessárias.
+
+        ## 10. Logout
+
+        Aplicar o layout à página:
+
+        `/admin/logout/`
+
+        Preservar:
+
+        * confirmação de encerramento da sessão;
+        * botão para entrar novamente;
+        * link para a página inicial;
+        * identidade visual oficial.
+
+        Não alterar a regra real de logout.
+
+        ## 11. Mensagens e erros
+
+        Adaptar os estados visuais do DevFront para as mensagens reais do Django.
+
+        Suportar:
+
+        * erro geral;
+        * erro de campo;
+        * sucesso;
+        * aviso;
+        * informação.
+
+        Não exibir simultaneamente:
+
+        * mensagem demonstrativa;
+        * mensagem real do backend.
+
+        As mensagens devem continuar acessíveis e semanticamente corretas.
+
+        ## 12. JavaScript visual
+
+        Manter somente o JavaScript necessário para:
+
+        * mostrar e ocultar senha;
+        * estados de carregamento;
+        * interações visuais;
+        * demonstrações convertidas para comportamento real da interface.
+
+        Remover scripts que:
+
+        * simulam sucesso;
+        * impedem envio real;
+        * substituem dados do formulário;
+        * usam `alert`;
+        * criam mensagens fictícias;
+        * redirecionam para arquivos HTML estáticos.
+
+        Não alterar regras do backend.
+
+        ## 13. Responsividade
+
+        Validar os layouts em:
+
+        * celular estreito;
+        * celular comum;
+        * tablet;
+        * notebook;
+        * desktop.
+
+        Garantir que:
+
+        * não exista rolagem horizontal;
+        * o card não fique colado nas bordas;
+        * campos respeitem o contêiner;
+        * a logo permaneça proporcional;
+        * botões tenham área de toque adequada;
+        * o teclado virtual não torne o formulário inutilizável;
+        * o desktop continue usando card centralizado, sem layout dividido.
+
+        ## 14. Integração com o Django Admin
+
+        As rotas de login, logout e recuperação pertencem ao fluxo do Admin, mas não devem herdar a aparência visual padrão antiga.
+
+        Manter compatibilidade com o Django Admin sem carregar elementos visuais desnecessários, como:
+
+        * menu lateral;
+        * cabeçalho interno;
+        * breadcrumbs;
+        * ações recentes;
+        * títulos duplicados.
+
+        Não alterar o tema das páginas internas do Admin.
+
+        ## 15. Segurança
+
+        Preservar:
+
+        * CSRF;
+        * campos ocultos;
+        * `next`;
+        * autocomplete apropriado;
+        * tokens de recuperação;
+        * mensagens seguras;
+        * proteção contra submissão duplicada apenas no frontend.
+
+        Não inserir credenciais ou dados sensíveis em JavaScript.
+
+        ## 16. Limites desta etapa
+
+        Não alterar:
+
+        * autenticação;
+        * criação de usuário;
+        * login automático;
+        * envio de e-mail;
+        * regras de senha;
+        * validação de e-mail;
+        * redirecionamentos;
+        * sessões;
+        * rate limit;
+        * models;
+        * migrations.
+
+        Esta etapa é somente de integração visual.
+
+        Problemas funcionais identificados devem ser relatados, não corrigidos.
+
+        ## 17. Testes e validação
+
+        Validar que:
+
+        * todas as cinco rotas carregam seus novos templates;
+        * os assets são encontrados;
+        * a logo aparece;
+        * não existem referências a arquivos HTML estáticos;
+        * erros reais são exibidos;
+        * CSRF permanece presente;
+        * `next` continua preservado no login;
+        * CSS não interfere nas páginas internas;
+        * JavaScript não gera erros fora das telas;
+        * mobile e desktop correspondem ao DevFront.
+
+        ## Critérios de aceite
+
+        * As cinco páginas utilizam os layouts entregues pelo DevFront.
+        * A identidade visual oficial aparece corretamente.
+        * O layout padrão do Django Admin não aparece nessas telas.
+        * CSS e JavaScript ficam isolados.
+        * Nenhuma outra página sofre interferência visual.
+        * Login, cadastro, logout e recuperação mantêm o comportamento atual.
+        * Nenhuma regra de backend é alterada.
+        * O resultado mobile corresponde ao layout aprovado.
+        * Melhorias adicionais devem ser apenas relatadas como sugestões.
+
+    ---
+    # Prompt 2
+        # Prompt 2 — Finances Hub: funcionalizar os novos fluxos de autenticação
+
+        ## Objetivo
+
+        Concluir a integração funcional dos novos layouts de autenticação implementados no prompt anterior.
+
+        Conectar corretamente os formulários e ações ao backend atual, preservando as regras existentes.
+
+        A única mudança nova de comportamento solicitada é:
+
+        **após o cadastro concluído com sucesso, autenticar o usuário automaticamente.**
+
+        Antes de iniciar, ler integralmente o `AGENTS.md`.
+
+        ## Preservação obrigatória
+
+        Os layouts integrados no prompt anterior estão aprovados.
+
+        Não alterar:
+
+        * estrutura visual;
+        * textos;
+        * logo;
+        * cores;
+        * espaçamentos;
+        * responsividade;
+        * componentes;
+        * organização dos campos;
+        * estilos;
+        * identidade visual.
+
+        Esta tarefa é funcional.
+
+        Alterações visuais devem ocorrer somente se forem indispensáveis para exibir um estado real de erro ou carregamento já previsto no layout.
+
+        ## 1. Login
+
+        Garantir que o formulário da nova tela de login utilize o fluxo real de autenticação.
+
+        Preservar:
+
+        * validação de credenciais;
+        * usuário ativo;
+        * CSRF;
+        * sessão;
+        * parâmetro `next`;
+        * mensagens de erro;
+        * redirecionamento padrão.
+
+        ## Redirecionamento
+
+        Quando existir `next` válido:
+
+        * redirecionar para ele após autenticação.
+
+        Quando não existir:
+
+        * usar o destino padrão já consolidado no sistema.
+
+        Não aceitar redirecionamento externo inseguro por manipulação do parâmetro.
+
+        ## Mensagens
+
+        Apresentar no layout:
+
+        * credenciais inválidas;
+        * conta inativa;
+        * erro de formulário;
+        * sessão expirada, quando aplicável.
+
+        Não exibir traceback ou mensagens técnicas.
+
+        ## 2. Cadastro
+
+        Conectar a nova tela ao formulário e à lógica real de criação de usuário.
+
+        Preservar os campos atuais e suas regras.
+
+        Validar no backend:
+
+        * campos obrigatórios;
+        * e-mail;
+        * duplicidade;
+        * senhas;
+        * confirmação de senha;
+        * requisitos de segurança;
+        * demais regras já implementadas.
+
+        Não confiar somente nas validações do navegador.
+
+        ## 3. Login automático após o cadastro
+
+        Após criar o usuário com sucesso:
+
+        1. salvar o usuário;
+        2. autenticar o usuário no mesmo fluxo;
+        3. criar a sessão;
+        4. direcioná-lo para a área interna apropriada.
+
+        O usuário não deve precisar preencher novamente a tela de login.
+
+        Não criar uma tela intermediária de sucesso.
+
+        ## Backend de autenticação
+
+        O login automático deve funcionar corretamente mesmo se o projeto possuir:
+
+        * backend de autenticação customizado;
+        * múltiplos backends;
+        * login por e-mail ou usuário.
+
+        Utilizar a abordagem compatível com a configuração real do projeto.
+
+        Não fixar manualmente um backend sem revisar as configurações.
+
+        ## Destino após cadastro
+
+        Utilizar o destino real consolidado para o primeiro acesso.
+
+        Se já existir uma regra de onboarding ou redirecionamento inicial, preservá-la.
+
+        Caso não exista, direcionar para a Home interna ou Dashboard oficial conforme a regra atual.
+
+        Não redirecionar novamente para a tela de login.
+
+        ## Transação
+
+        Evitar estado inconsistente em que:
+
+        * o usuário seja parcialmente criado;
+        * a sessão falhe silenciosamente;
+        * registros relacionados obrigatórios não sejam criados;
+        * ocorra duplicidade por envio repetido.
+
+        Usar transação quando o fluxo atual envolver múltiplas gravações relacionadas.
+
+        ## 4. Recuperação de senha
+
+        Conectar o novo formulário ao fluxo real de recuperação.
+
+        Preservar:
+
+        * validação do e-mail;
+        * envio da mensagem;
+        * token;
+        * prazo de validade;
+        * templates de e-mail;
+        * rate limit existente;
+        * mensagens de erro.
+
+        Após envio bem-sucedido, direcionar para:
+
+        `/admin/password_reset/done/`
+
+        ou para o nome de rota equivalente, usando `reverse`.
+
+        Não utilizar URL fixa quando existir rota nomeada.
+
+        ## 5. E-mail não encontrado
+
+        Preservar a regra já definida pelo projeto para e-mail inexistente.
+
+        Caso o sistema já apresente erro explícito, exibir a mensagem dentro do novo layout.
+
+        Não substituir por mensagem demonstrativa.
+
+        Manter a comparação de e-mail:
+
+        * normalizada;
+        * case-insensitive;
+        * compatível com os dados existentes.
+
+        Não alterar essa regra caso ela já esteja funcional.
+
+        ## 6. Confirmação do envio
+
+        A página de confirmação deve ser exibida somente depois de um envio aceito pelo backend.
+
+        Não permitir que JavaScript simule o sucesso.
+
+        O botão de voltar deve utilizar a rota nomeada real do login.
+
+        ## 7. Logout
+
+        Garantir que a rota execute o logout real antes de apresentar a nova tela.
+
+        Depois do logout:
+
+        * a sessão deve estar encerrada;
+        * páginas privadas devem exigir autenticação novamente;
+        * o botão Entrar novamente deve abrir o login;
+        * o link de página inicial deve apontar para a rota pública correta.
+
+        Não encerrar a sessão apenas no frontend.
+
+        ## 8. Mostrar e ocultar senha
+
+        Conectar os controles visuais existentes.
+
+        Garantir que:
+
+        * alterem somente o tipo do input;
+        * preservem o valor;
+        * preservem foco;
+        * possuam estado acessível;
+        * não interfiram no envio;
+        * funcionem com mais de um campo de senha na mesma página.
+
+        ## 9. Estado de carregamento
+
+        Ao enviar login, cadastro ou recuperação:
+
+        * desabilitar o botão temporariamente;
+        * impedir duplo envio;
+        * mostrar o texto de carregamento previsto;
+        * não apagar os campos;
+        * restaurar o estado se o backend retornar erro.
+
+        O frontend não deve exibir sucesso antes da resposta real.
+
+        ## 10. Erros de campo
+
+        Associar os erros reais do formulário aos respectivos campos.
+
+        Garantir:
+
+        * classe visual correta;
+        * mensagem próxima ao campo;
+        * `aria-invalid`;
+        * associação por `aria-describedby`;
+        * foco no primeiro erro após envio, quando adequado.
+
+        Erros gerais devem aparecer na área prevista pelo layout.
+
+        Não exibir erros duplicados.
+
+        ## 11. Autocomplete
+
+        Configurar corretamente os atributos dos campos:
+
+        ### Login
+
+        * identificador: `username` ou equivalente apropriado;
+        * senha: `current-password`.
+
+        ### Cadastro
+
+        * nome;
+        * sobrenome;
+        * e-mail;
+        * nova senha: `new-password`;
+        * confirmação: `new-password`.
+
+        ### Recuperação
+
+        * e-mail.
+
+        Preservar compatibilidade com gerenciadores de senha.
+
+        ## 12. Segurança
+
+        Preservar ou implementar corretamente:
+
+        * CSRF;
+        * validação no backend;
+        * escaping;
+        * sessão;
+        * proteção de redirecionamento;
+        * rate limit existente;
+        * mensagens seguras;
+        * cookies seguros conforme configuração;
+        * expiração de tokens.
+
+        Não registrar em logs:
+
+        * senhas;
+        * tokens;
+        * conteúdo sensível dos formulários.
+
+        ## 13. Isolamento multi-tenant
+
+        O cadastro deve criar somente os vínculos iniciais previstos para o próprio novo usuário.
+
+        Não permitir:
+
+        * escolha de proprietário;
+        * acesso a outro tenant;
+        * herança de dados de sessão anterior;
+        * associação indevida a registros de outro usuário.
+
+        Preservar o fluxo já consolidado de inicialização da conta.
+
+        ## 14. Rotas nomeadas
+
+        Revisar todos os links e redirecionamentos dos novos templates.
+
+        Usar:
+
+        * `{% url %}`;
+        * `reverse`;
+        * `reverse_lazy`;
+        * mecanismos equivalentes do projeto.
+
+        Evitar URLs fixas para:
+
+        * login;
+        * logout;
+        * cadastro;
+        * recuperação;
+        * confirmação;
+        * página inicial interna;
+        * página inicial pública.
+
+        Preservar parâmetros como `next` quando necessários.
+
+        ## 15. SEO e privacidade
+
+        As telas de autenticação não devem ser indexadas.
+
+        Garantir que todas possuam:
+
+        * `noindex`;
+        * diretiva apropriada para links;
+        * metadados genéricos;
+        * nenhuma informação sensível em título ou descrição.
+
+        Não incluir essas páginas no sitemap.
+
+        ## 16. Testes
+
+        Criar ou ajustar testes para garantir:
+
+        ### Login
+
+        * credenciais válidas autenticam;
+        * inválidas exibem erro;
+        * usuário inativo não entra;
+        * `next` válido é respeitado;
+        * `next` externo é rejeitado;
+        * CSRF permanece obrigatório.
+
+        ### Cadastro
+
+        * usuário válido é criado;
+        * e-mail duplicado é rejeitado;
+        * senhas inválidas são rejeitadas;
+        * erros aparecem nos campos;
+        * usuário é autenticado automaticamente;
+        * sessão é criada;
+        * usuário não retorna à tela de login;
+        * destino final está correto;
+        * duplo envio não cria usuários duplicados.
+
+        ### Recuperação
+
+        * e-mail válido inicia o fluxo;
+        * e-mail inválido exibe erro conforme a regra existente;
+        * envio bem-sucedido redireciona para a confirmação;
+        * rate limit continua funcionando;
+        * token e e-mail continuam sendo gerados corretamente.
+
+        ### Logout
+
+        * sessão é encerrada;
+        * área privada volta a exigir login;
+        * tela visual de logout é exibida;
+        * links apontam para as rotas corretas.
+
+        ### Layout e integração
+
+        * templates usam os formulários reais;
+        * mensagens demonstrativas não aparecem;
+        * erros reais são renderizados;
+        * CSS e JavaScript permanecem isolados;
+        * todas as páginas usam `noindex`.
+
+        ## Critérios de aceite
+
+        * O login funciona pelo novo layout.
+        * O parâmetro `next` continua funcionando com segurança.
+        * O cadastro cria o usuário corretamente.
+        * Após o cadastro, o usuário é autenticado automaticamente.
+        * O usuário é direcionado diretamente para a área interna.
+        * A recuperação de senha continua enviando o e-mail real.
+        * A confirmação aparece somente após sucesso real.
+        * O logout encerra a sessão.
+        * Erros e mensagens aparecem nos componentes corretos.
+        * O layout aprovado não é alterado.
+        * CSS e JavaScript continuam isolados.
+        * Nenhuma outra regra de autenticação deve ser modificada.
+        * Melhorias adicionais devem ser apenas relatadas como sugestões.

@@ -1,0 +1,724 @@
+# Sistema — Implementar tour de apresentação no primeiro acesso
+
+## Objetivo
+
+Implementar a primeira utilização da biblioteca de tour guiado já instalada no projeto.
+
+Quando um usuário acessar o sistema pela primeira vez após autenticar, deve ser exibido um tour de apresentação na Home administrativa.
+
+Esse primeiro tour deve:
+
+* apresentar o sistema de forma atrativa;
+* resumir os principais benefícios e recursos disponíveis;
+* orientar o usuário sobre onde começar;
+* ser exibido automaticamente somente uma vez para cada usuário;
+* permanecer curto e objetivo, mesmo em sistemas grandes.
+
+Antes de iniciar, ler integralmente o `AGENTS.md` e revisar:
+
+* a biblioteca de tour já instalada;
+* sua versão;
+* a forma oficial de carregamento dos assets;
+* a Home administrativa atual;
+* o modelo de usuário e os modelos de preferências existentes;
+* as regras de autenticação e multi-tenant do projeto.
+
+## Regra principal
+
+Não criar um tutorial detalhado de todas as telas.
+
+Este primeiro tour é uma **apresentação geral do produto**, não um manual completo.
+
+O usuário deve terminar o tour entendendo:
+
+* o que o sistema resolve;
+* quais são os principais recursos;
+* onde ficam as funcionalidades;
+* qual ação pode realizar primeiro.
+
+Tours específicos de páginas e funcionalidades serão implementados separadamente.
+
+---
+
+# 1. Momento de exibição
+
+Exibir o tour automaticamente quando todas estas condições forem atendidas:
+
+* o usuário está autenticado;
+* o usuário está acessando a Home administrativa oficial;
+* o usuário ainda não concluiu nem dispensou o tour inicial;
+* a página foi carregada corretamente;
+* os elementos necessários para o tour estão disponíveis.
+
+Não iniciar o tour:
+
+* na tela de login;
+* no cadastro;
+* na recuperação de senha;
+* em páginas internas diferentes da Home;
+* durante redirecionamentos;
+* antes da renderização dos elementos;
+* em toda atualização da página;
+* novamente depois de concluído ou dispensado.
+
+## Primeiro login
+
+Interpretar “primeiro login” como a primeira oportunidade válida de apresentar o tour.
+
+Caso o usuário seja criado, mas não acesse imediatamente a Home, o tour deve aguardar até o primeiro acesso válido.
+
+Não depender exclusivamente de `last_login`, porque:
+
+* o valor pode ser atualizado antes da Home carregar;
+* usuários podem ser criados por seed, importação ou Admin;
+* o login automático após cadastro também atualiza a sessão.
+
+A fonte de verdade deve ser um estado persistente específico do tour.
+
+---
+
+# 2. Persistência por usuário
+
+Registrar individualmente se o usuário já concluiu ou dispensou o tour inicial.
+
+O estado não pode ser armazenado somente em:
+
+* `localStorage`;
+* `sessionStorage`;
+* cookie;
+* variável JavaScript;
+* cache do navegador.
+
+Esses recursos podem ser utilizados apenas como apoio visual, nunca como fonte principal.
+
+A informação deve ser persistida no backend e associada ao usuário autenticado.
+
+## Reutilizar estrutura existente
+
+Antes de criar campo ou model, verificar se o projeto já possui:
+
+* perfil do usuário;
+* preferências;
+* configurações pessoais;
+* estado de onboarding;
+* tabela de tours concluídos.
+
+Reutilizar a estrutura existente quando ela for adequada.
+
+Não criar um novo model apenas para um único campo se já houver local apropriado.
+
+## Estado mínimo
+
+A persistência deve permitir identificar ao menos:
+
+* tour inicial ainda não apresentado;
+* tour concluído;
+* tour dispensado.
+
+Também pode registrar a versão do tour, caso isso seja necessário para futuras evoluções.
+
+Não registrar dados excessivos de navegação nesta etapa.
+
+---
+
+# 3. Exibição somente uma vez
+
+Depois que o usuário:
+
+* concluir o último passo; ou
+* escolher pular/fechar definitivamente;
+
+o tour não deve abrir automaticamente novamente.
+
+A conclusão deve ser persistida imediatamente no backend.
+
+Ao recarregar a página, trocar de dispositivo ou usar outro navegador, o tour deve continuar marcado como já visto.
+
+## Fechamento acidental
+
+Diferenciar, quando a biblioteca permitir:
+
+* concluir;
+* pular;
+* fechar de forma intencional.
+
+Qualquer ação explícita para encerrar o tour deve ser tratada como dispensa definitiva nesta primeira versão.
+
+Não abrir novamente em cada login porque o usuário clicou em “Pular”.
+
+---
+
+# 4. Conteúdo do tour
+
+Criar um tour breve, com quantidade controlada de etapas.
+
+Usar como referência:
+
+* aproximadamente 4 a 7 etapas;
+* textos curtos;
+* uma ideia principal por etapa;
+* títulos objetivos;
+* descrições fáceis de ler.
+
+Não criar dezenas de passos.
+
+## Estrutura sugerida
+
+O tour deve cobrir conceitualmente:
+
+### 1. Boas-vindas
+
+Apresentar:
+
+* nome do sistema;
+* proposta principal;
+* benefício central para o usuário.
+
+### 2. Visão geral da Home
+
+Explicar o que o usuário encontra na página inicial:
+
+* resumo;
+* informações prioritárias;
+* atalhos;
+* pendências ou indicadores, conforme o projeto.
+
+### 3. Navegação principal
+
+Destacar o menu e explicar que nele estão organizadas as funcionalidades.
+
+### 4. Principais entregas do sistema
+
+Apresentar de forma resumida os maiores grupos de recursos.
+
+Não listar cada model, submenu ou tela.
+
+### 5. Ação inicial recomendada
+
+Indicar ao usuário qual é um bom primeiro passo, como:
+
+* configurar o perfil;
+* cadastrar o primeiro registro;
+* completar uma configuração inicial;
+* acessar a funcionalidade principal.
+
+### 6. Encerramento
+
+Finalizar com mensagem positiva e indicar que o usuário já pode começar.
+
+Adaptar a quantidade de etapas ao tamanho real do sistema.
+
+---
+
+# 5. Sistemas grandes
+
+Em sistemas com muitas funcionalidades, não tentar mencionar tudo separadamente.
+
+Agrupar recursos por benefício ou área.
+
+Exemplo conceitual:
+
+Em vez de criar uma etapa para cada uma de dez funcionalidades, apresentar grupos como:
+
+* organização e acompanhamento;
+* cadastros e operações;
+* relatórios e histórico;
+* configurações e personalização.
+
+O texto deve destacar o valor entregue ao usuário, não apenas nomes técnicos de menus.
+
+## Limite de texto
+
+Cada etapa deve possuir:
+
+* título curto;
+* no máximo um ou dois parágrafos pequenos;
+* linguagem direta;
+* sem listas extensas;
+* sem explicações técnicas.
+
+Evitar textos que obriguem o usuário a rolar dentro do popover.
+
+---
+
+# 6. Definição do conteúdo real
+
+Antes de escrever os textos, analisar o sistema e identificar:
+
+* público-alvo;
+* proposta principal;
+* funcionalidades centrais;
+* recursos mais valiosos;
+* Home administrativa;
+* menu principal;
+* primeira ação recomendada.
+
+Não inventar funcionalidades.
+
+Não apresentar como disponível algo que esteja:
+
+* em desenvolvimento;
+* desativado;
+* restrito a outro plano;
+* acessível somente ao superusuário;
+* fora do escopo daquele usuário.
+
+O conteúdo deve refletir o que o usuário autenticado realmente pode utilizar.
+
+---
+
+# 7. Respeitar permissões
+
+As etapas devem considerar as permissões do usuário atual.
+
+Não destacar:
+
+* menus que ele não consegue acessar;
+* recursos exclusivos de outro perfil;
+* ações administrativas indisponíveis;
+* dados de outro tenant;
+* funcionalidades ocultas pelo plano ou configuração.
+
+Se existirem perfis significativamente diferentes, montar as etapas com base nos elementos realmente presentes na página.
+
+Não manter um seletor apontando para um elemento inexistente.
+
+## Superusuário
+
+O superusuário pode possuir uma experiência diferente, mas não deve receber automaticamente um tour voltado ao cliente comum caso isso não faça sentido.
+
+Definir explicitamente a regra do projeto para:
+
+* usuário comum;
+* equipe interna;
+* superusuário.
+
+Não criar vários tours complexos nesta etapa.
+
+Quando adequado, limitar o tour inicial aos usuários finais do sistema.
+
+---
+
+# 8. Seletores estáveis
+
+Não acoplar as etapas a seletores frágeis baseados em:
+
+* posição do elemento;
+* classes genéricas;
+* texto visível;
+* `nth-child`;
+* IDs gerados dinamicamente;
+* estrutura interna do Django Admin.
+
+Adicionar atributos estáveis aos elementos que serão destacados, como identificadores específicos de tour.
+
+Exemplo conceitual:
+
+* `data-tour="home-summary"`;
+* `data-tour="main-menu"`;
+* `data-tour="primary-action"`.
+
+Os nomes devem refletir a função do elemento.
+
+Não utilizar esses atributos para estilização.
+
+---
+
+# 9. Elementos inexistentes
+
+Antes de iniciar cada passo, confirmar que o elemento está disponível.
+
+Caso uma etapa dependa de elemento ausente por:
+
+* permissão;
+* configuração;
+* responsividade;
+* ausência de dados;
+* alteração futura do layout;
+
+o tour deve:
+
+* ignorar essa etapa com segurança; ou
+* usar uma apresentação central sem alvo.
+
+Não interromper todo o tour com erro JavaScript.
+
+Não apontar o destaque para posição vazia da tela.
+
+---
+
+# 10. Mobile e desktop
+
+O tour deve funcionar corretamente em:
+
+* celular;
+* tablet;
+* notebook;
+* desktop.
+
+No mobile:
+
+* não cobrir completamente o elemento destacado;
+* não ultrapassar a viewport;
+* permitir leitura sem zoom;
+* manter botões acessíveis;
+* respeitar áreas seguras;
+* não gerar scroll horizontal;
+* não bloquear permanentemente o menu.
+
+Se o menu estiver recolhido no mobile, o tour deve utilizar uma abordagem compatível com o estado real da interface.
+
+Não abrir automaticamente o menu lateral de maneira que quebre a navegação, salvo se isso for necessário e puder ser revertido ao final.
+
+---
+
+# 11. Aparência
+
+Adaptar a aparência da biblioteca à identidade visual do sistema.
+
+Preservar:
+
+* tipografia;
+* cores;
+* bordas;
+* botões;
+* espaçamentos;
+* contraste;
+* responsividade.
+
+Não modificar diretamente os arquivos originais da biblioteca.
+
+Criar um arquivo de personalização separado e isolado.
+
+A customização não deve alterar outros componentes do sistema.
+
+## Controles
+
+O tour deve possuir controles claros para:
+
+* avançar;
+* voltar;
+* concluir;
+* pular.
+
+Usar textos em português.
+
+Evitar exibir controles desnecessários na primeira etapa.
+
+---
+
+# 12. Linguagem
+
+Utilizar linguagem:
+
+* acolhedora;
+* simples;
+* profissional;
+* objetiva;
+* orientada a benefícios.
+
+Evitar:
+
+* jargões técnicos;
+* nomes de models;
+* termos internos do desenvolvimento;
+* frases excessivamente promocionais;
+* promessas que o produto não pode cumprir;
+* textos infantis.
+
+O usuário deve perceber o tour como uma ajuda útil, não como propaganda invasiva.
+
+---
+
+# 13. Integração com a Home administrativa
+
+Carregar o código do tour somente na Home administrativa onde ele será utilizado.
+
+Não adicionar a inicialização globalmente em todas as páginas do Admin.
+
+Organizar a implementação em arquivos próprios, como:
+
+* configuração do tour;
+* textos e etapas;
+* inicialização;
+* personalização visual.
+
+Não colocar toda a definição diretamente dentro do template.
+
+## Inicialização
+
+Iniciar somente após:
+
+* DOM pronto;
+* elementos principais renderizados;
+* confirmação de que o usuário deve ver o tour.
+
+Evitar atrasos fixos arbitrários longos.
+
+Se a Home renderizar componentes de forma assíncrona, aguardar de forma controlada e com limite de tentativas.
+
+---
+
+# 14. Endpoint para conclusão
+
+Criar ou reutilizar um endpoint autenticado para registrar a conclusão ou dispensa.
+
+O endpoint deve:
+
+* aceitar somente usuário autenticado;
+* alterar apenas o estado do próprio usuário;
+* validar CSRF;
+* aceitar método apropriado;
+* retornar resposta clara;
+* ser idempotente.
+
+Não aceitar ID de usuário enviado pelo navegador.
+
+O backend deve obter o usuário pela sessão atual.
+
+## Falha ao persistir
+
+Se a gravação falhar:
+
+* não afirmar silenciosamente que o tour foi salvo;
+* não deixar a página inutilizável;
+* registrar o erro de forma apropriada;
+* permitir que o sistema continue sendo usado.
+
+Evitar múltiplas requisições caso o evento de fechamento seja disparado mais de uma vez.
+
+---
+
+# 15. Concorrência e múltiplas abas
+
+A persistência deve permanecer consistente caso:
+
+* o usuário abra duas abas;
+* conclua em um dispositivo;
+* recarregue a Home rapidamente;
+* o evento final seja enviado duas vezes.
+
+O endpoint deve ser idempotente.
+
+Depois que o backend indicar conclusão, novas cargas não devem iniciar o tour.
+
+Não é necessário sincronizar o encerramento em tempo real entre abas nesta etapa.
+
+---
+
+# 16. Possibilidade futura de rever o tour
+
+Não implementar agora botão para rever o tour.
+
+Entretanto, organizar o código de forma que futuramente seja possível iniciar o mesmo tour manualmente, sem duplicar sua definição.
+
+A função de criação ou inicialização do tour deve poder ser reutilizada posteriormente.
+
+Não adicionar item ao menu, botão de ajuda ou configuração de perfil nesta tarefa.
+
+---
+
+# 17. Versionamento do tour
+
+Preparar uma estratégia simples para futuras atualizações.
+
+O estado pode registrar uma versão como:
+
+* tour inicial versão 1.
+
+Porém, nesta etapa, uma nova versão não deve fazer usuários antigos reverem automaticamente o tour.
+
+Qualquer reexibição futura por mudança de versão deve depender de decisão explícita em outro desenvolvimento.
+
+Não usar a versão para ignorar a regra de exibição única.
+
+---
+
+# 18. Migração e usuários existentes
+
+Definir como o tour será tratado para usuários que já existiam antes da implementação.
+
+Como regra padrão:
+
+* usuários que ainda não possuem o estado registrado podem visualizar o tour na próxima vez que acessarem a Home;
+* usuários criados após a implementação também visualizarão no primeiro acesso;
+* não marcar todos os usuários existentes como concluídos automaticamente.
+
+Caso o sistema já esteja amplamente em produção e exista uma decisão diferente documentada no projeto, respeitá-la.
+
+Não inferir conclusão pelo tempo de criação da conta.
+
+---
+
+# 19. Seeds e usuários técnicos
+
+Evitar exibir o tour para contas que não representem usuários finais, quando elas puderem ser identificadas com segurança, como:
+
+* contas de serviço;
+* usuários técnicos;
+* integrações;
+* automações.
+
+Não criar heurísticas baseadas apenas no nome de usuário.
+
+Usar flags ou tipos reais existentes no projeto.
+
+---
+
+# 20. Segurança e privacidade
+
+O tour não deve incluir:
+
+* dados financeiros específicos;
+* informações pessoais;
+* dados de outro usuário;
+* identificadores internos;
+* segredos;
+* tokens;
+* valores demonstrativos que pareçam reais.
+
+Os textos devem ser institucionais e genéricos.
+
+Não enviar ao frontend informações além das necessárias para decidir a exibição.
+
+---
+
+# 21. Acessibilidade
+
+Garantir que o tour:
+
+* funcione por teclado;
+* mantenha foco controlado;
+* permita avançar e fechar sem mouse;
+* utilize contraste adequado;
+* possua textos acessíveis;
+* não esconda permanentemente o foco;
+* devolva o foco para a página ao terminar;
+* respeite usuários com preferência por redução de movimento quando possível.
+
+Não depender somente de cor para indicar o elemento destacado.
+
+---
+
+# 22. Documentação no `AGENTS.md`
+
+Registrar objetivamente:
+
+* a biblioteca usada para os tours;
+* que o tour inicial é exibido na Home administrativa;
+* que a exibição é controlada por estado persistente no backend;
+* que cada usuário vê o tour automaticamente uma única vez;
+* que seletores devem utilizar atributos estáveis;
+* que o conteúdo deve ser breve e orientado a benefícios;
+* que tours específicos de funcionalidades devem ser implementados separadamente;
+* que não se deve criar uma segunda biblioteca de onboarding.
+
+Não copiar todos os textos do tour para o documento.
+
+---
+
+# 23. Testes
+
+Criar ou ajustar testes para garantir:
+
+## Exibição
+
+* usuário elegível recebe indicação para iniciar o tour;
+* usuário que nunca viu o tour o recebe na Home;
+* o tour não é iniciado em outras páginas;
+* usuário que concluiu não vê novamente;
+* usuário que dispensou não vê novamente;
+* recarregar a página não reabre após conclusão.
+
+## Persistência
+
+* conclusão é gravada no backend;
+* dispensa é gravada no backend;
+* endpoint exige autenticação;
+* usuário não altera o estado de outra pessoa;
+* requisição duplicada permanece idempotente;
+* estado persiste entre sessões.
+
+## Permissões
+
+* etapas indisponíveis são ignoradas;
+* elementos não existentes não quebram o tour;
+* usuário comum não recebe etapa de superusuário;
+* dados de outro tenant não são utilizados.
+
+## Frontend
+
+* biblioteca carrega somente na Home;
+* nenhum tour inicia antes da decisão do backend;
+* seletores são estáveis;
+* o tour funciona em desktop e mobile;
+* fechar o tour remove overlay e bloqueios;
+* não existem erros no console;
+* o sistema permanece utilizável se a persistência falhar.
+
+## Conteúdo
+
+* quantidade de etapas permanece controlada;
+* não existem textos excessivamente longos;
+* não são citadas funcionalidades inexistentes;
+* o encerramento apresenta uma ação inicial clara.
+
+---
+
+# 24. Validação manual
+
+Realizar ao menos os seguintes cenários:
+
+1. criar um usuário novo;
+2. autenticar;
+3. acessar a Home;
+4. verificar abertura automática;
+5. concluir o tour;
+6. sair e entrar novamente;
+7. confirmar que não reaparece;
+8. repetir com usuário que escolhe pular;
+9. testar em celular;
+10. testar usuário com permissões reduzidas;
+11. testar Home sem dados cadastrados;
+12. testar falha controlada no endpoint de conclusão.
+
+---
+
+# 25. Fora do escopo
+
+Não implementar nesta etapa:
+
+* tours específicos por página;
+* tutorial de cada formulário;
+* central de ajuda;
+* vídeos;
+* checklist de onboarding;
+* botão para rever o tour;
+* redefinição manual pelo usuário;
+* painel administrativo de tours;
+* editor dinâmico de etapas;
+* analytics de cada passo;
+* gamificação;
+* envio de e-mail de onboarding;
+* novos layouts da Home;
+* alteração de permissões;
+* segunda biblioteca de tour.
+
+Melhorias adicionais devem ser apenas relatadas como sugestões.
+
+# Critérios de aceite
+
+* O tour é exibido automaticamente na Home no primeiro acesso válido.
+* Cada usuário recebe o tour somente uma vez.
+* Concluir ou pular impede novas aberturas automáticas.
+* O estado é persistido no backend.
+* O tour apresenta o sistema de forma breve e atrativa.
+* Sistemas grandes continuam usando poucas etapas.
+* O conteúdo destaca benefícios e recursos reais.
+* Elementos são localizados por seletores estáveis.
+* Ausência de um elemento não quebra toda a apresentação.
+* O tour respeita permissões e multi-tenant.
+* A experiência funciona no desktop e no mobile.
+* Os estilos seguem a identidade visual e permanecem isolados.
+* Nenhum tour específico de funcionalidade é criado.
+* Nenhuma funcionalidade fora deste escopo é implementada.

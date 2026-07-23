@@ -1,0 +1,1611 @@
+# PROMPT 1 — Integrar o layout aprovado do novo cabeçalho e menu lateral
+
+## Objetivo
+
+Integrar ao Django Admin do Colmeias Online o layout aprovado no arquivo:
+
+`n-colmeias-online-menu-lateral.html`
+
+Esta primeira etapa é exclusivamente de **integração visual e estrutural**.
+
+O objetivo é substituir a apresentação atual do cabeçalho e do menu lateral pelo design criado no DevFront, preparando corretamente os templates, partials, classes, assets e pontos de integração que serão funcionalizados na etapa seguinte.
+
+Não redesenhar o layout e não criar uma nova proposta visual.
+
+## Fonte visual obrigatória
+
+Utilizar como fonte principal o arquivo:
+
+`n-colmeias-online-menu-lateral.html`
+
+Trabalhar exatamente sobre a versão mais recente disponível na área de layouts do projeto, incluindo os ajustes aprovados posteriormente:
+
+* mesma marcação visual para item avulso ativo e grupo com submenu ativo;
+* fundo ativo corretamente centralizado;
+* ícones alinhados no menu expandido e minimizado;
+* animações e espaçamentos definidos no arquivo;
+* cabeçalho e menu formando uma única estrutura visual;
+* versão mobile em formato de drawer.
+
+Não utilizar versões anteriores ou protótipos rejeitados.
+
+## Auditoria inicial
+
+Antes de modificar:
+
+* ler integralmente o `AGENTS.md`;
+* localizar o arquivo aprovado;
+* auditar a herança atual dos templates do Django Admin;
+* identificar o template base do Admin;
+* localizar o cabeçalho atual;
+* localizar o menu nativo do Django;
+* localizar a implementação do `admin_menu`;
+* identificar os CSS e JavaScript globais atualmente carregados;
+* identificar como páginas CRUD e páginas customizadas herdam a estrutura;
+* verificar o comportamento atual para usuário comum, superusuário e fallback;
+* localizar os arquivos oficiais de logo e símbolo em `core/static/identidade-visual/`.
+
+Não presumir que alterar apenas um template será suficiente. Auditar todos os consumidores da estrutura global.
+
+## Escopo desta etapa
+
+Implementar a estrutura visual de:
+
+* cabeçalho desktop;
+* cabeçalho mobile;
+* menu lateral expandido;
+* menu lateral minimizado;
+* contêiner destinado à expansão temporária;
+* área de busca;
+* itens avulsos;
+* grupos com submenus;
+* itens inferiores;
+* backdrop mobile;
+* drawer mobile;
+* área principal de conteúdo.
+
+Nesta etapa, preparar os elementos e hooks necessários para as funcionalidades futuras, mas não implementar ainda toda a lógica de interação descrita no protótipo.
+
+## Integração com o Django Admin
+
+Transformar a estrutura do DevFront em componentes reutilizáveis do Admin.
+
+Preferir uma organização adequada à arquitetura existente, como:
+
+* template base ou override do Admin;
+* partial do cabeçalho;
+* partial do menu lateral;
+* partial de item avulso;
+* partial de grupo e submenu;
+* arquivos CSS próprios;
+* arquivo JavaScript preparado para a etapa seguinte.
+
+Não copiar o HTML completo do protótipo para todas as páginas.
+
+Não duplicar cabeçalho e menu em cada template.
+
+O conteúdo real das páginas deve continuar sendo renderizado pelos blocos atuais do Django Admin.
+
+## Conteúdo real do menu
+
+Não transportar para o Django os itens demonstrativos hardcoded do DevFront como fonte definitiva.
+
+A estrutura visual deve ser alimentada pelo mecanismo real já existente no `admin_menu`.
+
+Nesta primeira etapa:
+
+* manter os itens reais configurados no sistema;
+* manter a ordem real;
+* manter grupos e submenus reais;
+* manter itens avulsos;
+* manter as permissões atuais;
+* preservar os links atuais;
+* preservar o fallback existente;
+* não modificar seeds;
+* não criar novos registros de menu;
+* não reorganizar funcionalidades.
+
+O arquivo do DevFront define a apresentação, não a fonte dos dados.
+
+## Cabeçalho
+
+Integrar o cabeçalho aprovado.
+
+### Lado esquerdo
+
+Preparar:
+
+* botão de abrir o menu no mobile;
+* área da identidade visual;
+* logo horizontal oficial no estado apropriado;
+* símbolo oficial no estado apropriado;
+* controle de minimizar ou expandir no desktop.
+
+Utilizar somente os arquivos oficiais existentes.
+
+Não:
+
+* redesenhar a logo;
+* recriar a logo em SVG manual;
+* recolorir;
+* usar versões demonstrativas do protótipo;
+* distorcer as proporções.
+
+### Lado direito
+
+Exibir apenas:
+
+* saudação ao usuário;
+* `Ir para o site`;
+* `Encerrar sessão`.
+
+Não incluir:
+
+* Alterar senha;
+* modo escuro;
+* seletor de tema;
+* notificações;
+* configurações;
+* avatar obrigatório;
+* outras ações do Django Admin.
+
+Nesta primeira etapa, preservar os destinos atuais quando eles já existirem. A ligação definitiva e a validação dos fluxos serão feitas no segundo prompt.
+
+## Logo expandida e símbolo
+
+Preparar dois estados visuais:
+
+### Menu expandido
+
+Exibir a versão horizontal completa da identidade do Colmeias Online.
+
+### Menu minimizado
+
+Exibir apenas o símbolo oficial, mantendo alinhamento e área de proteção.
+
+Não deixar as duas versões visíveis simultaneamente.
+
+Não permitir sobreposição, compressão ou resíduo visual durante a mudança de estado.
+
+## Menu lateral
+
+Integrar visualmente:
+
+* busca;
+* itens avulsos;
+* grupos;
+* submenus;
+* indicação de item ativo;
+* indicação de grupo que contém item ativo;
+* área inferior;
+* ícones;
+* setas;
+* tooltips;
+* estados expandido e minimizado.
+
+Manter exatamente o padrão visual aprovado:
+
+* item avulso ativo e grupo ativo com a mesma marcação;
+* fundo claro arredondado;
+* barra dourada lateral;
+* ícone centralizado;
+* ausência da antiga bolinha dourada;
+* mesma coluna de alinhamento para todos os ícones.
+
+## Conteúdo principal
+
+O novo shell não pode alterar os layouts internos das páginas.
+
+Preservar:
+
+* formulários;
+* tabelas;
+* mensagens;
+* breadcrumbs quando realmente utilizados;
+* títulos customizados;
+* modais;
+* páginas customizadas;
+* assets específicos;
+* validações;
+* páginas CRUD do Admin.
+
+Não adicionar ao conteúdo:
+
+* `max-width` global;
+* background decorativo;
+* padding duplicado;
+* margem adicional desnecessária;
+* card externo envolvendo todas as páginas.
+
+O conteúdo deve continuar utilizando toda a largura disponível ao lado do menu.
+
+## Responsividade estrutural
+
+Preparar a estrutura para os estados previstos.
+
+### Desktop
+
+* cabeçalho no topo;
+* menu abaixo do cabeçalho;
+* conteúdo ao lado;
+* estado expandido como padrão inicial;
+* estado minimizado disponível por classe;
+* contêiner preparado para sobreposição temporária.
+
+### Mobile
+
+* cabeçalho compacto;
+* menu fora da viewport quando fechado;
+* drawer preparado para abrir pela esquerda;
+* backdrop preparado;
+* conteúdo ocupando toda a largura;
+* nenhuma reserva permanente de espaço para o menu;
+* uso correto de `100dvh`;
+* consideração das áreas seguras do iPhone.
+
+Nesta etapa, é aceitável manter apenas o comportamento atual indispensável para não bloquear a navegação. As interações definitivas serão implementadas no segundo prompt.
+
+## CSS
+
+Adaptar o CSS do DevFront para assets reais do projeto.
+
+Garantir:
+
+* isolamento por classes específicas do shell do Admin;
+* ausência de regras genéricas para todos os botões, links, inputs ou headers;
+* ausência de conflito com CSS das páginas customizadas;
+* ausência de conflito com componentes de select, PhotoSwipe, galerias, modais ou formulários;
+* ausência de rolagem horizontal;
+* z-index organizado;
+* respeito a `hidden`;
+* respeito a `prefers-reduced-motion`.
+
+Remover do CSS importado:
+
+* estilos destinados apenas aos cards demonstrativos;
+* conteúdo fictício;
+* fundo da página de demonstração;
+* regras usadas apenas para simular a área principal;
+* ajustes que interfiram nos layouts reais.
+
+## JavaScript nesta etapa
+
+Não transportar automaticamente todo o JavaScript demonstrativo.
+
+Nesta primeira fase:
+
+* preparar seletores e atributos `data-*`;
+* preservar somente o necessário para o layout não quebrar;
+* não implementar ainda busca completa;
+* não implementar persistência;
+* não implementar ainda expansão temporária definitiva;
+* não criar lógica duplicada em relação ao menu atual;
+* não transportar arrays ou dados fictícios;
+* não usar URLs hardcoded.
+
+O código definitivo de interação pertence ao segundo prompt.
+
+## Preservação obrigatória
+
+Não alterar:
+
+* models;
+* migrations;
+* permissões;
+* ownership;
+* `ScreenAccessMiddleware`;
+* regras de visibilidade;
+* registros do menu;
+* seed do menu;
+* rotas existentes;
+* páginas públicas;
+* conteúdo das páginas internas;
+* PWA;
+* autenticação;
+* comportamento de logout;
+* regras específicas de superusuário;
+* fallback atual do menu.
+
+O novo layout deve respeitar o escopo em que o menu customizado já é aplicado.
+
+## Testes
+
+Adicionar ou atualizar testes compatíveis com esta etapa para validar:
+
+* renderização do novo cabeçalho;
+* renderização do novo menu;
+* ausência do menu nativo duplicado no escopo customizado;
+* presença da logo oficial;
+* presença do símbolo oficial;
+* presença apenas de `Ir para o site` e `Encerrar sessão`;
+* conteúdo principal continua renderizado;
+* itens reais do menu continuam sendo exibidos;
+* links existentes continuam presentes;
+* item ativo recebe as classes esperadas;
+* grupo com submenu ativo recebe a mesma marcação-base do item avulso ativo;
+* fallback existente continua funcionando;
+* superusuário mantém o comportamento previsto pela arquitetura atual;
+* páginas customizadas não recebem padding ou largura global indevidos.
+
+Executar também:
+
+* testes do `admin_menu`;
+* testes do Admin afetado;
+* testes de renderização dos templates base;
+* `python3 manage.py check`.
+
+## Critérios de aceite
+
+* O layout visual de `n-colmeias-online-menu-lateral.html` foi integrado ao Admin.
+* O layout não foi redesenhado.
+* O cabeçalho utiliza os assets oficiais.
+* A logo completa e o símbolo possuem estados separados.
+* Apenas `Ir para o site` e `Encerrar sessão` aparecem no lado direito.
+* O menu real alimenta a nova estrutura.
+* Itens não foram hardcoded a partir do protótipo.
+* O conteúdo das páginas continua intacto.
+* Não há cabeçalho ou menu duplicado.
+* O menu nativo não aparece junto do novo menu no escopo customizado.
+* O desktop e o mobile possuem a estrutura visual correta.
+* As funcionalidades avançadas ficaram preparadas, mas não foram implementadas de forma parcial ou improvisada.
+* Nenhuma regra de negócio ou permissão foi alterada.
+
+## Relatório final
+
+Informar:
+
+* quais templates base foram alterados;
+* quais partials foram criados;
+* quais assets foram adicionados;
+* como o menu real foi encaixado no layout do DevFront;
+* como o menu nativo foi evitado no escopo customizado;
+* quais elementos demonstrativos foram descartados;
+* quais testes foram executados;
+* quais interações permaneceram deliberadamente para a segunda etapa.
+
+---
+
+# PROMPT 2 — Tornar funcional o novo cabeçalho e menu lateral
+
+## Objetivo
+
+Após a conclusão e validação da integração visual, tornar completamente funcional o novo cabeçalho e menu lateral implementados a partir de:
+
+`n-colmeias-online-menu-lateral.html`
+
+Trabalhar sobre a implementação produzida no primeiro prompt.
+
+Não refazer templates, não redesenhar o componente e não substituir o layout aprovado.
+
+Esta etapa deve conectar ao sistema real:
+
+* links;
+* grupos;
+* busca;
+* estado ativo;
+* minimização;
+* expansão temporária;
+* drawer mobile;
+* logo;
+* saudação;
+* logout;
+* acessibilidade;
+* preservação de estado quando aplicável.
+
+## Auditoria inicial
+
+Antes de alterar:
+
+* ler integralmente o `AGENTS.md`;
+* revisar a entrega do primeiro prompt;
+* comparar novamente com o arquivo do DevFront;
+* auditar a implementação real do `admin_menu`;
+* verificar o contexto já enviado aos templates;
+* identificar todas as rotas nomeadas;
+* identificar o fluxo nativo de logout;
+* identificar a rota real da Home pública;
+* identificar a rota de Minhas assinaturas;
+* identificar `admin:delete_personal_data`;
+* verificar a lógica atual de item ativo;
+* verificar o fallback para o menu nativo;
+* verificar se já existe persistência aprovada para estado do menu.
+
+## Dados e segurança
+
+O menu deve continuar sendo alimentado exclusivamente pelo backend atual.
+
+Não confiar em listas ou permissões definidas no JavaScript.
+
+O frontend pode:
+
+* abrir;
+* fechar;
+* filtrar visualmente;
+* destacar;
+* minimizar;
+* expandir.
+
+O frontend não pode decidir quais itens o usuário tem permissão para acessar.
+
+Preservar:
+
+* visibilidade configurada;
+* permissões;
+* `ScreenAccessMiddleware`;
+* ownership;
+* escopo para usuário comum;
+* comportamento de superusuário;
+* fallback seguro em caso de falha.
+
+## Header funcional
+
+### Saudação
+
+Exibir o usuário autenticado real.
+
+Usar a apresentação já adotada pelo projeto, sem expor informações desnecessárias.
+
+Exemplo visual:
+
+`Bem-vindo, Augusto`
+
+Não hardcodar nome.
+
+### Ir para o site
+
+Conectar à rota nomeada real da página pública principal.
+
+Não usar `/` hardcoded sem auditar a rota oficial.
+
+### Encerrar sessão
+
+Manter o fluxo nativo e seguro de logout do Django.
+
+Se a versão atual exigir POST:
+
+* usar formulário com CSRF;
+* apresentar visualmente como link administrativo;
+* não trocar por GET apenas para simplificar.
+
+Não criar uma página ou endpoint paralelo de logout.
+
+## Logo conforme o estado
+
+### Desktop expandido
+
+Exibir a logo horizontal oficial.
+
+### Desktop minimizado
+
+Exibir somente o símbolo oficial.
+
+### Expansão temporária
+
+Ao expandir temporariamente o menu minimizado, apresentar a versão prevista no layout sem:
+
+* piscar;
+* sobrepor;
+* exibir as duas marcas;
+* comprimir a logo;
+* provocar mudança permanente do estado.
+
+### Mobile
+
+Usar a versão aprovada para o cabeçalho e drawer mobile.
+
+## Grupos e submenus
+
+Tornar funcionais todos os grupos reais.
+
+Garantir:
+
+* toda a linha do grupo clicável;
+* múltiplos grupos abertos simultaneamente;
+* seta atualizada;
+* `aria-expanded`;
+* `aria-controls`;
+* animação entre 220 e 300 milissegundos;
+* nenhum salto visual;
+* nenhum terceiro nível;
+* grupo contendo item ativo aberto inicialmente;
+* item ativo preservado mesmo se o usuário fechar o grupo manualmente.
+
+Os links finais devem usar as URLs resolvidas no backend.
+
+## Estado ativo
+
+Identificar a página atual principalmente por:
+
+`resolver_match.view_name`
+
+Não usar prefixo textual da URL como regra geral.
+
+Aplicar corretamente:
+
+* item avulso ativo;
+* submenu ativo;
+* grupo pai contendo submenu ativo;
+* página customizada sob `/admin/`;
+* CRUDs do Admin.
+
+Preservar a marcação visual unificada aprovada:
+
+* fundo claro;
+* barra dourada lateral;
+* ícone alinhado;
+* sem bolinha diferente para item avulso.
+
+## Busca
+
+Implementar o filtro do menu.
+
+A busca deve:
+
+* filtrar itens avulsos;
+* filtrar grupos;
+* filtrar submenus;
+* ignorar maiúsculas, minúsculas e acentuação quando possível;
+* atualizar durante a digitação;
+* manter o grupo pai visível quando um submenu corresponder;
+* abrir temporariamente os grupos com resultados;
+* exibir `Nenhum item encontrado.` quando necessário.
+
+Ao iniciar uma busca:
+
+* guardar em memória os grupos que estavam abertos;
+* não alterar permanentemente a preferência do usuário.
+
+Ao limpar:
+
+* restaurar os itens;
+* restaurar os grupos que estavam abertos antes da busca;
+* remover o estado de nenhum resultado.
+
+Não enviar consulta ao backend.
+
+## Desktop expandido e minimizado
+
+### Minimizar
+
+Ao clicar no controle:
+
+* reduzir o menu para a largura aprovada;
+* ocultar textos completamente;
+* ocultar a busca completa;
+* manter os ícones;
+* manter o estado ativo;
+* reajustar permanentemente a área do conteúdo;
+* trocar a logo completa pelo símbolo;
+* não deixar resíduos visuais.
+
+### Expandir permanentemente
+
+Ao clicar novamente:
+
+* restaurar o menu completo;
+* restaurar logo horizontal;
+* restaurar textos;
+* restaurar busca;
+* restaurar grupos;
+* reajustar a área do conteúdo.
+
+A animação deve seguir aproximadamente 260 a 340 milissegundos.
+
+## Expansão temporária por hover
+
+Quando o menu estiver permanentemente minimizado:
+
+* iniciar a expansão ao entrar na área real do menu;
+* usar pequeno atraso de abertura;
+* expandir sobre o conteúdo;
+* não deslocar o conteúdo;
+* não mudar a preferência permanente;
+* recolher ao sair da área visual real.
+
+Utilizar aproximadamente:
+
+* abertura: 100 a 180 milissegundos;
+* fechamento: 140 a 220 milissegundos.
+
+Cancelar corretamente os timers quando o cursor retornar.
+
+Não criar uma zona invisível maior que o menu.
+
+Não obrigar o usuário a afastar muito o cursor.
+
+## Expansão por foco
+
+Quando o menu estiver minimizado e um item receber foco pelo teclado:
+
+* expandir temporariamente;
+* manter aberto enquanto o foco estiver dentro;
+* recolher quando o foco sair;
+* não depender de hover.
+
+## Tooltips
+
+No estado minimizado e não expandido temporariamente:
+
+* mostrar tooltip para cada item;
+* funcionar por hover e foco;
+* usar o título real;
+* não ser cortado;
+* não aparecer junto ao menu temporariamente aberto;
+* não bloquear cliques.
+
+## Mobile
+
+No mobile, o menu deve iniciar fechado.
+
+Ao clicar no botão do cabeçalho:
+
+* abrir o drawer pela esquerda;
+* exibir backdrop;
+* bloquear o scroll da página;
+* preservar a posição do scroll;
+* mover o foco para o drawer;
+* manter busca, grupos e itens inferiores acessíveis.
+
+O drawer deve:
+
+* usar `100dvh`;
+* respeitar safe areas;
+* possuir rolagem interna;
+* não gerar rolagem horizontal;
+* manter o botão de fechar visível;
+* deixar uma faixa de backdrop à direita.
+
+## Fechamento mobile
+
+Fechar por:
+
+* botão de fechar;
+* backdrop;
+* tecla Escape;
+* clique em link final.
+
+Não fechar ao:
+
+* abrir grupo;
+* fechar grupo;
+* focar busca;
+* limpar busca.
+
+Ao fechar:
+
+* restaurar o scroll;
+* restaurar a posição da página;
+* remover classes temporárias;
+* devolver foco ao botão de abertura.
+
+## Itens inferiores
+
+Conectar corretamente:
+
+* Minhas assinaturas;
+* Meus dados e privacidade.
+
+`Meus dados e privacidade` deve reutilizar:
+
+`admin:delete_personal_data`
+
+Não criar nova tela.
+
+Minhas assinaturas deve utilizar a integração e rota real já existentes.
+
+Os dois continuam como itens avulsos fora de grupos artificiais.
+
+## Persistência de estado
+
+Persistir somente os estados aprovados e realmente necessários:
+
+* menu permanentemente expandido ou minimizado;
+* grupos abertos.
+
+Não persistir:
+
+* expansão temporária;
+* busca digitada;
+* drawer mobile aberto;
+* hover;
+* foco.
+
+Antes de criar novo armazenamento:
+
+* auditar se o projeto já possui mecanismo para isso;
+* reutilizar o mecanismo existente quando adequado;
+* não criar migration sem necessidade;
+* caso seja usado armazenamento local, atualizar a auditoria correspondente em `docs/privacidade/cookies.md`.
+
+A ausência de armazenamento não pode quebrar o menu. O padrão seguro deve ser menu expandido no desktop e fechado no mobile.
+
+## Acessibilidade
+
+Garantir:
+
+* navegação semântica;
+* botões reais para grupos e controles;
+* links reais para destinos;
+* `aria-expanded`;
+* `aria-controls`;
+* `aria-current="page"` no link ativo;
+* foco visível;
+* funcionamento por teclado;
+* Escape no drawer;
+* retorno de foco;
+* submenus fechados fora do fluxo de Tab;
+* tooltips acessíveis;
+* comportamento compatível com `prefers-reduced-motion`.
+
+## Compatibilidade com páginas existentes
+
+Validar o shell com:
+
+* Home administrativa;
+* changelists;
+* formulários de inclusão;
+* formulários de edição;
+* Revisão em sequência;
+* Histórico da colmeia;
+* Galeria da colmeia;
+* Dashboard de produção;
+* Perfil;
+* Criadores por região;
+* modais;
+* componentes de select externos;
+* componente de select único;
+* PhotoSwipe;
+* galerias de imagens.
+
+O menu não pode:
+
+* cobrir o conteúdo permanentemente;
+* cortar modais;
+* alterar z-index de galerias;
+* gerar padding duplicado;
+* restringir a largura das páginas;
+* adicionar background global;
+* quebrar rolagem;
+* permanecer aberto após navegação mobile.
+
+## JavaScript
+
+Criar uma implementação organizada e reutilizável.
+
+Evitar:
+
+* código inline espalhado nos templates;
+* listeners duplicados a cada página;
+* dependência de textos para reconhecer ações;
+* URLs hardcoded;
+* classes genéricas;
+* variáveis globais desnecessárias;
+* bibliotecas externas.
+
+A inicialização deve ser idempotente e não executar duas vezes se um asset for incluído mais de uma vez.
+
+## Testes
+
+Cobrir no backend:
+
+* itens reais renderizados;
+* links resolvidos;
+* permissões preservadas;
+* item ativo por `view_name`;
+* grupo pai ativo;
+* itens inferiores corretos;
+* saudação com usuário real;
+* rota pública correta;
+* logout seguro;
+* ausência de links não autorizados;
+* comportamento de superusuário;
+* fallback em falha do menu customizado.
+
+Cobrir o JavaScript com a infraestrutura já existente ou realizar testes de navegador quando disponíveis:
+
+* abrir e fechar grupos;
+* mais de um grupo aberto;
+* busca;
+* restauração após limpar busca;
+* minimizar;
+* expandir;
+* hover temporário;
+* fechamento ao sair da área real;
+* expansão por foco;
+* drawer mobile;
+* scroll lock;
+* Escape;
+* retorno de foco;
+* clique em link final;
+* ausência de duplo listener.
+
+Realizar testes manuais em:
+
+* desktop largo;
+* notebook;
+* tablet;
+* iPhone XR;
+* iPhone recente;
+* Android estreito.
+
+Executar:
+
+* testes do `admin_menu`;
+* testes do Admin;
+* testes de rotas customizadas;
+* testes de autenticação/logout afetados;
+* `python3 manage.py check`.
+
+## Preservação obrigatória
+
+Não alterar:
+
+* regras de negócio;
+* models;
+* ownership;
+* permissões;
+* organização real do menu sem solicitação;
+* seeds, salvo correção indispensável e comprovada;
+* páginas internas;
+* layouts customizados;
+* rotas públicas;
+* autenticação;
+* PWA;
+* identidade oficial.
+
+Não adicionar:
+
+* modo escuro;
+* Alterar senha;
+* notificações;
+* avatar obrigatório;
+* configurações genéricas;
+* novos grupos;
+* terceiro nível;
+* novos itens por iniciativa própria.
+
+## Critérios de aceite
+
+* A saudação utiliza o usuário autenticado real.
+* Ir para o site utiliza a rota oficial.
+* Encerrar sessão utiliza o fluxo seguro do Django.
+* A logo completa aparece no estado expandido.
+* O símbolo aparece no estado minimizado.
+* Grupos e submenus funcionam.
+* A busca filtra e restaura corretamente os estados.
+* O item ativo é identificado por rota nomeada.
+* Item avulso e grupo ativo usam a mesma marcação.
+* O menu minimizado não apresenta resíduos.
+* A expansão temporária não desloca o conteúdo.
+* O menu fecha ao sair de sua área real.
+* O menu funciona por teclado.
+* O drawer mobile bloqueia e restaura o scroll.
+* O drawer fecha por todos os meios previstos.
+* Os itens inferiores utilizam as rotas reais.
+* O menu respeita permissões e fallback.
+* As páginas existentes não sofreram regressão.
+* Nenhum item fictício do DevFront foi transformado em dado real do sistema.
+
+## Relatório final
+
+Informar:
+
+* como os itens reais foram conectados;
+* como o item ativo é identificado;
+* como grupos e busca foram implementados;
+* como funciona a minimização permanente;
+* como funciona a expansão temporária;
+* como o drawer bloqueia e restaura o scroll;
+* como logo e símbolo são alternados;
+* quais rotas foram usadas no header e nos itens inferiores;
+* qual mecanismo de persistência foi utilizado;
+* quais testes automatizados e manuais foram executados.
+
+
+# PROMPT — Finalizar a integração real do novo menu lateral com o menu personalizado e o tema do sistema
+
+## Objetivo
+
+Corrigir e concluir a implementação do novo cabeçalho e menu lateral do Colmeias Online.
+
+O shell visual foi incluído, porém a implementação atual não está funcionalmente integrada ao sistema:
+
+* o cabeçalho aparece;
+* a logo aparece;
+* a saudação utiliza o usuário real;
+* **Ir para o site** funciona;
+* **Encerrar sessão** está disponível;
+* o menu lateral, porém, está completamente vazio;
+* as cores configuradas pelo tema atual não estão sendo respeitadas;
+* o cabeçalho recebeu um fundo azul que não corresponde à identidade configurada no sistema.
+
+Não criar outro layout e não voltar ao menu nativo do Django.
+
+Trabalhar sobre a implementação atual e fazer o novo layout utilizar corretamente:
+
+* a configuração real do menu personalizado;
+* os registros existentes criados pelas seeds;
+* as permissões e visibilidades atuais;
+* a configuração real do tema administrativo.
+
+## Evidência do problema
+
+A implementação atual informa que o novo menu foi alimentado por:
+
+`available_apps`
+
+Essa não pode ser a fonte principal do menu do Colmeias Online.
+
+Antes da substituição visual, o sistema já possuía um menu personalizado funcional, alimentado por sua própria estrutura e configurado pelas seeds do projeto.
+
+O novo layout deve consumir exatamente essa estrutura existente.
+
+Não substituir a arquitetura do menu personalizado pelo agrupamento padrão de aplicações do Django Admin.
+
+## Auditoria inicial obrigatória
+
+Antes de modificar:
+
+* ler integralmente o `AGENTS.md`;
+* revisar as duas entregas anteriores do shell;
+* auditar a implementação anterior do menu que funcionava;
+* usar o histórico do Git quando necessário para identificar como o menu era carregado antes da troca dos templates;
+* localizar os models, services, context processors, template tags ou estruturas do app `admin_menu`;
+* localizar a seed responsável pela composição do menu;
+* localizar a seed ou configuração responsável pelo tema e pelas cores;
+* identificar como usuário, permissões, grupos, ordem e visibilidade eram aplicados;
+* verificar por que o novo template está recebendo uma lista vazia;
+* verificar por que `available_apps` foi usado no lugar da estrutura personalizada;
+* verificar quais variáveis de tema eram aplicadas no Admin antes da alteração.
+
+Não fazer uma correção apenas adicionando itens hardcoded ao template.
+
+## Preservar o que já funciona
+
+Manter sem regressão:
+
+* logo oficial;
+* saudação com usuário real;
+* link **Ir para o site**;
+* logout seguro via POST e CSRF;
+* layout aprovado pelo DevFront;
+* minimização;
+* expansão temporária;
+* busca;
+* grupos expansíveis;
+* drawer mobile;
+* acessibilidade;
+* persistência do estado;
+* identificação de item ativo por rota nomeada;
+* itens inferiores;
+* conteúdo das páginas internas.
+
+Não redesenhar o cabeçalho ou o menu.
+
+## Fonte correta do menu
+
+O novo menu deve ser alimentado pela mesma fonte real utilizada pelo menu personalizado anterior.
+
+Preservar:
+
+* grupos definidos na configuração;
+* itens avulsos;
+* submenus;
+* ordem configurada;
+* ícones configurados;
+* rotas nomeadas;
+* visibilidade por usuário;
+* permissões;
+* comportamento para usuário comum;
+* comportamento para superusuário;
+* itens criados ou atualizados pelas seeds;
+* regras do `ScreenAccessMiddleware`;
+* fallback já aprovado.
+
+`available_apps` não deve ser a fonte principal.
+
+Ele somente pode permanecer como fallback se esse comportamento já fazia parte da arquitetura anterior e estiver comprovado pela auditoria.
+
+O sistema não pode renderizar silenciosamente uma barra lateral vazia.
+
+## Integração com a seed do menu
+
+Confirmar que a seed atual continua sendo a fonte de composição do menu.
+
+Não criar novos itens apenas para fazer o menu aparecer.
+
+Não duplicar registros.
+
+Não alterar a organização já configurada sem solicitação.
+
+O novo layout precisa apresentar, conforme a configuração real do ambiente, itens como:
+
+* páginas avulsas;
+* grupos com submenus;
+* Minhas assinaturas;
+* Meus dados e privacidade.
+
+Os itens inferiores devem continuar fora de grupos artificiais.
+
+Executar a seed somente quando necessário para validar idempotência e atualização de ambiente existente, sem apagar personalizações válidas.
+
+## Cabeçalho
+
+Alterar o fundo do cabeçalho para **branco**.
+
+O cabeçalho branco deve:
+
+* favorecer a leitura da logo oficial;
+* possuir separação discreta em relação ao conteúdo;
+* usar borda inferior ou sombra muito suave;
+* manter aparência compacta;
+* não receber o azul atualmente exibido;
+* não variar de forma imprevisível com o tema.
+
+A logo não deve ser redesenhada nem recolorida.
+
+### Textos do cabeçalho
+
+Garantir contraste correto para:
+
+* saudação;
+* Ir para o site;
+* Encerrar sessão;
+* botão de minimizar;
+* botão mobile.
+
+O fundo branco não pode deixar esses elementos apagados.
+
+Preservar **Encerrar sessão** com diferenciação discreta, sem contraste agressivo.
+
+## Integração com o tema
+
+O menu lateral e seus estados devem utilizar a configuração real do tema administrativo já existente.
+
+O ambiente possuía anteriormente verde escuro como cor principal. A implementação nova não deve aplicar um azul fixo ou um fallback genérico quando existe um tema configurado.
+
+Auditar a fonte real do tema e reutilizar:
+
+* cor principal;
+* cor secundária;
+* cor de destaque;
+* superfícies;
+* textos;
+* bordas;
+* estados de hover;
+* estados ativos;
+* foco.
+
+Preferir disponibilizar esses valores por variáveis CSS próprias do shell, alimentadas pela configuração existente.
+
+Não espalhar valores obtidos do tema em regras CSS duplicadas.
+
+### Comportamento esperado
+
+* cabeçalho: branco fixo;
+* menu lateral: identidade derivada do tema configurado;
+* estado ativo: padrão visual aprovado pelo DevFront;
+* barra dourada e demais destaques: usar a configuração existente quando ela possuir valores correspondentes;
+* textos e ícones: contraste acessível;
+* nenhuma cor azul arbitrária.
+
+Definir fallback coerente com a identidade oficial somente quando realmente não existir configuração de tema.
+
+## Renderização estrutural
+
+Garantir que o template receba explicitamente os dados necessários para montar:
+
+* item avulso;
+* grupo;
+* submenu;
+* item ativo;
+* grupo que contém item ativo;
+* ícone;
+* URL;
+* ordem;
+* visibilidade;
+* itens inferiores.
+
+Não usar condicionais frágeis baseadas apenas no nome visível.
+
+Não depender de prefixos hardcoded de URL.
+
+Continuar utilizando rotas nomeadas e `resolver_match.view_name` para o estado ativo.
+
+## Menu vazio
+
+Corrigir a causa estrutural da barra lateral vazia.
+
+Auditar, entre outros pontos:
+
+* contexto não enviado ao `nav_sidebar.html`;
+* template tag removida durante a troca;
+* variável renomeada;
+* queryset filtrado incorretamente;
+* incompatibilidade entre a estrutura do `admin_menu` e `available_apps`;
+* falta de contexto em páginas customizadas;
+* escopo aplicado apenas a algumas páginas;
+* permissões avaliadas de forma diferente;
+* erro silencioso no template;
+* CSS ocultando itens que foram renderizados;
+* estado minimizado persistido incorretamente;
+* busca inicial filtrando tudo;
+* atributos `hidden` ou classes de inicialização incorretos.
+
+Não considerar concluído apenas porque o HTML contém o contêiner do menu.
+
+Confirmar no DOM e visualmente que os itens reais foram renderizados e estão visíveis.
+
+## Conta de teste
+
+Utilizar a conta de teste fornecida pelo usuário nesta conversa para executar uma validação autenticada real.
+
+Não registrar nem repetir a senha em:
+
+* código;
+* testes versionados;
+* fixtures;
+* documentação;
+* relatório final;
+* logs.
+
+A validação deve ser feita com o usuário comum informado, pois o problema foi observado nessa conta.
+
+Também validar o comportamento de superusuário quando houver fixture ou conta segura já disponível no ambiente.
+
+## Desktop
+
+Validar que, após a correção:
+
+* o menu aparece expandido;
+* os grupos reais aparecem;
+* os itens avulsos aparecem;
+* os submenus abrem;
+* a busca encontra itens reais;
+* minimizar mantém os ícones;
+* expandir temporariamente mostra o conteúdo;
+* o item ativo é identificado;
+* o conteúdo principal não fica com uma grande área vazia;
+* a logo completa e o símbolo alternam corretamente.
+
+## Mobile
+
+Validar que:
+
+* o botão do cabeçalho abre o drawer;
+* o drawer contém o mesmo menu real do desktop;
+* grupos e itens respeitam permissões;
+* a busca funciona com itens reais;
+* o scroll da página é bloqueado;
+* o botão de fechar permanece acessível;
+* o drawer não aparece vazio;
+* o item ativo continua identificado;
+* os itens inferiores continuam acessíveis.
+
+## Fallback
+
+Preservar o fallback aprovado do menu.
+
+Em caso de erro ou ausência legítima da configuração personalizada:
+
+* não apresentar uma barra completamente vazia;
+* não expor itens não autorizados;
+* não ignorar permissões;
+* utilizar somente o fallback já previsto pela arquitetura anterior.
+
+Não criar um fallback novo baseado em suposições.
+
+## Testes obrigatórios
+
+### Menu personalizado
+
+Criar ou ajustar testes para comprovar que:
+
+* os registros da seed alimentam o novo menu;
+* grupos são renderizados;
+* itens avulsos são renderizados;
+* submenus são renderizados;
+* a ordem configurada é respeitada;
+* itens inferiores são renderizados;
+* links utilizam as URLs reais;
+* itens não autorizados não aparecem;
+* o menu de usuário comum não fica vazio;
+* superusuário mantém seu comportamento previsto.
+
+Não testar apenas classes ou contêineres vazios.
+
+Verificar o texto e os destinos dos itens reais renderizados.
+
+### Tema
+
+Testar que:
+
+* a configuração do tema é carregada;
+* as variáveis esperadas chegam ao shell;
+* a cor principal configurada aparece nas variáveis do menu;
+* o cabeçalho possui o estilo branco definido;
+* o azul fixo não permanece;
+* existe fallback seguro quando não houver tema configurado.
+
+### Estado ativo
+
+Testar:
+
+* item avulso ativo;
+* submenu ativo;
+* grupo pai ativo;
+* CRUD do Admin;
+* página customizada em `/admin/`.
+
+### Seed
+
+Validar idempotência:
+
+* executar a seed em banco com dados existentes;
+* não duplicar grupos;
+* não duplicar itens;
+* preservar a organização configurada;
+* atualizar somente o necessário.
+
+### Regressão
+
+Executar os testes relacionados a:
+
+* `admin_menu`;
+* shell do Admin;
+* dashboard;
+* autenticação;
+* rotas customizadas;
+* permissões;
+* middleware de acesso.
+
+Executar também:
+
+* `python3 manage.py check`;
+* `python3 manage.py makemigrations --check --dry-run`;
+* verificação sintática do JavaScript;
+* `git diff --check`.
+
+## Validação manual obrigatória
+
+Com a conta de teste informada:
+
+1. acessar a Home administrativa;
+2. confirmar que o menu não está vazio;
+3. abrir todos os grupos disponíveis;
+4. navegar por pelo menos um item avulso;
+5. navegar por pelo menos um submenu;
+6. confirmar a marcação ativa;
+7. usar a busca;
+8. minimizar e expandir;
+9. testar o drawer mobile;
+10. confirmar as cores derivadas do tema;
+11. confirmar o cabeçalho branco;
+12. confirmar que logout e Ir para o site continuam funcionando.
+
+Não declarar validação mobile real caso tenha sido testado somente redimensionando o desktop. Informar com precisão qual ambiente foi usado.
+
+## Preservação obrigatória
+
+Não alterar:
+
+* models de domínio;
+* ownership;
+* permissões;
+* regras de negócio;
+* conteúdo da Home;
+* cards do dashboard;
+* formulários;
+* rotas;
+* autenticação;
+* PWA;
+* organização do menu definida pelo produto;
+* identidade visual oficial.
+
+Não:
+
+* hardcodar menu no HTML;
+* usar dados fictícios do DevFront;
+* criar um segundo sistema de menu;
+* substituir novamente o layout;
+* restaurar o menu nativo como solução principal;
+* deixar `available_apps` como fonte principal;
+* adicionar modo escuro;
+* adicionar Alterar senha;
+* adicionar ações não solicitadas.
+
+## Critérios de aceite
+
+* O menu lateral exibe os itens reais da configuração personalizada.
+* A seed existente continua sendo a fonte de composição do menu.
+* Grupos, itens avulsos e submenus aparecem corretamente.
+* Permissões e ordem são preservadas.
+* A conta de usuário comum não recebe uma barra vazia.
+* O menu desktop e o drawer mobile utilizam os mesmos dados reais.
+* O cabeçalho possui fundo branco.
+* A logo oficial permanece íntegra.
+* O menu utiliza as cores reais do tema configurado.
+* O azul arbitrário foi removido.
+* Busca, grupos, minimização, hover e estado ativo continuam funcionando.
+* O fallback não expõe itens indevidos e não deixa o menu silenciosamente vazio.
+* A Home e as demais páginas internas não sofreram alterações de layout.
+* A implementação foi validada em uma sessão autenticada real.
+
+## Relatório final
+
+Informar objetivamente:
+
+* qual era a causa da barra lateral vazia;
+* por que `available_apps` não apresentou o menu personalizado;
+* qual fonte de dados voltou a alimentar o template;
+* quais componentes da arquitetura anterior foram restaurados ou reutilizados;
+* como a configuração do tema passou a chegar ao shell;
+* de onde vinha o azul exibido;
+* como o cabeçalho branco foi aplicado;
+* quais itens foram visualizados com a conta de teste;
+* quais permissões foram verificadas;
+* quais testes automatizados foram executados;
+* quais testes manuais foram realmente realizados.
+
+
+# PROMPT — Transformar Perfil e Criadores por região em itens avulsos do menu
+
+## Objetivo
+
+Alterar a seed do menu personalizado do Colmeias Online para remover **Perfil** e **Criadores por região** do grupo atual **Perfil e comunidade**.
+
+Os dois passam a ser itens avulsos e independentes no menu lateral:
+
+1. **Perfil**
+2. **Criadores por região**
+
+Após implementar, executar a seed no ambiente atual para atualizar os registros existentes.
+
+## Auditoria inicial
+
+Antes de modificar:
+
+* ler integralmente o `AGENTS.md`;
+* localizar a seed oficial do menu personalizado;
+* auditar os models e serviços do `admin_menu`;
+* verificar como itens avulsos já existentes são configurados;
+* identificar os registros atuais de:
+
+  * Perfil e comunidade;
+  * Perfil;
+  * Criadores por região;
+* identificar as rotas nomeadas, ícones, permissões e ordem atuais;
+* verificar se o modelo já suporta item sem grupo.
+
+Não criar um segundo mecanismo de menu.
+
+## Nova organização
+
+Substituir a estrutura atual:
+
+```text
+Perfil e comunidade
+├── Perfil
+└── Criadores por região
+```
+
+por:
+
+```text
+Perfil
+Criadores por região
+```
+
+Os dois itens devem:
+
+* aparecer diretamente no primeiro nível do menu;
+* não possuir seta de expansão;
+* não abrir submenu;
+* continuar utilizando suas rotas nomeadas atuais;
+* preservar ícones, permissões e regras de visibilidade;
+* preservar o destaque de item ativo;
+* funcionar no menu expandido, minimizado e no drawer mobile.
+
+## Ordem
+
+Manter os dois itens na mesma região em que atualmente aparece o grupo **Perfil e comunidade**.
+
+A ordem deve ser:
+
+1. Perfil;
+2. Criadores por região.
+
+Não reorganizar outros grupos ou itens do menu.
+
+## Grupo Perfil e comunidade
+
+Depois de desvincular os dois itens:
+
+* remover o registro do grupo **Perfil e comunidade** caso ele não possua nenhum outro item válido;
+* não deixar grupo vazio no banco;
+* não deixar grupo vazio renderizado no menu;
+* não remover qualquer outro item por correspondência imprecisa de nome.
+
+A remoção deve ser segura e específica.
+
+## Model
+
+Primeiro, reutilizar a estrutura existente para itens avulsos.
+
+Alterar model ou criar migration somente se a auditoria comprovar que o modelo atual realmente não suporta essa configuração.
+
+Como o sistema já possui outros itens avulsos, não criar alteração estrutural desnecessária.
+
+Caso algum ajuste de model seja indispensável:
+
+* fazer a menor alteração possível;
+* preservar compatibilidade com registros existentes;
+* criar migration;
+* atualizar Admin, validações e testes relacionados;
+* explicar no relatório por que a estrutura existente não era suficiente.
+
+## Seed
+
+A seed deve ser idempotente e atualizar bancos já existentes.
+
+Ela deve:
+
+* localizar os itens pelas identificações estáveis usadas atualmente;
+* desvincular Perfil do grupo antigo;
+* desvincular Criadores por região do grupo antigo;
+* configurá-los como itens avulsos;
+* preservar seus destinos e permissões;
+* ajustar a ordem;
+* remover o grupo antigo vazio;
+* não duplicar itens;
+* não recriar o grupo em execuções posteriores;
+* não apagar personalizações ou itens não relacionados.
+
+Executar a seed duas vezes durante a validação e confirmar que a segunda execução não gera alterações indevidas ou duplicidades.
+
+## Execução no ambiente atual
+
+Após implementar:
+
+1. executar o comando oficial já existente da seed do menu;
+2. não criar comando temporário;
+3. confirmar no banco que os dois itens ficaram sem grupo;
+4. confirmar que o grupo **Perfil e comunidade** foi removido;
+5. acessar o menu com usuário comum e validar visualmente;
+6. confirmar o comportamento para superusuário conforme as regras atuais.
+
+Não registrar credenciais em código, testes, documentação ou relatório.
+
+## Preservação obrigatória
+
+Não alterar:
+
+* rotas de Perfil;
+* rota de Criadores por região;
+* conteúdo dessas páginas;
+* permissões;
+* ownership;
+* `ScreenAccessMiddleware`;
+* cabeçalho;
+* layout do novo menu;
+* busca;
+* minimização;
+* drawer mobile;
+* Minhas assinaturas;
+* Meus dados e privacidade;
+* demais grupos;
+* ordem dos demais itens;
+* identidade visual.
+
+## Testes
+
+Cobrir que:
+
+* Perfil é renderizado como item avulso;
+* Criadores por região é renderizado como item avulso;
+* nenhum dos dois possui grupo pai;
+* Perfil aparece antes de Criadores por região;
+* o grupo Perfil e comunidade não aparece;
+* não existe grupo vazio no banco;
+* as rotas continuam corretas;
+* os ícones e permissões são preservados;
+* usuário comum visualiza apenas o permitido;
+* o item ativo continua correto nas duas páginas;
+* duas execuções da seed não criam duplicidades;
+* os demais itens do menu permanecem inalterados.
+
+Executar também:
+
+* testes do `admin_menu`;
+* testes do novo shell administrativo;
+* testes das páginas Perfil e Criadores por região;
+* `python3 manage.py check`;
+* `python3 manage.py makemigrations --check --dry-run`;
+* `git diff --check`.
+
+## Critérios de aceite
+
+* Perfil aparece diretamente no menu.
+* Criadores por região aparece diretamente no menu.
+* Os dois não ficam dentro de submenu.
+* Perfil aparece antes de Criadores por região.
+* O grupo Perfil e comunidade não existe mais.
+* Não existem registros duplicados ou órfãos.
+* A seed foi executada no ambiente atual.
+* Executar a seed novamente não altera indevidamente os dados.
+* Rotas, permissões e estado ativo continuam funcionando.
+* Nenhum outro item do menu foi reorganizado.
+
+## Relatório final
+
+Informar:
+
+* qual seed foi alterada;
+* qual comando foi executado;
+* se foi necessário alterar model ou migration;
+* como os itens foram transformados em avulsos;
+* como o grupo antigo foi removido;
+* resultado da primeira e da segunda execução da seed;
+* quais testes foram executados;
+* confirmação visual de que os dois itens aparecem separadamente no menu.
+
+# ADENDO — Correções obrigatórias consolidadas
+
+Este adendo complementa os quatro prompts e é requisito de aceite.
+
+## Referência visual e limites
+
+* O HTML aprovado que será colocado nesta pasta é a fonte visual obrigatória,
+  inclusive suas alturas e paddings ajustados. Nunca usar protótipo anterior.
+* Ele não é fonte de itens, URLs, permissões, dados, logos ou persistência.
+* Adaptar apenas a apresentação à estrutura e aos assets reais do projeto de
+  destino, sem copiar arrays ou dados demonstrativos.
+
+## Correções que devem estar presentes
+
+* A fonte principal é o menu configurável existente, não `available_apps`.
+  Este só pode ser fallback quando já previsto e seguro.
+* Confirmar no DOM e visualmente que usuário comum recebe grupos, avulsos e
+  submenus reais; um contêiner vazio não é uma integração concluída.
+* Header branco, contrastado e compacto. O menu recebe cores do tema existente
+  por variáveis CSS; não deixar links azuis ou cores arbitrárias.
+* Links inferiores e avulsos usam a mesma paleta, tipografia e dimensões dos
+  links superiores.
+* O shell não pode aplicar background, padding ou largura global ao conteúdo.
+* Menu, busca e links usam `box-sizing: border-box`, `min-width: 0` e largura
+  limitada ao contêiner; textos longos truncam, não extrapolam a lateral.
+* Busca filtra avulsos, grupos, submenus e itens inferiores, ignorando caixa e
+  acento; preserva/restaura grupos; e mostra estado vazio quando necessário.
+* Ao usar `element.hidden`, incluir regra específica do shell para
+  `#nav-sidebar [hidden] { display: none !important; }`: display grid/flex do
+  componente pode vencer o estilo nativo e deixar a busca apenas ilustrativa.
+* Validar visualmente uma busca como `Rev`: somente itens de revisão permanecem
+  visíveis, e Perfil, Criadores, Colmeias, Galeria e rodapé desaparecem.
+* Estado ativo usa `resolver_match.view_name`; CRUD aceita só sufixos admin
+  conhecidos para não marcar página customizada e CRUD ao mesmo tempo.
+* Persistir apenas grupos e minimização permanente. Aplicar o estado antes de
+  habilitar animações para impedir abertura repetida ao navegar.
+* Hover/foco do menu minimizado expande sobre o conteúdo sem persistir. Se
+  piscar, auditar regras de `#main > #nav-sidebar`, posição, z-index, overflow
+  e largura antes de alterar o JavaScript.
+* Drawer mobile bloqueia/restaura scroll, move/devolve foco e fecha por botão,
+  backdrop, Escape e link final.
+* Em mobile, usar a logo horizontal oficial reduzida e centralizada, o
+  hambúrguer na ponta esquerda e o botão de ações da conta na ponta direita;
+  os três ficam na mesma linha. Os links de conta ficam ocultos inicialmente e
+  aparecem no painel do botão.
+* O cabeçalho mobile é fixo. Regras nativas do Django com IDs podem vencer
+  classes simples: sobrescrever `#header` e `#nav-sidebar` no breakpoint com
+  escopo equivalente, inclusive `display`, `position`, `z-index` e dimensões.
+  Se o dropdown abrir no DOM mas não aparecer, verificar `overflow: hidden` no
+  header nativo e defini-lo como `visible` somente para o header mobile.
+* O dropdown de conta deve ser filho posicionado absolutamente do contêiner do
+  botão, com `top: calc(100% + 6px)` e `right: 0`; assim ele abre logo abaixo e
+  alinhado ao botão, em vez de ficar deslocado pela viewport.
+* O drawer precisa ser contêiner flex em coluna e sua área interna precisa usar
+  `flex: 1` e altura automática. Isso evita que o último item inferior, como
+  privacidade, fique abaixo da viewport por causa do cabeçalho do drawer.
+* O shell não aplica gradiente/fundo ao conteúdo. Em caso de herança, limitar a
+  neutralização a `#main`, `#content-start` e `#content` dentro do shell.
+* Nunca registrar credenciais, dados de usuário ou identidade visual do
+  Colmeias nas cópias ou no projeto de destino.
